@@ -1,3 +1,14 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 
 /***********************************/
 /*http://www.layabox.com  2017/12/12*/
@@ -2663,9 +2674,10 @@ var GameConfig=(function(){
 		var reg=ClassUtils.regClass;
 		reg("script.GameStart",GameStart);
 		reg("script.Controller",Controller);
-		reg("laya.physics.BoxCollider",BoxCollider);
 		reg("laya.physics.RigidBody",RigidBody);
+		reg("laya.physics.ChainCollider",ChainCollider);
 		reg("script.Role",Role);
+		reg("laya.physics.BoxCollider",BoxCollider);
 	}
 
 	GameConfig.width=640;
@@ -55279,271 +55291,354 @@ var Role=(function(_super){
 		this.roleParentSp=null;
 		// 人物精灵刚体
 		this.rigid=null;
-		// 摇杆
-		this.rocker=null;
-		// 大圆
-		this.rockerBig=null;
-		// 小圆
-		this.rockerSmall=null;
-		// 摇杆位置
-		this.rockerX=NaN;
-		this.rockerY=NaN;
-		// 大小圆的中心位置
-		this.rockerSBX=60;
-		this.rockerSBY=60;
-		// 摇杆半径
-		this.rocekerRadius=70;
-		// 地图移动所需参数
-		this.viewCenterX=NaN;
-		this.viewCenterY=NaN;
-		this.scrollRectYMin=NaN;
-		this.scrollRectYMax=NaN;
-		this.scrollRectXMin=NaN;
-		this.scrollRectXMax=NaN;
+		// 人物精灵身体碰撞区
+		this.bodyBox=null;
+		// 人物精灵脚步碰撞区
+		this.footBox=null;
 		// 人物方向
 		this.direction=null;
+		// 人物状态
+		this.roleState=null;
+		// 人物速度
+		this.speedX=0;
+		this.speedY=0;
+		// 是否可以行走
+		this.isCanRight=true;
+		this.isCanLeft=true;
+		/**
+		*改变移动方向
+		*/
+		this.pressing=false;
 		Role.__super.call(this);
+		script.Role.ROLE=this;
 	}
 
 	__class(Role,'script.Role',_super);
 	var __proto=Role.prototype;
 	__proto.onEnable=function(){
-		var boxChollider=this.owner.getComponent(BoxCollider);
-		Laya.timer.once(500,this,this.laterExec);
-		this.rocker=new Sprite();
-		this.rockerBig=new Sprite();
-		this.rockerSmall=new Sprite();
 		this.roleSp=this.owner;
 		this.roleParentSp=this.roleSp.parent;
 		this.rigid=this.roleSp.getComponent(RigidBody);
+		var boxs=this.roleSp.getComponents(BoxCollider);
+		this.bodyBox=boxs[1];
+		this.footBox=boxs[0];
+		console.log("boxs");
+		console.log(boxs);
 		this.ani=new Animation();
 		this.ani.loadAnimation("GameScene/Role.ani",Handler.create(this,this.onAniLoaded));
 	}
 
-	/**
-	*延迟300毫秒后执行此函数
-	*用于计算一些需要在浏览器完全打开之后
-	*再计算的数据
-	*/
-	__proto.laterExec=function(){
-		this.rockerX=80;
-		this.rockerY=Laya.stage.displayHeight-80;
-		Laya.loader.load("res/atlas/icon.atlas",Handler.create(this,this.onIconAtlasLoaded));
-		this.viewCenterY=Laya.stage.displayHeight / 2;
-		this.viewCenterX=Laya.stage.displayWidth / 2;
-		this.scrollRectYMin=0;
-		this.scrollRectYMax=375-Laya.stage.stage.displayHeight;
-		this.scrollRectXMax=5571-Laya.stage.displayWidth;
-		this.scrollRectXMin=0;
-		var rec=new Rectangle(0,0,Laya.stage.displayWidth,Laya.stage.displayHeight);
-		Laya.stage.scrollRect=rec;
-		Laya.timer.loop(10,this,this.onLoop);
-		this.ani.on("complete",this,this.onAniPlayed);
-		this.roleSp.pos(this.viewCenterX,this.viewCenterY);
+	// roleSp.pos(100,0);
+	__proto.getDir=function(){
+		return this.direction;
 	}
 
-	/**
-	*游戏循环
-	*/
-	__proto.onLoop=function(){
-		this.moveMap();
-		switch(this.direction){
-			case "right":{
-					if (!this.ani.isPlaying){
-						this.ani.play(0,false,"blue_r_run");
-					}
-					break ;
-				}
-			case "left":{
-					if (!this.ani.isPlaying){
-						this.ani.play(0,false,"blue_l_run");
-					}
-					break ;
-				}
-			case "up":{
-					break ;
-				}
-			case "down":{
-					break ;
-				}
-			case "stop":{
-					this.ani.stop();
-					break ;
-				}
-			default :{
-					break ;
-				}
-			}
+	__proto.getState=function(){
+		return this.roleState;
 	}
 
-	/**
-	*临时函数
-	*/
-	__proto.onAniPlayed=function(){
-		console.log("结束");
-		switch(this.direction){
-			case "right":{
-					this.ani.play(0,false,"blue_r_run");
-					break ;
-				}
-			case "left":{
-					this.ani.play(0,false,"blue_l_run");
-					break ;
-				}
-			case "up":{
-					break ;
-				}
-			case "down":{
-					break ;
-				}
-			default :{
-					break ;
-				}
-			}
+	__proto.getRigidBound=function(){
+		return this.bodyBox.x+","+this.bodyBox.y+","+this.bodyBox.width+","+this.bodyBox.height;
 	}
 
-	/**
-	*碰撞回调函数
-	*/
+	__proto.getIsPlay=function(){
+		return this.ani.isPlaying;
+	}
+
 	__proto.onTriggerEnter=function(other,self,contact){
-		if (other.label==="pass_n"){
-			this.rigid.setVelocity({x:0,y:0})
+		if ((other.label==="pass_n" || other.label==="pass_y")&& this.rigid.linearVelocity.y > 0 && self.label==="foot"){
+			this.rigid.type="kinematic";
+			console.log("进入 myself");
+			console.log(self);
+			this.rigid.gravityScale=0;
+			console.log("触碰到");
+			this.roleState="touch";
+		}
+		if (other.label==="l_wall" && this.roleState !="jump"){
+			this.isCanRight=false;
+			}else if (other.label==="r_wall" && this.roleState !="jump"){
+			this.isCanLeft=false;
 		}
 	}
 
 	/**
-	*移动 Laya.stage.scrollRect（简称 滚动区域）实现移动屏幕效果
+	*碰撞结束
 	*/
-	__proto.moveMap=function(){
-		if (this.roleSp.x-Laya.stage.scrollRect.x >=this.viewCenterX){
-			var moveX=this.roleSp.x-this.viewCenterX;
-			if (moveX > this.scrollRectXMax || moveX < this.scrollRectXMin){
-				moveX=Laya.stage.scrollRect.x;
+	__proto.onTriggerExit=function(other,self,contact){
+		if((other.label==="pass_y" || other.label==="pass_n")&& this.roleState !="jump" && self.label==="foot"){
+			console.log("出来");
+			console.log(self);
+			this.rigid.type="dynamic";
+			this.rigid.gravityScale=1;
+			this.roleState="jump";
+		}
+		if (other.label==="l_wall"){
+			this.isCanRight=true;
+		}
+		if (other.label==="r_wall"){
+			this.isCanLeft=true;
+		}
+		console.log("碰撞结束");
+		console.log(self);
+	}
+
+	/**
+	*持续碰撞
+	*/
+	__proto.onTriggerStay=function(other,self,contact){
+		console.log("持续碰撞");
+		console.log(self);
+		self=this.footBox;
+	}
+
+	/**
+	*跳跃
+	*/
+	__proto.jump=function(){
+		this.rigid.type="dynamic";
+		this.rigid.gravityScale=1;
+		this.rigid.linearVelocity={x:0,y:-6};
+		this.roleState="jump";
+		this.ani.stop();
+	}
+
+	__proto.moveAndChangeAni=function(){
+		switch(this.direction){
+			case "right":{
+					if (!this.ani.isPlaying){
+					switch(this.roleState){
+						case "jump":{
+								if (this.pressing){
+									this.rigid.setVelocity({x:1,y:this.rigid.linearVelocity.y});
+								}
+								this.ani.play(0,true,"blue_r_jump");
+								this.bodyBox.x=0;
+								this.bodyBox.y=0;
+								this.bodyBox.width=23;
+								this.bodyBox.height=28;
+								break ;
+							}
+						case "run":{
+								if (this.isCanRight){
+									this.rigid.linearVelocity={x:1,y:0};
+									}else {
+									this.rigid.linearVelocity={x:0,y:0};
+								}
+								this.ani.play(0,true,"blue_r_run");
+								this.bodyBox.x=4;
+								this.bodyBox.y=0;
+								this.bodyBox.width=23;
+								this.bodyBox.height=45;
+								break ;
+							}
+						case "stop":{
+								this.rigid.setVelocity({x:0 ,y:0});
+								this.ani.play(0,false,"blue_r_stand");
+								break ;
+							}
+						case "touch":{
+								if (this.pressing){
+									this.roleState="run";
+									}else {
+									this.roleState="stop";
+								}
+								break ;
+							}
+						case "lie":{
+								if (this.rigid.linearVelocity.y==0){
+									this.ani.play(0,false,"blue_r_lie");
+									this.rigid.setVelocity({x:0,y:0});
+								}
+								break ;
+							}
+						default :{
+								break ;
+							}
+						}
+					}else {
+					switch(this.roleState){
+						case "jump":{
+								if (this.pressing){
+									this.rigid.linearVelocity={x:1,y:this.rigid.linearVelocity.y};
+								}
+								this.bodyBox.x=0;
+								this.bodyBox.y=0;
+								this.bodyBox.width=23;
+								this.bodyBox.height=28;
+								break ;
+							}
+						case "run":{
+								if (this.isCanRight){
+									this.rigid.linearVelocity={x:1,y:0};
+									}else {
+									this.rigid.linearVelocity={x:0,y:0};
+								}
+								this.bodyBox.x=4;
+								this.bodyBox.y=0;
+								this.bodyBox.width=23;
+								this.bodyBox.height=45;
+								break ;
+							}
+						case "stop":{
+								this.rigid.setVelocity({x:0 ,y:0});
+								break ;
+							}
+						case "touch":{
+								if (this.pressing){
+									this.ani.stop();
+									this.roleState="run";
+									}else {
+									this.ani.stop();
+									this.roleState="stop";
+								}
+								break ;
+							}
+						case "lie":{
+								if (this.rigid.linearVelocity.y==0){
+									this.ani.play(0,false,"blue_r_lie");
+									this.rigid.setVelocity({x:0,y:0});
+								}
+								break ;
+							}
+						default :{
+								break ;
+							}
+						}
+				}
+				break ;
 			}
-			Laya.stage.scrollRect.x=moveX;
-			this.rockerX=moveX+80;
-			this.rocker.pos(this.rockerX,this.rockerY);
-		};
-		var moveY=this.roleSp.y-this.viewCenterY;
-		if (moveY > this.scrollRectYMax || moveY <this.scrollRectYMin){
-			moveY=Laya.stage.scrollRect.y;
+			case "left":{
+				if (!this.ani.isPlaying){
+					switch(this.roleState){
+						case "jump":{
+								if (this.pressing){
+									this.rigid.setVelocity({x:-1,y:this.rigid.linearVelocity.y});
+								}
+								this.ani.play(0,false,"blue_l_jump");
+								this.bodyBox.x=0;
+								this.bodyBox.y=0;
+								this.bodyBox.width=23;
+								this.bodyBox.height=28;
+								break ;
+							}
+						case "run":{
+								if (this.isCanLeft){
+									this.rigid.linearVelocity={x:-1,y:0};
+									}else {
+									this.rigid.linearVelocity={x:0,y:0};
+								}
+								this.ani.play(0,true,"blue_l_run");
+								this.bodyBox.x=4;
+								this.bodyBox.y=0;
+								this.bodyBox.width=23;
+								this.bodyBox.height=45;
+								break ;
+							}
+						case "stop":{
+								this.rigid.setVelocity({x:0 ,y:0});
+								this.ani.play(0,false,"blue_l_stand");
+								break ;
+							}
+						case "touch":{
+								if (this.pressing){
+									this.roleState="run";
+									}else {
+									this.roleState="stop";
+								}
+								break ;
+							}
+						case "lie":{
+								if (this.rigid.linearVelocity.y==0){
+									this.ani.play(0,false,"blue_l_lie");
+									this.rigid.setVelocity({x:0,y:0});
+								}
+								break ;
+							}
+						default :{
+								break ;
+							}
+						}
+					}else {
+					switch(this.roleState){
+						case "jump":{
+								if (this.pressing){
+									this.rigid.linearVelocity={x:-1,y:this.rigid.linearVelocity.y};
+								}
+								this.bodyBox.x=0;
+								this.bodyBox.y=0;
+								this.bodyBox.width=23;
+								this.bodyBox.height=28;
+								break ;
+							}
+						case "run":{
+								if (this.isCanLeft){
+									this.rigid.linearVelocity={x:-1,y:0};
+									}else {
+									this.rigid.linearVelocity={x:0,y:0};
+								}
+								this.bodyBox.x=4;
+								this.bodyBox.y=0;
+								this.bodyBox.width=23;
+								this.bodyBox.height=45;
+								break ;
+							}
+						case "stop":{
+								this.rigid.setVelocity({x:0 ,y:0});
+								break ;
+							}
+						case "touch":{
+								if (this.pressing){
+									this.ani.stop();
+									this.roleState="run";
+									}else {
+									this.ani.stop();
+									this.roleState="stop";
+								}
+								break ;
+							}
+						case "lie":{
+								if (this.rigid.linearVelocity.y==0){
+									this.ani.play(0,false,"blue_l_lie");
+									this.rigid.setVelocity({x:0,y:0});
+								}
+								break ;
+							}
+						default :{
+								break ;
+							}
+						}
+				}
+				break ;
+			}
+			case "up":{
+				break ;
+			}
+			case "down":{
+				break ;
+			}
+			default :{
+				break ;
+			}
 		}
-		Laya.stage.scrollRect.y=moveY;
-		this.rockerY=moveY+Laya.stage.displayHeight-80;
-		this.rocker.pos(this.rockerX,this.rockerY);
 	}
 
-	/**
-	*加载完icon的atlas资源后调用此函数
-	*此函数用于对两个摇杆圆Sprite加载图片
-	*/
-	__proto.onIconAtlasLoaded=function(){
-		this.rockerBig.loadImage("icon/rocker.png",Handler.create(this,this.onBigLoaded));
-		this.rockerSmall.loadImage("icon/rocker_center.png",Handler.create(this,this.onSmallLoaded));
-		this.rocker.pos(this.rockerX,this.rockerY);
-		this.rocker.pivot(60,60);
-		this.rocker.size(120,120);
-		this.rocker.addChild(this.rockerSmall);
-		this.rocker.addChild(this.rockerBig);
-		Laya.stage.addChild(this.rocker);
-	}
-
-	/**
-	*加载完小圆后的回调函数
-	*用于设置小圆的样式即添加侦听事件
-	*/
-	__proto.onSmallLoaded=function(){
-		this.rockerSmall.pos(this.rockerSBX,this.rockerSBY);
-		this.rockerSmall.size(40,40);
-		this.rockerSmall.alpha=0.6;
-		this.rockerSmall.pivot(20,20);
-		this.rockerSmall.on("mousedown",this,this.onMouseClickDown);
-		this.rockerSmall.on("mouseup",this,this.onMouseClickUp)
-	}
-
-	/**
-	*鼠标按下事件
-	*/
-	__proto.onMouseClickDown=function(){
-		this.rockerSmall.on("mousemove",this,this.onRockerSmallMove);
-		this.rockerSmall.alpha=1;
-	}
-
-	/**
-	*鼠标抬起事件
-	*/
-	__proto.onMouseClickUp=function(){
-		this.rockerSmall.off("mousemove",this,this.onRockerSmallMove);
-		Tween.to(this.rockerSmall,{x:this.rockerSBY,y:this.rockerSBY},300,Ease.backIn);
-		this.rockerSmall.alpha=0.6;
-		this.rigid.setVelocity({x:0,y:0});
-	}
-
-	/**
-	*移动摇杆
-	*/
-	__proto.onRockerSmallMove=function(){
-		var absX=NaN;
-		var absY=NaN;
-		var powX=NaN;
-		var powY=NaN;
-		var moveRadius=NaN;
-		var posX=NaN;
-		var posY=NaN;
-		posX=this.rocker.mouseX+Laya.stage.scrollRect.x;
-		posY=this.rocker.mouseY+Laya.stage.scrollRect.y;
-		console.log("posX = "+posX);
-		console.log("posY = "+posY);
-		this.rockerSmall.pos(posX,posY,true);
-		absX=Math.abs(this.rockerSmall.x-this.rockerBig.x);
-		absY=Math.abs(this.rockerSmall.y-this.rockerBig.y);
-		powX=Math.pow(absX,2);
-		powY=Math.pow(absY,2);
-		moveRadius=Math.sqrt(powX+powY);
-		var rad=this.getRad(posX-this.rockerSBX,posY-this.rockerSBY,moveRadius);
-		var angle=180 / Math.PI *rad;
-		if ((angle >=0 && angle < 22.5)||(angle >=337.5 && angle < 360)){
-			this.rigid.linearVelocity={x:1,y:0};
-			this.direction="right";
-			console.log("右");
-			}else if (angle >=22.5 && angle < 67.5){
-			console.log("右上");
-			}else if (angle >=67.5 && angle < 112.5){
-			this.direction="up";
-			console.log("上");
-			this.rigid.setVelocity({x:0,y:-1});
-			}else if (angle >=112.5 && angle < 157.5){
-			console.log("左上");
-			}else if (angle >=157.5 && angle < 202.5){
-			this.direction="left";
-			console.log("左");
-			this.rigid.setVelocity({x:-1,y:0});
-			}else if (angle >=202.5 && angle < 247.5){
-			console.log("左下");
-			}else if (angle >=247.5 && angle < 292.5){
-			this.rigid.setVelocity({x:0,y:1});
-			this.direction="down";
-			console.log("下");
-			}else if (angle >=292.5 && angle < 337.5){
-			console.log("右下");
+	__proto.setDirection=function(dir,clickDown){
+		if (this.direction !=dir){
+			this.direction=dir;
+			this.ani.stop();
+			}else {
+			if (this.roleState==="stop"){
+				this.ani.stop();
+			}
 		}
-		if (moveRadius > this.rocekerRadius){
-			console.log("超出了  "+moveRadius);
-			Laya.stage.off("mousemove",this,this.onRockerSmallMove);
-			Tween.to(this.rockerSmall,{x:this.rockerSBY,y:this.rockerSBY},300,Ease.backIn);
-			this.rockerSmall.alpha=0.6;
-		}
+		this.pressing=clickDown;
 	}
 
 	/**
-	*加载完大圆后的回调函数
-	*用于设置大圆的样式即添加侦听事件
+	*改变人物目前的状态
 	*/
-	__proto.onBigLoaded=function(){
-		this.rockerBig.pos(this.rockerSBX,this.rockerSBY);
-		this.rockerBig.size(120,120);
-		this.rockerBig.alpha=0.6;
-		this.rockerBig.pivot(60,60);
+	__proto.setRoleState=function(state){
+		this.roleState=this.roleState==="jump" ? "jump" :state;
 	}
 
 	/**
@@ -55556,15 +55651,6 @@ var Role=(function(_super){
 	}
 
 	/**
-	*获取以摇杆为中心，鼠标位置与中心点的弧度值
-	*
-	*/
-	__proto.getRad=function(xx,yy,moveRadius){
-		var rad=yy >=0 ? (Math.PI *2-Math.acos(xx / moveRadius)):(Math.acos(xx / moveRadius));
-		return rad;
-	}
-
-	/**
 	*本对象精灵的位置随刚体位置变化而变化，
 	*则动画位置随精灵位置变化而变化
 	*/
@@ -55574,6 +55660,7 @@ var Role=(function(_super){
 	}
 
 	__proto.onDisable=function(){}
+	Role.ROLE=null;
 	return Role;
 })(Script)
 
@@ -55591,30 +55678,362 @@ var Controller=(function(_super){
 		this.boolType=true;
 		/**@prop {name:role,tips:"Role脚本",type:prefab}*/
 		this.role=null;
-		// 三段地图
-		this.map1=null;
-		this.map2=null;
-		this.map3=null;
 		// 三张个合一
 		this.map=null;
-		this.viewPort=null;
-		this.rec=null;
 		// 人物脚本
 		this.roleClass=null;
 		// 人物精灵
 		this.roleSp=null;
+		// 人物当前方向
+		this.curDir=null;
+		// 摇杆
+		this.rocker=null;
+		// 大圆
+		this.rockerBig=null;
+		// 小圆
+		this.rockerSmall=null;
+		// 摇杆位置
+		this.rockerX=NaN;
+		this.rockerY=NaN;
+		// 大小圆的中心位置
+		this.rockerSBX=60;
+		this.rockerSBY=60;
+		// 摇杆半径
+		this.rocekerRadius=70;
+		// 开枪按钮
+		this.fireBtn=null;
+		this.fireBtnX=NaN;
+		this.fireBtnY=NaN;
+		// 上跳按钮
+		this.jumpUpBtn=null;
+		this.jumpUpBtnX=NaN;
+		this.jumpUpBtnY=NaN;
+		// 下跃按钮
+		this.jumpDownBtn=null;
+		this.jumpDownBtnX=NaN;
+		this.jumpDownBtnY=NaN;
+		/*
+		地图移动所需参数
+		*/
+		this.viewCenterX=NaN;
+		this.viewCenterY=NaN;
+		this.scrollRectYMin=NaN;
+		this.scrollRectYMax=NaN;
+		this.scrollRectXMin=NaN;
+		this.scrollRectXMax=NaN;
+		/**
+		*鼠标按下事件
+		*/
+		this.isPressing=false;
 		Controller.__super.call(this);
 	}
 
 	__class(Controller,'script.Controller',_super);
 	var __proto=Controller.prototype;
+	/*结束 */
 	__proto.onEnable=function(){
 		this.map=this.owner.getChildByName("background");
-		this.roleClass=this.role.create();
-		this.roleSp=this.roleClass;
+		Laya.timer.once(500,this,this.laterExec);
+		this.rocker=new Sprite();
+		this.rockerBig=new Sprite();
+		this.rockerSmall=new Sprite();
+		this.fireBtn=new Sprite();
+		this.jumpUpBtn=new Sprite();
+		this.jumpDownBtn=new Sprite();
+		this.roleSp=this.role.create();
 		this.map.addChild(this.roleSp);
+		this.roleClass=Role.ROLE;
+		var boxChollider=this.roleSp.getComponent(BoxCollider);
 	}
 
+	/**
+	*延迟300毫秒后执行此函数
+	*用于计算一些需要在浏览器完全打开之后
+	*再计算的数据
+	*/
+	__proto.laterExec=function(){
+		var displayHeight=Laya.stage.height;
+		var displayWidth=Laya.stage.width;
+		this.rockerX=80;
+		this.rockerY=displayHeight-80;
+		this.fireBtnX=displayWidth-100;
+		this.fireBtnY=displayHeight-100;
+		this.jumpUpBtnX=displayWidth-90;
+		this.jumpUpBtnY=displayHeight-160;
+		this.jumpDownBtnX=displayWidth-160;
+		this.jumpDownBtnY=displayHeight-90;
+		Laya.loader.load("res/atlas/icon.atlas",Handler.create(this,this.onIconAtlasLoaded));
+		this.viewCenterY=Laya.stage.displayHeight / 2;
+		this.viewCenterX=Laya.stage.displayWidth / 2;
+		this.scrollRectYMin=0;
+		this.scrollRectYMax=375-Laya.stage.stage.displayHeight;
+		this.scrollRectXMax=5571-Laya.stage.displayWidth;
+		this.scrollRectXMin=0;
+		var rec=new Rectangle(0,0,Laya.stage.displayWidth,Laya.stage.displayHeight);
+		Laya.stage.scrollRect=rec;
+		Laya.timer.loop(10,this,this.onLoop);
+	}
+
+	/**
+	*游戏循环
+	*/
+	__proto.onLoop=function(){
+		this.moveMap();
+		this.roleClass.moveAndChangeAni();
+	}
+
+	/**
+	*加载完icon的atlas资源后调用此函数
+	*此函数用于对两个摇杆圆Sprite加载图片
+	*/
+	__proto.onIconAtlasLoaded=function(){
+		this.rockerBig.loadImage("icon/rocker.png",Handler.create(this,this.onBigLoaded));
+		this.rockerSmall.loadImage("icon/rocker_center.png",Handler.create(this,this.onSmallLoaded));
+		this.rocker.pos(this.rockerX,this.rockerY);
+		this.rocker.pivot(60,60);
+		this.rocker.size(120,120);
+		this.rocker.addChild(this.rockerSmall);
+		this.rocker.addChild(this.rockerBig);
+		Laya.stage.addChild(this.rocker);
+		this.fireBtn.loadImage("icon/fire.png",Handler.create(this,this.onFireBtnLoaded));
+		this.jumpUpBtn.loadImage("icon/jump.png",Handler.create(this,this.onJumpUpBtnLoaded));
+		this.jumpDownBtn.loadImage("icon/jump_down.png",Handler.create(this,this.onJumpDownBtnLoaded));
+		Laya.stage.addChildren(this.fireBtn,this.jumpUpBtn,this.jumpDownBtn);
+	}
+
+	/**
+	*加载完 下跃 按钮的回调函数
+	*用于设置按钮大小、位置等参数
+	*/
+	__proto.onJumpDownBtnLoaded=function(){
+		this.jumpDownBtn.size(50,50);
+		this.jumpDownBtn.pos(this.jumpDownBtnX,this.jumpDownBtnY);
+		this.jumpDownBtn.alpha=0.6;
+		this.jumpDownBtn.on("mousedown",this,this.onMouseClickJumpDownDown);
+	}
+
+	__proto.onMouseClickJumpDownDown=function(){
+		console.log(this.roleClass.getDir());
+		console.log(this.roleClass.getState());
+	}
+
+	/**
+	*加载完 上跃 按钮的回调函数
+	*用于设置按钮大小、位置等参数
+	*/
+	__proto.onJumpUpBtnLoaded=function(){
+		this.jumpUpBtn.size(50,50);
+		this.jumpUpBtn.pos(this.jumpUpBtnX,this.jumpUpBtnY);
+		this.jumpUpBtn.alpha=0.6;
+		this.jumpUpBtn.on("click",this,this.onMousClickJumpUpDown);
+	}
+
+	__proto.onMousClickJumpUpDown=function(){
+		this.roleClass.jump();
+	}
+
+	/**
+	*加载完 开枪 按钮的回调函数
+	*用于设置按钮大小、位置等参数
+	*/
+	__proto.onFireBtnLoaded=function(){
+		this.fireBtn.size(80,80);
+		this.fireBtn.pos(this.fireBtnX,this.fireBtnY);
+		this.fireBtn.alpha=0.6;
+	}
+
+	/**
+	*加载完大圆后的回调函数
+	*用于设置大圆的样式即添加侦听事件
+	*/
+	__proto.onBigLoaded=function(){
+		this.rockerBig.pos(this.rockerSBX,this.rockerSBY);
+		this.rockerBig.size(120,120);
+		this.rockerBig.alpha=0.6;
+		this.rockerBig.pivot(60,60);
+	}
+
+	/**
+	*加载完小圆后的回调函数
+	*用于设置小圆的样式即添加侦听事件
+	*/
+	__proto.onSmallLoaded=function(){
+		this.rockerSmall.pos(this.rockerSBX,this.rockerSBY);
+		this.rockerSmall.size(40,40);
+		this.rockerSmall.alpha=0.6;
+		this.rockerSmall.pivot(20,20);
+		this.rockerSmall.on("mousedown",this,this.onMouseClickRockerSmallDown);
+		this.rockerSmall.on("mouseup",this,this.onMouseClickRockerSmallUp)
+	}
+
+	__proto.onMouseClickRockerSmallDown=function(){
+		this.rockerSmall.on("mousemove",this,this.onRockerSmallMove);
+		this.rockerSmall.alpha=1;
+		this.isPressing=true;
+	}
+
+	/**
+	*鼠标抬起事件
+	*/
+	__proto.onMouseClickRockerSmallUp=function(){
+		this.rockerSmall.off("mousemove",this,this.onRockerSmallMove);
+		Tween.to(this.rockerSmall,{x:this.rockerSBY,y:this.rockerSBY},300,Ease.backIn);
+		this.rockerSmall.alpha=0.6;
+		this.isPressing=false;
+		this.roleClass.setRoleState("stop");
+		this.roleClass.setDirection(this.curDir,this.isPressing);
+	}
+
+	/**
+	*移动摇杆
+	*/
+	__proto.onRockerSmallMove=function(){
+		var absX=NaN;
+		var absY=NaN;
+		var powX=NaN;
+		var powY=NaN;
+		var moveRadius=NaN;
+		var posX=NaN;
+		var posY=NaN;
+		posX=this.rocker.mouseX+Laya.stage.scrollRect.x;
+		posY=this.rocker.mouseY+Laya.stage.scrollRect.y;
+		this.rockerSmall.pos(posX,posY,true);
+		absX=Math.abs(this.rockerSmall.x-this.rockerBig.x);
+		absY=Math.abs(this.rockerSmall.y-this.rockerBig.y);
+		powX=Math.pow(absX,2);
+		powY=Math.pow(absY,2);
+		moveRadius=Math.sqrt(powX+powY);
+		var rad=this.getRad(posX-this.rockerSBX,posY-this.rockerSBY,moveRadius);
+		var angle=180 / Math.PI *rad;
+		if ((angle >=0 && angle < 22.5)||(angle >=337.5 && angle < 360)){
+			this.roleClass.setDirection("right",this.isPressing);
+			this.roleClass.setRoleState("run");
+			this.curDir="right";
+			}else if (angle >=22.5 && angle < 67.5){
+			}else if (angle >=67.5 && angle < 112.5){
+			this.roleClass.setDirection("up",this.isPressing);
+			}else if (angle >=112.5 && angle < 157.5){
+			}else if (angle >=157.5 && angle < 202.5){
+			this.roleClass.setDirection("left",this.isPressing);
+			this.roleClass.setRoleState("run");
+			this.curDir="left";
+			}else if (angle >=202.5 && angle < 247.5){
+			}else if (angle >=247.5 && angle < 292.5){
+			this.roleClass.setDirection(this.curDir,this.isPressing);
+			this.roleClass.setRoleState("lie");
+		}else if (angle >=292.5 && angle < 337.5){}
+		if (moveRadius > this.rocekerRadius){
+			Laya.stage.off("mousemove",this,this.onRockerSmallMove);
+			Tween.to(this.rockerSmall,{x:this.rockerSBY,y:this.rockerSBY},300,Ease.backIn);
+			this.rockerSmall.alpha=0.6;
+		}
+	}
+
+	__proto.onKeyDown=function(e){
+		this.isPressing=true;
+		switch(e.keyCode){
+			case 37:{
+					this.roleClass.setDirection("left",this.isPressing);
+					this.roleClass.setRoleState("run");
+					this.curDir="left";
+					break ;
+				}
+			case 39:{
+					this.roleClass.setDirection("right",this.isPressing);
+					this.roleClass.setRoleState("run");
+					this.curDir="right";
+					break ;
+				}
+			case 40:{
+					this.roleClass.setDirection(this.curDir,this.isPressing);
+					this.roleClass.setRoleState("lie");
+					break ;
+				}
+			case 32:{
+					this.roleClass.jump();
+					break ;
+				}
+			case 86:{
+					console.log("状态："+this.roleClass.getState());
+					console.log("方向"+this.roleClass.getDir());
+					console.log("播放"+this.roleClass.getIsPlay());
+					console.log("碰撞区"+this.roleClass.getRigidBound());
+					break ;
+				}
+			default :{
+					break ;
+				}
+			}
+	}
+
+	__proto.onKeyUp=function(e){
+		switch(e.keyCode){
+			case 37:{
+					this.isPressing=false;
+					this.roleClass.setRoleState("stop");
+					this.roleClass.setDirection(this.curDir,this.isPressing);
+					break ;
+				}
+			case 39:{
+					this.isPressing=false;
+					this.roleClass.setRoleState("stop");
+					this.roleClass.setDirection(this.curDir,this.isPressing);
+					break ;
+				}
+			case 40:{
+					this.isPressing=false;
+					this.roleClass.setRoleState("stop");
+					this.roleClass.setDirection(this.curDir,this.isPressing);
+					break ;
+				}
+			default :{
+					break ;
+				}
+			}
+	}
+
+	/**
+	*获取以摇杆为中心，鼠标位置与中心点的弧度值
+	*
+	*/
+	__proto.getRad=function(xx,yy,moveRadius){
+		var rad=yy >=0 ? (Math.PI *2-Math.acos(xx / moveRadius)):(Math.acos(xx / moveRadius));
+		return rad;
+	}
+
+	/**
+	*移动 Laya.stage.scrollRect（滚动区域）实现移动屏幕效果
+	*/
+	__proto.moveMap=function(){
+		var moveX=this.roleSp.x-this.viewCenterX;
+		if (moveX > this.scrollRectXMax || moveX < this.scrollRectXMin){
+			moveX=Laya.stage.scrollRect.x;
+		}
+		Laya.stage.scrollRect.x=moveX;
+		this.rockerX=moveX+80;
+		this.rocker.pos(this.rockerX,this.rockerY);
+		this.fireBtnX=moveX+Laya.stage.displayWidth-100;
+		this.jumpUpBtnX=moveX+Laya.stage.displayWidth-90;
+		this.jumpDownBtnX=moveX+Laya.stage.displayWidth-160;
+		this.fireBtn.pos(this.fireBtnX,this.fireBtnY);
+		this.jumpUpBtn.pos(this.jumpUpBtnX,this.jumpUpBtnY);
+		this.jumpDownBtn.pos(this.jumpDownBtnX,this.jumpDownBtnY);
+		var moveY=this.roleSp.y-this.viewCenterY;
+		if (moveY > this.scrollRectYMax || moveY <this.scrollRectYMin){
+			moveY=Laya.stage.scrollRect.y;
+		}
+		Laya.stage.scrollRect.y=moveY;
+		this.rockerY=moveY+Laya.stage.displayHeight-80;
+		this.rocker.pos(this.rockerX,this.rockerY);
+		this.fireBtnY=moveY+Laya.stage.displayHeight-100;
+		this.jumpUpBtnY=moveY+Laya.stage.displayHeight-160;
+		this.jumpDownBtnY=moveY+Laya.stage.displayHeight-90;
+		this.fireBtn.pos(this.fireBtnX,this.fireBtnY);
+		this.jumpUpBtn.pos(this.jumpUpBtnX,this.jumpUpBtnY);
+		this.jumpDownBtn.pos(this.jumpDownBtnX,this.jumpDownBtnY);
+	}
+
+	/*结束 */
 	__proto.onDisable=function(){}
 	return Controller;
 })(Script)
@@ -84727,8 +85146,10 @@ var TextArea=(function(_super){
 })(TextInput)
 
 
-	Laya.__init([EventDispatcher,LoaderManager,Render,View,GameConfig,Timer,SceneUtils,WebGLContext2D,LocalStorage,CallLater,GraphicAnimation,Physics,Path]);
+	Laya.__init([LoaderManager,EventDispatcher,GameConfig,Timer,SceneUtils,WebGLContext2D,LocalStorage,CallLater,GraphicAnimation,Physics,Render,Path,View]);
 	/**LayaGameStart**/
 	new Main();
 
 })(window,document,Laya);
+
+},{}]},{},[1]);

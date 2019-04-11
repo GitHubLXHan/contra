@@ -5,7 +5,7 @@
     "searchKey":"View",
     "props":{"sceneWidth":600,"sceneHeight":400,"sceneColor":"#000000"},
     "nodeParent":-1,
-    "maxID":11,
+    "maxID":15,
     "label":"View",
     "isOpen":null,
     "isDirectory":true,
@@ -61,7 +61,7 @@
             "isDirectory":false,
             "isAniNode":true,
             "hasChild":false,
-            "compId":9,
+            "compId":10,
             "child":[
                 ]
         },
@@ -74,7 +74,46 @@
             "isDirectory":false,
             "isAniNode":true,
             "hasChild":false,
-            "compId":10,
+            "compId":11,
+            "child":[
+                ]
+        },
+        {
+            "type":"GraphicNode",
+            "searchKey":"GraphicNode",
+            "props":{},
+            "nodeParent":2,
+            "label":"GraphicNode",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":12,
+            "child":[
+                ]
+        },
+        {
+            "type":"GraphicNode",
+            "searchKey":"GraphicNode",
+            "props":{},
+            "nodeParent":2,
+            "label":"GraphicNode",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":13,
+            "child":[
+                ]
+        },
+        {
+            "type":"GraphicNode",
+            "searchKey":"GraphicNode",
+            "props":{},
+            "nodeParent":2,
+            "label":"GraphicNode",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":14,
             "child":[
                 ]
         }],
@@ -193,13 +232,31 @@
                     }
                 },
                 {
-                    "target":9,
+                    "target":10,
                     "keyframes":{
 
                     }
                 },
                 {
-                    "target":10,
+                    "target":11,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":12,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":13,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":14,
                     "keyframes":{
 
                     }
@@ -315,13 +372,13 @@
                     }
                 },
                 {
-                    "target":9,
+                    "target":10,
                     "keyframes":{
 
                     }
                 },
                 {
-                    "target":10,
+                    "target":11,
                     "keyframes":{
 
                     }
@@ -437,12 +494,6 @@
                     }
                 },
                 {
-                    "target":9,
-                    "keyframes":{
-
-                    }
-                },
-                {
                     "target":10,
                     "keyframes":{
 
@@ -471,38 +522,6 @@
                     "target":6,
                     "keyframes":{
 
-                    }
-                },
-                {
-                    "target":9,
-                    "keyframes":{
-                        "y":[
-                            {
-                                "value":0,
-                                "tweenMethod":"linearNone",
-                                "tween":true,
-                                "target":9,
-                                "key":"y",
-                                "index":0
-                            }],
-                        "x":[
-                            {
-                                "value":0,
-                                "tweenMethod":"linearNone",
-                                "tween":true,
-                                "target":9,
-                                "key":"x",
-                                "index":0
-                            }],
-                        "skin":[
-                            {
-                                "value":null,
-                                "tweenMethod":"linearNone",
-                                "tween":false,
-                                "target":9,
-                                "key":"skin",
-                                "index":0
-                            }]
                     }
                 },
                 {
@@ -591,6 +610,384 @@
             "name":"blue_r_jump",
             "id":4,
             "frameRate":8,
+            "action":0
+        },
+        {
+            "nodes":[
+                {
+                    "target":3,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":5,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":6,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":10,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":11,
+                    "keyframes":{
+                        "y":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":11,
+                                "key":"y",
+                                "index":0
+                            }],
+                        "x":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":11,
+                                "key":"x",
+                                "index":0
+                            }],
+                        "width":[
+                            {
+                                "value":30,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":11,
+                                "key":"width",
+                                "index":0
+                            }],
+                        "skin":[
+                            {
+                                "value":"role_blue/blue_left01.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":11,
+                                "key":"skin",
+                                "index":0
+                            }],
+                        "height":[
+                            {
+                                "value":50,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":11,
+                                "key":"height",
+                                "index":0
+                            }]
+                    }
+                },
+                {
+                    "target":12,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":13,
+                    "keyframes":{
+
+                    }
+                }],
+            "name":"blue_l_stand",
+            "id":5,
+            "frameRate":24,
+            "action":0
+        },
+        {
+            "nodes":[
+                {
+                    "target":3,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":5,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":6,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":10,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":11,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":12,
+                    "keyframes":{
+                        "y":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":12,
+                                "key":"y",
+                                "index":0
+                            }],
+                        "x":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":12,
+                                "key":"x",
+                                "index":0
+                            }],
+                        "width":[
+                            {
+                                "value":30,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":12,
+                                "key":"width",
+                                "index":0
+                            }],
+                        "skin":[
+                            {
+                                "value":"role_blue/blue_right01.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":12,
+                                "key":"skin",
+                                "index":0
+                            }],
+                        "height":[
+                            {
+                                "value":50,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":12,
+                                "key":"height",
+                                "index":0
+                            }]
+                    }
+                }],
+            "name":"blue_r_stand",
+            "id":6,
+            "frameRate":24,
+            "action":0
+        },
+        {
+            "nodes":[
+                {
+                    "target":3,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":5,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":6,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":10,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":11,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":12,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":13,
+                    "keyframes":{
+                        "y":[
+                            {
+                                "value":18,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":13,
+                                "key":"y",
+                                "index":0
+                            }],
+                        "x":[
+                            {
+                                "value":-10,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":13,
+                                "key":"x",
+                                "index":0
+                            }],
+                        "width":[
+                            {
+                                "value":50,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":13,
+                                "key":"width",
+                                "index":0
+                            }],
+                        "skin":[
+                            {
+                                "value":"role_blue/blue_l_lie.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":13,
+                                "key":"skin",
+                                "index":0
+                            }],
+                        "height":[
+                            {
+                                "value":30,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":13,
+                                "key":"height",
+                                "index":0
+                            }]
+                    }
+                },
+                {
+                    "target":14,
+                    "keyframes":{
+
+                    }
+                }],
+            "name":"blue_l_lie",
+            "id":7,
+            "frameRate":24,
+            "action":0
+        },
+        {
+            "nodes":[
+                {
+                    "target":3,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":5,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":6,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":10,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":11,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":12,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":13,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":14,
+                    "keyframes":{
+                        "y":[
+                            {
+                                "value":18,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":14,
+                                "key":"y",
+                                "index":0
+                            }],
+                        "x":[
+                            {
+                                "value":-10,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":14,
+                                "key":"x",
+                                "index":0
+                            }],
+                        "width":[
+                            {
+                                "value":50,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":14,
+                                "key":"width",
+                                "index":0
+                            }],
+                        "skin":[
+                            {
+                                "value":"role_blue/blue_r_lie.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":14,
+                                "key":"skin",
+                                "index":0
+                            }],
+                        "height":[
+                            {
+                                "value":30,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":14,
+                                "key":"height",
+                                "index":0
+                            }]
+                    }
+                }],
+            "name":"blue_r_lie",
+            "id":8,
+            "frameRate":24,
             "action":0
         }]
 }

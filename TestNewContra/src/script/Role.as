@@ -27,415 +27,481 @@ package script {
 
 
 		
+		// 静态访问接口
+		public static var ROLE:Role;
 		
 		//人物动画
 		private var ani:Animation;
-		
 		// 本对象精灵
 		private var roleSp:Sprite;
 		// 本对象父节点 - 即背景节点
 		private var roleParentSp:Sprite;
+
+		
 		// 人物精灵刚体
 		private var rigid:RigidBody;
-		
-		// 摇杆
-		private var rocker:Sprite;
-		// 大圆
-		private var rockerBig:Sprite;
-		// 小圆
-		private var rockerSmall:Sprite;
-		// 摇杆位置
-		private var rockerX:Number;
-		private var rockerY:Number;
-		// 大小圆的中心位置
-		private var rockerSBX:Number = 60;
-		private var rockerSBY:Number = 60;
-		// 摇杆半径
-		private var rocekerRadius:Number = 70;
-		
-		
-		// 地图移动所需参数
-		private var viewCenterX:Number;
-		private var viewCenterY:Number;
-		private var scrollRectYMin:Number;
-		private var scrollRectYMax:Number;
-		private var scrollRectXMin:Number;
-		private var scrollRectXMax:Number;
+		// 人物精灵身体碰撞区
+		private var bodyBox:BoxCollider;
+		// 人物精灵脚步碰撞区
+		private var footBox:BoxCollider;
 		
 		// 人物方向
 		private var direction:String;
+		// 人物状态
+		private var roleState:String; 
+		// 人物速度
+		private var speedX:Number = 0;
+		private var speedY:Number = 0;
+		
+		public function Role():void {
+			Role.ROLE = this;
+		}
 		
 	
 		override public function onEnable():void {
 			
-			var boxChollider:BoxCollider = this.owner.getComponent(BoxCollider);
-			
-			// 延迟300毫秒后，
-			Laya.timer.once(500, this, laterExec);
-			
-			// 实例化摇杆大小圆
-			rocker = new Sprite();
-			rockerBig = new Sprite();
-			rockerSmall = new Sprite();
+
 			
 			// 获取本对象精灵
 			roleSp = this.owner as Sprite;
 			
 			// 获取父节点
 			roleParentSp = roleSp.parent as Sprite;
+			
+			
+			
+			
 			// 获取人物精灵刚体
 			rigid = roleSp.getComponent(RigidBody);
 			
+			// 获取人物精灵碰撞区
+			var boxs:Array = roleSp.getComponents(BoxCollider);
+			bodyBox = boxs[1];
+			footBox = boxs[0];
+			console.log("boxs");
+			trace(boxs);
 			// 实例化动画并加载动画资源
 			ani = new Animation();
 			ani.loadAnimation("GameScene/Role.ani", Handler.create(this, onAniLoaded));
 			
-
-			
-
-			
+//			roleSp.pos(100, 0);
 				
 		}
 		
 
-		/**
-		 * 延迟300毫秒后执行此函数
-		 * 用于计算一些需要在浏览器完全打开之后
-		 * 再计算的数据
-		 */ 
-		private function laterExec():void {
-			// 计算摇杆的中心点位置
-			rockerX = 80;
-			rockerY = Laya.stage.displayHeight - 80;
-			// 加载图片资源
-			Laya.loader.load("res/atlas/icon.atlas", Handler.create(this, onIconAtlasLoaded));
-	
-			// 计算屏幕显示中心
-			viewCenterY = Laya.stage.displayHeight / 2;
-			viewCenterX = Laya.stage.displayWidth / 2;
-			scrollRectYMin = 0;
-			scrollRectYMax = 375 - Laya.stage.stage.displayHeight;
-			scrollRectXMax = 5571 - Laya.stage.displayWidth;
-			scrollRectXMin = 0;
-
-			
-			// 给舞台添加一个 滚动区域
-			// 在接下来的屏幕移动效果
-			// 其实就是移动 滚动区域
-			var rec:Rectangle = new Rectangle(0, 0, Laya.stage.displayWidth, Laya.stage.displayHeight);
-			Laya.stage.scrollRect = rec;
-			
-
-			// 给本角色添加游戏循环
-			Laya.timer.loop(10, this, onLoop);
-			// 临时测试
-			ani.on(Event.COMPLETE, this, onAniPlayed);
-			roleSp.pos(viewCenterX, viewCenterY);
+		
+		public function getDir():String {
+			return direction;
 		}
-		
-		/**
-		 * 游戏循环
-		 */
-		private function onLoop():void
-		{		
-			// 调动移动 滚动区域 函数
-			moveMap();
-			// 播放人物动画
-			switch(direction)
-			{
-				case "right":
-				{
-					if (!ani.isPlaying) {
-						ani.play(0, false, "blue_r_run");				
-					}		
-					break;
-				}
-				case "left":
-				{
-					if (!ani.isPlaying) {
-						ani.play(0, false, "blue_l_run");					
-					}		
-					break;
-				}
-				case "up":
-				{
-					break;
-				}	
-				case "down":
-				{
-					break;
-				}	
-				case "stop":
-				{
-					ani.stop();
-					break;
-				}	
-				default:
-				{
-					break;
-				}
-			}			
-
-		}		
-		
-		/**
-		 * 临时函数
-		 */
-		private function onAniPlayed():void
-		{
-			console.log("结束");
-			switch(direction)
-			{
-				case "right":
-				{
-					ani.play(0, false, "blue_r_run");		
-					break;
-				}
-				case "left":
-				{
-					ani.play(0, false, "blue_l_run");		
-					break;
-				}
-				case "up":
-				{
-					break;
-				}	
-				case "down":
-				{
-					break;
-				}	
-				default:
-				{
-					break;
-				}
-			}			
-		}		
+		public function getState():String {
+			return roleState;
+		}
+		public function getRigidBound():String {
+			return bodyBox.x + "," + bodyBox.y + "," + bodyBox.width + "," + bodyBox.height;
+		}
+		public function getIsPlay():Boolean {
+			return ani.isPlaying;
+		}
 		
 		/**
 		 * 碰撞回调函数
 		 */
+		// 是否可以行走
+		private var isCanRight:Boolean = true;
+		private var isCanLeft:Boolean = true;
 		override public function onTriggerEnter(other:*, self:*, contact:*):void {
-			if (other.label === "pass_n") {
-				rigid.setVelocity({x:0, y:0})		
+			
+			if ((other.label === "pass_n" || other.label === "pass_y") && rigid.linearVelocity.y > 0 && self.label === "foot") {
+				rigid.type = "kinematic";
+				console.log("进入 myself");
+				trace(self);
+				rigid.gravityScale =  0;
+				console.log("触碰到");
+				roleState = "touch";
+				
 			}
+			
+			// 触碰当不可行走障碍物
+			if (other.label === "l_wall" && roleState != "jump") {
+//				roleState = "no_right";
+				isCanRight = false;
+			}else if (other.label === "r_wall"  && roleState != "jump") {
+//				roleState = "no_left";
+				isCanLeft = false;
+			}
+		}
+
+		/**
+		 * 碰撞结束
+		 */
+		override public function onTriggerExit(other:*, self:*, contact:*):void {
+			if((other.label === "pass_y" || other.label === "pass_n") && roleState != "jump" && self.label === "foot") {
+				console.log("出来");
+				trace(self);
+				rigid.type = "dynamic";
+				rigid.gravityScale = 1;
+				roleState = "jump";
+				
+			}
+			if (other.label === "l_wall") {
+//				roleState = "run";
+				isCanRight = true;
+			}
+			if (other.label === "r_wall") {
+//				roleState = "run";
+				isCanLeft = true;
+			}
+			console.log("碰撞结束");
+			trace(self);
+			
 		}
 		
 		/**
-		 * 移动 Laya.stage.scrollRect（简称 滚动区域）实现移动屏幕效果
+		 * 持续碰撞
 		 */
-		private function moveMap():void {
-				
-			/*
-			移动 x 方向
-			*/
-			// 当人物移动到 1/2 屏幕的时候才进行移动背景图，因为人物只能前进
-			if (roleSp.x - Laya.stage.scrollRect.x >= viewCenterX) {
-				// 试移动 滚动区域 的 X轴
-				var moveX:Number = roleSp.x - viewCenterX;
-				// 再判断是否超过了移动界限
-				if (moveX > scrollRectXMax || moveX < scrollRectXMin) {
-					// 若超过则将 moveX 设置为 滚动区域 原来未移动时的 X轴
-					moveX = Laya.stage.scrollRect.x;
+		override public function onTriggerStay(other:*, self:*, contact:*):void {
+			console.log("持续碰撞");
+			trace(self);
+			self = footBox;
+		}
+		
+		/**
+		 * 跳跃
+		 */
+		public function jump():void {
+			rigid.type = "dynamic";
+			rigid.gravityScale = 1;
+			rigid.linearVelocity = {x:0, y:-6};
+			roleState = "jump";
+			ani.stop();
+		}
+		
+		public function moveAndChangeAni():void {
+			// 播放人物动画及移动人物
+			switch(direction)
+			{
+				case "right":
+				{
+					if (!ani.isPlaying) {
+						switch(roleState)
+						{
+							case "jump":
+							{
+								if (pressing) {
+									// 跳跃时且向右走
+									rigid.setVelocity({x:1, y:rigid.linearVelocity.y});	
+								}								
+								// 播放跳跃动画
+								ani.play(0, true, "blue_r_jump");
+								// 更改跳跃时碰撞区
+								bodyBox.x = 0;
+								bodyBox.y = 0;
+								bodyBox.width = 23;
+								bodyBox.height = 28;
+								break;
+							}
+							case "run":
+							{
+								if (isCanRight) {
+									//没有跳跃且可以像右走
+									rigid.linearVelocity = {x:1, y:0};
+								} else {
+									//没有跳跃，不可以像右走
+									rigid.linearVelocity = {x:0, y:0};
+								}
+								// 播放向右走动画
+								ani.play(0, true, "blue_r_run");
+								// 更改站立或行走时碰撞区
+								bodyBox.x = 4;
+								bodyBox.y = 0;
+								bodyBox.width = 23;
+								bodyBox.height = 45;
+								break;
+							}
+							case "stop":
+							{
+								// 停止移动
+								rigid.setVelocity({x:0 , y:0});
+								ani.play(0, false, "blue_r_stand");
+//								roleState = "run";
+								break;
+							}
+							
+							case "touch":
+							{
+								if (pressing) {
+									roleState = "run";
+								} else {
+									roleState = "stop";
+								}
+								break;
+							}
+							case "lie":
+							{
+								if (rigid.linearVelocity.y == 0) {
+									ani.play(0, false, "blue_r_lie");
+									rigid.setVelocity({x:0, y:0});
+								}
+								break;
+							}	
+							default:
+							{
+								break;
+							}
+						}						
+					} else {
+						// 正在播放动画的情况下
+						switch(roleState)
+						{
+							case "jump":
+							{
+								if (pressing) {
+									// 跳跃情况下，移动人物
+									rigid.linearVelocity = {x:1, y:rigid.linearVelocity.y};	
+								}
+								// 更改跳跃时碰撞区
+								bodyBox.x = 0;
+								bodyBox.y = 0;
+								bodyBox.width = 23;
+								bodyBox.height = 28;
+								break;
+							}
+							case "run":
+							{								
+								if (isCanRight) {
+									//没有跳跃且可以像右走的情况下
+									rigid.linearVelocity = {x:1, y:0};
+								} else {
+									// 不可向右走
+									rigid.linearVelocity = {x:0, y:0};	
+								}
+								// 更改站立或行走碰撞区
+								bodyBox.x = 4;
+								bodyBox.y = 0;
+								bodyBox.width = 23;
+								bodyBox.height = 45;
+								break;
+							}
+							case "stop":
+							{
+								// 停止移动
+								rigid.setVelocity({x:0 , y:0});
+//								roleState = "run";
+								break;
+							}
+							case "touch":
+							{
+								if (pressing) {
+									ani.stop();
+									roleState = "run";
+								} else {
+									ani.stop();
+									roleState = "stop";
+								}
+								break;
+							}
+							case "lie":
+							{
+								if (rigid.linearVelocity.y == 0) {
+									ani.play(0, false, "blue_r_lie");
+									rigid.setVelocity({x:0, y:0});
+								}
+								break;
+							}
+							default:
+							{
+								break;
+							}
+						}
+					}
+					break;
 				}
-				// 更新滚动区域的位置
-				Laya.stage.scrollRect.x = moveX;
-				// 更新摇杆的位置，因为摇杆必须实时固定在屏幕上
-				rockerX = moveX + 80;
-				rocker.pos(rockerX, rockerY);
-			}
-			/* 结束 */
-			
-			
-			/*
-			移动 y 方向
-			*/
-			// 试移动 滚动区域 的 Y 轴
-			var moveY:Number = roleSp.y - viewCenterY; 
-			// 再判断是否超过移动界限
-			if (moveY > scrollRectYMax || moveY <scrollRectYMin) {
-				// 若超过则将 moveY 值设置为 滚动区域 原来未移动时的 Y 轴
-				moveY = Laya.stage.scrollRect.y;
-			}
-			// 更新滚动区域 Y轴 位置
-			Laya.stage.scrollRect.y = moveY;
-			// 更新摇杆的位置，因为摇杆必须实时固定在屏幕上
-			rockerY = moveY + Laya.stage.displayHeight - 80;
-			rocker.pos(rockerX, rockerY);
-			/* 结束 */
-		}
-		
-		
-		
-		/**
-		 * 加载完icon的atlas资源后调用此函数
-		 * 此函数用于对两个摇杆圆Sprite加载图片
-		 */
-		private function onIconAtlasLoaded():void
-		{
-			// 为摇杆两个 Sprite 加载图片资源
-			rockerBig.loadImage("icon/rocker.png",Handler.create(this, onBigLoaded));
-			rockerSmall.loadImage("icon/rocker_center.png", Handler.create(this, onSmallLoaded));
-			
-			/* 
-			  因为摇杆要时时刻刻保持在最顶层，
-			  但是人物移动时舞台视口会移动，影响了摇杆的位置，
-			  所以将其添加到父节点后再添加到舞台上，
-			  让父节点随视口移动即可
-			*/
-			
-			// 摇杆父节点
-			rocker.pos(rockerX, rockerY);
-			rocker.pivot(60, 60);
-			rocker.size(120, 120);
-			// 摇杆两个圆添加到父节点中
-			rocker.addChild(rockerSmall);
-			rocker.addChild(rockerBig);
-			Laya.stage.addChild(rocker);
-			
-			
-		}	
-		
-		
-		/**
-		 * 加载完小圆后的回调函数
-		 * 用于设置小圆的样式即添加侦听事件
-		 */
-		private function onSmallLoaded():void
-		{	
-			//设置小圆的位置、大小、透明度、中心轴
-			rockerSmall.pos(rockerSBX, rockerSBY);
-			rockerSmall.size(40, 40);
-			rockerSmall.alpha = 0.6;
-			rockerSmall.pivot(20,20);
-			
-			// 添加侦听事件
-			rockerSmall.on(Event.MOUSE_DOWN, this, this.onMouseClickDown);
-			rockerSmall.on(Event.MOUSE_UP, this, onMouseClickUp)	
-		}
-		
-		/**
-		 * 鼠标按下事件
-		 */
-		private function onMouseClickDown():void
-		{
-			// 给摇杆小圆添加鼠点击按下事件
-			rockerSmall.on(Event.MOUSE_MOVE, this, onRockerSmallMove);	
-			// 修改小圆透明度，当点下去的时候透明度为 1
-			rockerSmall.alpha = 1;		
-			
-		}
-		
-		/**
-		 * 鼠标抬起事件
-		 */
-		private function onMouseClickUp():void
-		{
-			// 当鼠标抬起时销毁 摇杆小圆 的鼠标移动事件
-			rockerSmall.off(Event.MOUSE_MOVE, this, onRockerSmallMove);
-			// 利用缓动动画将小圆移动回原处
-			Tween.to(rockerSmall, {x:rockerSBY, y:rockerSBY}, 300, Ease.backIn);
-			// 重设透明度
-			rockerSmall.alpha = 0.6;
-			// 人物速度为零
-			rigid.setVelocity({x:0, y:0});
-		}
-		
-		/**
-		 * 移动摇杆
-		 */
-		private function onRockerSmallMove():void { 
-			//定义临时变量
-			var absX:Number;
-			var absY:Number;
-			var powX:Number;
-			var powY:Number;
-			var moveRadius:Number;
-			var posX:Number;
-			var posY:Number;
-			// 获取鼠标位置
-			posX = rocker.mouseX + Laya.stage.scrollRect.x;
-			posY = rocker.mouseY + Laya.stage.scrollRect.y;
-			console.log("posX = " + posX);
-			console.log("posY = " + posY);
-			
-			// 改变小圆的位置
-			rockerSmall.pos(posX, posY, true);
-			//计算小圆是否被拉得太远
-			absX = Math.abs(rockerSmall.x - rockerBig.x);
-			absY = Math.abs(rockerSmall.y - rockerBig.y);
-			powX = Math.pow(absX, 2);
-			powY = Math.pow(absY, 2);
-			moveRadius = Math.sqrt(powX + powY);
-			// 弧度值
-			var rad:Number = getRad(posX - rockerSBX, posY - rockerSBY, moveRadius);
-			// 弧度转角度
-			var angle:Number = 180 / Math.PI * rad;
-			
-			/*
-			  判断方向
-			*/
-			if ((angle >= 0 && angle < 22.5) ||(angle >= 337.5 && angle < 360)){
-				rigid.linearVelocity = {x:1, y:0};
-				direction = "right";
+				case "left":
+				{
+					if (!ani.isPlaying) {
+						switch(roleState)
+						{
+							case "jump":
+							{
+								if (pressing) {
+									// 跳跃时且向右走
+									rigid.setVelocity({x:-1, y:rigid.linearVelocity.y});
+								}								
+								// 播放跳跃动画
+								ani.play(0, false, "blue_l_jump");
+								// 更改跳跃时碰撞区
+								bodyBox.x = 0;
+								bodyBox.y = 0;
+								bodyBox.width = 23;
+								bodyBox.height = 28;
+								break;
+							}
+							case "run":
+							{
+								if (isCanLeft) {
+									//没有跳跃且可以像右走的情况下
+									rigid.linearVelocity = {x:-1, y:0};
+								} else {
+									// 不可向右走时
+									rigid.linearVelocity = {x:0, y:0};
+								}
+								// 播放向右走动画
+								ani.play(0, true, "blue_l_run");	
+								// 更改站立或行走时碰撞区
+								bodyBox.x = 4;
+								bodyBox.y = 0;
+								bodyBox.width = 23;
+								bodyBox.height = 45;
+								break;
+							}
+							case "stop":
+							{
+								// 停止移动
+								rigid.setVelocity({x:0 , y:0});
+								ani.play(0, false, "blue_l_stand");
+//								roleState = "run";
+								break;
+							}
+							case "touch":
+							{
+								if (pressing) {
+									roleState = "run";
+								} else {
+									roleState = "stop";
+								}
+								break;
+							}
+							case "lie":
+							{
+								if (rigid.linearVelocity.y == 0) {
+									ani.play(0, false, "blue_l_lie");
+									rigid.setVelocity({x:0, y:0});
+								}
+								break;
+							}
+							default:
+							{
+								break;
+							}
+						}						
+					} else {
+						// 正在播放动画的情况下
+						switch(roleState)
+						{
+							case "jump":
+							{
+								if (pressing) {
+									// 跳跃情况下，移动人物
+									rigid.linearVelocity = {x:-1, y:rigid.linearVelocity.y};
+								}
+								// 更改跳跃时碰撞区
+								bodyBox.x = 0;
+								bodyBox.y = 0;
+								bodyBox.width = 23;
+								bodyBox.height = 28;
+								break;
+							}
+							case "run":
+							{				
+								if (isCanLeft) {
+									//没有跳跃且可以像右走的情况下
+									rigid.linearVelocity = {x:-1, y:0};
+									
+								} else {
+									rigid.linearVelocity = {x:0, y:0};									
+								}
+								// 更改站立或行走时碰撞区
+								bodyBox.x = 4;
+								bodyBox.y = 0;
+								bodyBox.width = 23;
+								bodyBox.height = 45;			
+								break;
+							}
+							case "stop":
+							{
+								// 停止移动
+								rigid.setVelocity({x:0 , y:0});
+//								roleState = "run";
+								break;
+							}
+							case "touch":
+							{
+								if (pressing) {
+									ani.stop();
+									roleState = "run";
+								} else {
+									ani.stop();
+									roleState = "stop";
+								}
+								break;
+							}
+							case "lie":
+							{
+								if (rigid.linearVelocity.y == 0) {
+									ani.play(0, false, "blue_l_lie");
+									rigid.setVelocity({x:0, y:0});
+									
+								}
+								break;
+							}
+							default:
+							{
+								break;
+							}
+						}
+					}
+					break;
+				}
+				case "up":
+				{
+					
+					break;
+				}	
+				case "down":
+				{
 
-				console.log("右");
-			} else if (angle >= 22.5 && angle < 67.5) {
+					break;
+				}	
+				default:
+				{
+					break;
+				}
+			}	
+		}
+		
+	
+		/**
+		 * 改变移动方向
+		 */
+		private var pressing:Boolean;
+		public function setDirection(dir:String,clickDown:Boolean):void {
+			if (direction != dir) {
+				// 如果改变的方向与当前方向不同，则停止播放动画
+				// 让 moveAndChangeAni() 函数另外播放其他动画
 				
-				console.log("右上");
-				
-			} else if (angle >= 67.5 && angle < 112.5) {
-				direction = "up";
-				console.log("上");
-				rigid.setVelocity({x:0, y:-1});
-			} else if (angle >= 112.5 && angle < 157.5) {
-				
-				console.log("左上");
-				
-			} else if (angle >= 157.5 && angle < 202.5) {
-				direction = "left";
-
-				console.log("左");
-				rigid.setVelocity({x:-1, y:0});
-
-//				moveMap(1,0);
-				
-			} else if (angle >= 202.5 && angle < 247.5) {
-				
-				console.log("左下");
-			
-			} else if (angle >= 247.5 && angle < 292.5) {
-				rigid.setVelocity({x:0, y:1});
-				direction = "down";
-				console.log("下");
-				
-			} else if (angle >= 292.5 && angle < 337.5){
-				
-				console.log("右下");
+				// 设置方向
+				this.direction = dir; 
+				// 是否停止播放动画
+				ani.stop();			
+			} else {
+				// 如果方向没有改变时，再判断是否需要停止播放动画
+				if (roleState === "stop") {
+					ani.stop();	
+				}
 			}
-			/* 结束 */
-			
-			// 以 rockerRaidus 为准，超出则销毁移动侦听事件及将小圆复位
-			if (moveRadius > rocekerRadius) {
-				console.log("超出了  " + moveRadius);
-				Laya.stage.off(Event.MOUSE_MOVE, this, onRockerSmallMove);
-				Tween.to(rockerSmall, {x:rockerSBY, y:rockerSBY}, 300, Ease.backIn);
-				rockerSmall.alpha = 0.6;
-			}
-			
-		}	
+			// 正在按压移动摇杆（true:是，false:否）
+			pressing = clickDown;
+		}
+		
 		
 		/**
-		 * 加载完大圆后的回调函数
-		 * 用于设置大圆的样式即添加侦听事件
+		 * 改变人物目前的状态
 		 */
-		private function onBigLoaded():void
-		{
-			//设置大圆的位置、大小、透明度、中心轴		
-			rockerBig.pos(rockerSBX, rockerSBY);
-			rockerBig.size(120, 120);
-			rockerBig.alpha = 0.6;
-			rockerBig.pivot(60, 60);		
+		public function setRoleState(state:String):void {
+			roleState = roleState === "jump" ? "jump" : state;
+			
 		
+				
 		}
 		
 		/**
@@ -448,19 +514,6 @@ package script {
 			roleParentSp.addChild(ani);
 		}
 		
-		
-		
-		/**
-		 * 获取以摇杆为中心，鼠标位置与中心点的弧度值
-		 * 
-		 */
-		private function getRad(xx:Number, yy:Number, moveRadius:Number):Number{
-			var rad:Number = yy >= 0 ? (Math.PI * 2 - Math.acos(xx / moveRadius)) : (Math.acos(xx / moveRadius));			
-			return rad;
-		}
-		
-		
-
 		
 		/**
 		 * 本对象精灵的位置随刚体位置变化而变化，

@@ -53,8 +53,8 @@
         ""
     ],
     "clearReleaseDir": true,
-    "compile": false,
+    "compile": true,
     "onlyIndexJS": true,
     "projectType": "as",
-    "pubTime": 1554253260006
+    "pubTime": 1554958819406
 }

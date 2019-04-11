@@ -4,6 +4,8 @@ package ui.GameScene {
 	import laya.display.*;
 	import script.GameStart;
 	import script.Controller;
+	import laya.physics.RigidBody;
+	import laya.physics.ChainCollider;
 
 	public class GameMainSceneUI extends Scene {
 

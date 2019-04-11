@@ -5,9 +5,10 @@ package {
 	import laya.webgl.WebGL;
 	import script.GameStart;
 	import script.Controller;
-	import laya.physics.BoxCollider;
 	import laya.physics.RigidBody;
+	import laya.physics.ChainCollider;
 	import script.Role;
+	import laya.physics.BoxCollider;
 	/**
 	 * 游戏初始化配置
 	 */
@@ -30,9 +31,10 @@ package {
 			var reg:Function = ClassUtils.regClass;
 			reg("script.GameStart",GameStart);
 			reg("script.Controller",Controller);
-			reg("laya.physics.BoxCollider",BoxCollider);
 			reg("laya.physics.RigidBody",RigidBody);
+			reg("laya.physics.ChainCollider",ChainCollider);
 			reg("script.Role",Role);
+			reg("laya.physics.BoxCollider",BoxCollider);
 		}
 		GameConfig.init();
 	}
