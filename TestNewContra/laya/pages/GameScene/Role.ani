@@ -116,6 +116,188 @@
             "compId":14,
             "child":[
                 ]
+        },
+        {
+            "type":"GraphicNode",
+            "searchKey":"GraphicNode",
+            "props":{},
+            "nodeParent":2,
+            "label":"GraphicNode",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":17,
+            "child":[
+                ]
+        },
+        {
+            "type":"GraphicNode",
+            "searchKey":"GraphicNode",
+            "props":{},
+            "nodeParent":2,
+            "label":"GraphicNode",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":18,
+            "child":[
+                ]
+        },
+        {
+            "type":"GraphicNode",
+            "searchKey":"GraphicNode",
+            "props":{},
+            "nodeParent":2,
+            "label":"GraphicNode",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":19,
+            "child":[
+                ]
+        },
+        {
+            "type":"GraphicNode",
+            "searchKey":"GraphicNode",
+            "props":{},
+            "nodeParent":2,
+            "label":"GraphicNode",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":20,
+            "child":[
+                ]
+        },
+        {
+            "type":"GraphicNode",
+            "searchKey":"GraphicNode",
+            "props":{},
+            "nodeParent":2,
+            "label":"GraphicNode",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":22,
+            "child":[
+                ]
+        },
+        {
+            "type":"GraphicNode",
+            "searchKey":"GraphicNode",
+            "props":{},
+            "nodeParent":2,
+            "label":"GraphicNode",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":23,
+            "child":[
+                ]
+        },
+        {
+            "type":"GraphicNode",
+            "searchKey":"GraphicNode",
+            "props":{},
+            "nodeParent":2,
+            "label":"GraphicNode",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":25,
+            "child":[
+                ]
+        },
+        {
+            "type":"GraphicNode",
+            "searchKey":"GraphicNode",
+            "props":{},
+            "nodeParent":2,
+            "label":"GraphicNode",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":26,
+            "child":[
+                ]
+        },
+        {
+            "type":"GraphicNode",
+            "searchKey":"GraphicNode",
+            "props":{},
+            "nodeParent":2,
+            "label":"GraphicNode",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":27,
+            "child":[
+                ]
+        },
+        {
+            "type":"GraphicNode",
+            "searchKey":"GraphicNode",
+            "props":{},
+            "nodeParent":2,
+            "label":"GraphicNode",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":28,
+            "child":[
+                ]
+        },
+        {
+            "type":"GraphicNode",
+            "searchKey":"GraphicNode",
+            "props":{},
+            "nodeParent":2,
+            "label":"GraphicNode",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":30,
+            "child":[
+                ]
+        },
+        {
+            "type":"GraphicNode",
+            "searchKey":"GraphicNode",
+            "props":{},
+            "nodeParent":2,
+            "label":"GraphicNode",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":31,
+            "child":[
+                ]
+        },
+        {
+            "type":"GraphicNode",
+            "searchKey":"GraphicNode",
+            "props":{},
+            "nodeParent":2,
+            "label":"GraphicNode",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":32,
+            "child":[
+                ]
+        },
+        {
+            "type":"GraphicNode",
+            "searchKey":"GraphicNode",
+            "props":{},
+            "nodeParent":2,
+            "label":"GraphicNode",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":33,
+            "child":[
+                ]
         }],
     "animations":[
         {
@@ -260,6 +442,66 @@
                     "keyframes":{
 
                     }
+                },
+                {
+                    "target":17,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":18,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":19,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":20,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":22,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":23,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":25,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":26,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":27,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":28,
+                    "keyframes":{
+
+                    }
                 }],
             "name":"blue_l_run",
             "id":1,
@@ -382,6 +624,30 @@
                     "keyframes":{
 
                     }
+                },
+                {
+                    "target":12,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":13,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":14,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":17,
+                    "keyframes":{
+
+                    }
                 }],
             "name":"blue_r_run",
             "id":2,
@@ -467,7 +733,7 @@
                             }],
                         "name":[
                             {
-                                "value":"",
+                                "value":"blue_l_jump",
                                 "tweenMethod":"linearNone",
                                 "tween":false,
                                 "target":6,
@@ -495,6 +761,36 @@
                 },
                 {
                     "target":10,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":11,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":12,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":13,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":14,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":17,
                     "keyframes":{
 
                     }
@@ -589,7 +885,7 @@
                             }],
                         "name":[
                             {
-                                "value":"blue_l_jump",
+                                "value":"blue_r_jump",
                                 "tweenMethod":"linearNone",
                                 "tween":false,
                                 "target":10,
@@ -605,6 +901,60 @@
                                 "key":"height",
                                 "index":0
                             }]
+                    }
+                },
+                {
+                    "target":11,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":12,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":13,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":14,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":17,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":18,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":19,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":20,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":22,
+                    "keyframes":{
+
                     }
                 }],
             "name":"blue_r_jump",
@@ -677,6 +1027,15 @@
                                 "key":"skin",
                                 "index":0
                             }],
+                        "name":[
+                            {
+                                "value":"blue_l_stand",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":11,
+                                "key":"name",
+                                "index":0
+                            }],
                         "height":[
                             {
                                 "value":50,
@@ -696,6 +1055,18 @@
                 },
                 {
                     "target":13,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":14,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":17,
                     "keyframes":{
 
                     }
@@ -776,6 +1147,15 @@
                                 "key":"skin",
                                 "index":0
                             }],
+                        "name":[
+                            {
+                                "value":"blue_r_stand",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":12,
+                                "key":"name",
+                                "index":0
+                            }],
                         "height":[
                             {
                                 "value":50,
@@ -785,6 +1165,24 @@
                                 "key":"height",
                                 "index":0
                             }]
+                    }
+                },
+                {
+                    "target":13,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":14,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":17,
+                    "keyframes":{
+
                     }
                 }],
             "name":"blue_r_stand",
@@ -869,6 +1267,15 @@
                                 "key":"skin",
                                 "index":0
                             }],
+                        "name":[
+                            {
+                                "value":"blue_l_lie",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":13,
+                                "key":"name",
+                                "index":0
+                            }],
                         "height":[
                             {
                                 "value":30,
@@ -882,6 +1289,12 @@
                 },
                 {
                     "target":14,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":17,
                     "keyframes":{
 
                     }
@@ -974,6 +1387,15 @@
                                 "key":"skin",
                                 "index":0
                             }],
+                        "name":[
+                            {
+                                "value":"blue_r_lie",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":14,
+                                "key":"name",
+                                "index":0
+                            }],
                         "height":[
                             {
                                 "value":30,
@@ -984,10 +1406,2420 @@
                                 "index":0
                             }]
                     }
+                },
+                {
+                    "target":17,
+                    "keyframes":{
+
+                    }
                 }],
             "name":"blue_r_lie",
             "id":8,
             "frameRate":24,
+            "action":0
+        },
+        {
+            "nodes":[
+                {
+                    "target":3,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":5,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":6,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":10,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":11,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":12,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":13,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":14,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":17,
+                    "keyframes":{
+                        "y":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":17,
+                                "key":"y",
+                                "index":0
+                            }],
+                        "x":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":17,
+                                "key":"x",
+                                "index":0
+                            }],
+                        "width":[
+                            {
+                                "value":30,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":17,
+                                "key":"width",
+                                "index":0
+                            }],
+                        "skin":[
+                            {
+                                "value":"role_blue/blue_l_obl_down01.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":17,
+                                "key":"skin",
+                                "index":0
+                            },
+                            {
+                                "value":"role_blue/blue_l_obl_down02.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":17,
+                                "key":"skin",
+                                "index":1
+                            },
+                            {
+                                "value":"role_blue/blue_l_obl_down03.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":17,
+                                "key":"skin",
+                                "index":2
+                            }],
+                        "name":[
+                            {
+                                "value":"blue_l_obl_down",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":17,
+                                "key":"name",
+                                "index":0
+                            }],
+                        "height":[
+                            {
+                                "value":50,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":17,
+                                "key":"height",
+                                "index":0
+                            }]
+                    }
+                },
+                {
+                    "target":18,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":19,
+                    "keyframes":{
+
+                    }
+                }],
+            "name":"blue_l_obl_down",
+            "id":9,
+            "frameRate":8,
+            "action":0
+        },
+        {
+            "nodes":[
+                {
+                    "target":3,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":5,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":6,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":10,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":11,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":12,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":13,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":14,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":17,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":18,
+                    "keyframes":{
+                        "y":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":18,
+                                "key":"y",
+                                "index":0
+                            }],
+                        "x":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":18,
+                                "key":"x",
+                                "index":0
+                            }],
+                        "width":[
+                            {
+                                "value":30,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":18,
+                                "key":"width",
+                                "index":0
+                            }],
+                        "skin":[
+                            {
+                                "value":"role_blue/blue_r_obl_down01.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":18,
+                                "key":"skin",
+                                "index":0
+                            },
+                            {
+                                "value":"role_blue/blue_r_obl_down02.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":18,
+                                "key":"skin",
+                                "index":1
+                            },
+                            {
+                                "value":"role_blue/blue_r_obl_down03.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":18,
+                                "key":"skin",
+                                "index":2
+                            }],
+                        "name":[
+                            {
+                                "value":"blue_r_obl_down",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":18,
+                                "key":"name",
+                                "index":0
+                            },
+                            {
+                                "value":"blue_r_obl_down",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":18,
+                                "key":"name",
+                                "index":1
+                            }],
+                        "height":[
+                            {
+                                "value":50,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":18,
+                                "key":"height",
+                                "index":0
+                            }]
+                    }
+                },
+                {
+                    "target":19,
+                    "keyframes":{
+
+                    }
+                }],
+            "name":"blue_r_obl_down",
+            "id":10,
+            "frameRate":8,
+            "action":0
+        },
+        {
+            "nodes":[
+                {
+                    "target":3,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":5,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":6,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":10,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":11,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":12,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":13,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":14,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":17,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":18,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":19,
+                    "keyframes":{
+                        "y":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":19,
+                                "key":"y",
+                                "index":0
+                            }],
+                        "x":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":19,
+                                "key":"x",
+                                "index":0
+                            }],
+                        "width":[
+                            {
+                                "value":30,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":19,
+                                "key":"width",
+                                "index":0
+                            }],
+                        "skin":[
+                            {
+                                "value":"role_blue/blue_l_obl_up01.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":19,
+                                "key":"skin",
+                                "index":0
+                            },
+                            {
+                                "value":"role_blue/blue_l_obl_up02.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":19,
+                                "key":"skin",
+                                "index":1
+                            },
+                            {
+                                "value":"role_blue/blue_l_obl_up03.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":19,
+                                "key":"skin",
+                                "index":2
+                            }],
+                        "name":[
+                            {
+                                "value":"blue_r_obl_up",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":19,
+                                "key":"name",
+                                "index":0
+                            }],
+                        "height":[
+                            {
+                                "value":50,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":19,
+                                "key":"height",
+                                "index":0
+                            }]
+                    }
+                },
+                {
+                    "target":20,
+                    "keyframes":{
+
+                    }
+                }],
+            "name":"blue_l_obl_up",
+            "id":11,
+            "frameRate":8,
+            "action":0
+        },
+        {
+            "nodes":[
+                {
+                    "target":3,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":5,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":6,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":10,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":11,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":12,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":13,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":14,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":17,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":18,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":19,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":20,
+                    "keyframes":{
+                        "y":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":20,
+                                "key":"y",
+                                "index":0
+                            }],
+                        "x":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":20,
+                                "key":"x",
+                                "index":0
+                            }],
+                        "width":[
+                            {
+                                "value":30,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":20,
+                                "key":"width",
+                                "index":0
+                            }],
+                        "skin":[
+                            {
+                                "value":"role_blue/blue_r_obl_up01.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":20,
+                                "key":"skin",
+                                "index":0
+                            },
+                            {
+                                "value":"role_blue/blue_r_obl_up02.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":20,
+                                "key":"skin",
+                                "index":1
+                            },
+                            {
+                                "value":"role_blue/blue_r_obl_up03.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":20,
+                                "key":"skin",
+                                "index":2
+                            }],
+                        "name":[
+                            {
+                                "value":"",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":20,
+                                "key":"name",
+                                "index":0
+                            },
+                            {
+                                "value":"blue_r_obl_up",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":20,
+                                "key":"name",
+                                "index":2
+                            }],
+                        "height":[
+                            {
+                                "value":50,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":20,
+                                "key":"height",
+                                "index":0
+                            }]
+                    }
+                }],
+            "name":"blue_r_obl_up",
+            "id":12,
+            "frameRate":8,
+            "action":0
+        },
+        {
+            "nodes":[
+                {
+                    "target":3,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":5,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":6,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":10,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":11,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":12,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":13,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":14,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":17,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":18,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":19,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":20,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":22,
+                    "keyframes":{
+                        "y":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":22,
+                                "key":"y",
+                                "index":0
+                            }],
+                        "x":[
+                            {
+                                "value":-5,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":22,
+                                "key":"x",
+                                "index":0
+                            }],
+                        "width":[
+                            {
+                                "value":30,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":22,
+                                "key":"width",
+                                "index":0
+                            }],
+                        "skin":[
+                            {
+                                "value":"role_blue/blue_l_str_left01.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":22,
+                                "key":"skin",
+                                "index":0
+                            },
+                            {
+                                "value":"role_blue/blue_l_str_left02.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":22,
+                                "key":"skin",
+                                "index":1
+                            },
+                            {
+                                "value":"role_blue/blue_l_str_left03.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":22,
+                                "key":"skin",
+                                "index":2
+                            }],
+                        "name":[
+                            {
+                                "value":"blue_l_str_left",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":22,
+                                "key":"name",
+                                "index":0
+                            }],
+                        "height":[
+                            {
+                                "value":50,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":22,
+                                "key":"height",
+                                "index":0
+                            }]
+                    }
+                }],
+            "name":"blue_l_str_left",
+            "id":13,
+            "frameRate":8,
+            "action":0
+        },
+        {
+            "nodes":[
+                {
+                    "target":3,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":5,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":6,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":10,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":11,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":12,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":13,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":14,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":17,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":18,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":19,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":20,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":22,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":23,
+                    "keyframes":{
+                        "y":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":23,
+                                "key":"y",
+                                "index":0
+                            }],
+                        "x":[
+                            {
+                                "value":5,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":23,
+                                "key":"x",
+                                "index":0
+                            }],
+                        "width":[
+                            {
+                                "value":30,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":23,
+                                "key":"width",
+                                "index":0
+                            }],
+                        "skin":[
+                            {
+                                "value":"role_blue/blue_r_str_right01.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":23,
+                                "key":"skin",
+                                "index":0
+                            },
+                            {
+                                "value":"role_blue/blue_r_str_right02.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":23,
+                                "key":"skin",
+                                "index":1
+                            },
+                            {
+                                "value":"role_blue/blue_r_str_right03.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":23,
+                                "key":"skin",
+                                "index":2
+                            }],
+                        "name":[
+                            {
+                                "value":"blue_r_str_right",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":23,
+                                "key":"name",
+                                "index":0
+                            }],
+                        "height":[
+                            {
+                                "value":50,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":23,
+                                "key":"height",
+                                "index":0
+                            }]
+                    }
+                }],
+            "name":"blue_r_str_right",
+            "id":14,
+            "frameRate":8,
+            "action":0
+        },
+        {
+            "nodes":[
+                {
+                    "target":3,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":5,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":6,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":10,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":11,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":12,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":13,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":14,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":17,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":18,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":19,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":20,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":22,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":23,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":25,
+                    "keyframes":{
+                        "y":[
+                            {
+                                "value":-13,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":25,
+                                "key":"y",
+                                "index":0
+                            }],
+                        "x":[
+                            {
+                                "value":5,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":25,
+                                "key":"x",
+                                "index":0
+                            }],
+                        "width":[
+                            {
+                                "value":25,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":25,
+                                "key":"width",
+                                "index":0
+                            }],
+                        "skin":[
+                            {
+                                "value":"role_blue/blue_l_str_up01.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":25,
+                                "key":"skin",
+                                "index":0
+                            },
+                            {
+                                "value":"role_blue/blue_l_str_up02.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":25,
+                                "key":"skin",
+                                "index":1
+                            },
+                            {
+                                "value":"role_blue/blue_l_str_up03.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":25,
+                                "key":"skin",
+                                "index":2
+                            }],
+                        "name":[
+                            {
+                                "value":"blue_l_str_up",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":25,
+                                "key":"name",
+                                "index":0
+                            }],
+                        "height":[
+                            {
+                                "value":63,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":25,
+                                "key":"height",
+                                "index":0
+                            }]
+                    }
+                },
+                {
+                    "target":26,
+                    "keyframes":{
+
+                    }
+                }],
+            "name":"blue_l_str_up",
+            "id":15,
+            "frameRate":8,
+            "action":0
+        },
+        {
+            "nodes":[
+                {
+                    "target":3,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":5,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":6,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":10,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":11,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":12,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":13,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":14,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":17,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":18,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":19,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":20,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":22,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":23,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":25,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":26,
+                    "keyframes":{
+                        "y":[
+                            {
+                                "value":-13,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":26,
+                                "key":"y",
+                                "index":0
+                            }],
+                        "x":[
+                            {
+                                "value":5,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":26,
+                                "key":"x",
+                                "index":0
+                            }],
+                        "width":[
+                            {
+                                "value":25,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":26,
+                                "key":"width",
+                                "index":0
+                            }],
+                        "skin":[
+                            {
+                                "value":"role_blue/blue_r_str_up01.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":26,
+                                "key":"skin",
+                                "index":0
+                            },
+                            {
+                                "value":"role_blue/blue_r_str_up02.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":26,
+                                "key":"skin",
+                                "index":1
+                            },
+                            {
+                                "value":"role_blue/blue_r_str_up03.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":26,
+                                "key":"skin",
+                                "index":2
+                            }],
+                        "name":[
+                            {
+                                "value":"blue_r_str_up",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":26,
+                                "key":"name",
+                                "index":0
+                            }],
+                        "height":[
+                            {
+                                "value":63,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":26,
+                                "key":"height",
+                                "index":0
+                            }]
+                    }
+                }],
+            "name":"blue_r_str_up",
+            "id":16,
+            "frameRate":8,
+            "action":0
+        },
+        {
+            "nodes":[
+                {
+                    "target":3,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":5,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":6,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":10,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":11,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":12,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":13,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":14,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":17,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":18,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":19,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":20,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":22,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":23,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":25,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":26,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":27,
+                    "keyframes":{
+                        "y":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":27,
+                                "key":"y",
+                                "index":0
+                            }],
+                        "x":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":27,
+                                "key":"x",
+                                "index":0
+                            }],
+                        "width":[
+                            {
+                                "value":30,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":27,
+                                "key":"width",
+                                "index":0
+                            }],
+                        "skin":[
+                            {
+                                "value":"role_blue/blue_l_water_run.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":27,
+                                "key":"skin",
+                                "index":0
+                            }],
+                        "name":[
+                            {
+                                "value":"blue_l_water_run",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":27,
+                                "key":"name",
+                                "index":0
+                            }],
+                        "height":[
+                            {
+                                "value":25,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":27,
+                                "key":"height",
+                                "index":0
+                            }]
+                    }
+                },
+                {
+                    "target":28,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":30,
+                    "keyframes":{
+
+                    }
+                }],
+            "name":"blue_l_water_run",
+            "id":17,
+            "frameRate":8,
+            "action":0
+        },
+        {
+            "nodes":[
+                {
+                    "target":3,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":5,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":6,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":10,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":11,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":12,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":13,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":14,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":17,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":18,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":19,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":20,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":22,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":23,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":25,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":26,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":27,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":28,
+                    "keyframes":{
+                        "y":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":28,
+                                "key":"y",
+                                "index":0
+                            }],
+                        "x":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":28,
+                                "key":"x",
+                                "index":0
+                            }],
+                        "width":[
+                            {
+                                "value":30,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":28,
+                                "key":"width",
+                                "index":0
+                            }],
+                        "skin":[
+                            {
+                                "value":"role_blue/blue_r_water_run.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":28,
+                                "key":"skin",
+                                "index":0
+                            }],
+                        "name":[
+                            {
+                                "value":"blue_r_water_run",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":28,
+                                "key":"name",
+                                "index":0
+                            }],
+                        "height":[
+                            {
+                                "value":25,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":28,
+                                "key":"height",
+                                "index":0
+                            }]
+                    }
+                },
+                {
+                    "target":30,
+                    "keyframes":{
+
+                    }
+                }],
+            "name":"blue_r_water_run",
+            "id":18,
+            "frameRate":8,
+            "action":0
+        },
+        {
+            "nodes":[
+                {
+                    "target":3,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":5,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":6,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":10,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":11,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":12,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":13,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":14,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":17,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":18,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":19,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":20,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":22,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":23,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":25,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":26,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":27,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":28,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":30,
+                    "keyframes":{
+                        "y":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":30,
+                                "key":"y",
+                                "index":0
+                            }],
+                        "x":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":30,
+                                "key":"x",
+                                "index":0
+                            }],
+                        "width":[
+                            {
+                                "value":30,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":30,
+                                "key":"width",
+                                "index":0
+                            }],
+                        "skin":[
+                            {
+                                "value":"role_blue/blue_l_water_str.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":30,
+                                "key":"skin",
+                                "index":0
+                            }],
+                        "name":[
+                            {
+                                "value":"blue_l_water_str",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":30,
+                                "key":"name",
+                                "index":0
+                            }],
+                        "height":[
+                            {
+                                "value":25,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":30,
+                                "key":"height",
+                                "index":0
+                            }]
+                    }
+                }],
+            "name":"blue_l_water_str",
+            "id":19,
+            "frameRate":8,
+            "action":0
+        },
+        {
+            "nodes":[
+                {
+                    "target":3,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":5,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":6,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":10,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":11,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":12,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":13,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":14,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":17,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":18,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":19,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":20,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":22,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":23,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":25,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":26,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":27,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":28,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":30,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":31,
+                    "keyframes":{
+                        "y":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":31,
+                                "key":"y",
+                                "index":0
+                            }],
+                        "x":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":31,
+                                "key":"x",
+                                "index":0
+                            }],
+                        "width":[
+                            {
+                                "value":30,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":31,
+                                "key":"width",
+                                "index":0
+                            }],
+                        "skin":[
+                            {
+                                "value":"role_blue/blue_r_water_str.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":31,
+                                "key":"skin",
+                                "index":0
+                            }],
+                        "name":[
+                            {
+                                "value":"blue_r_water_str",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":31,
+                                "key":"name",
+                                "index":0
+                            }],
+                        "height":[
+                            {
+                                "value":25,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":31,
+                                "key":"height",
+                                "index":0
+                            }]
+                    }
+                }],
+            "name":"blue_r_water_str",
+            "id":20,
+            "frameRate":8,
+            "action":0
+        },
+        {
+            "nodes":[
+                {
+                    "target":3,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":5,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":6,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":10,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":11,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":12,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":13,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":14,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":17,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":18,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":19,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":20,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":22,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":23,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":25,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":26,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":27,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":28,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":30,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":31,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":32,
+                    "keyframes":{
+                        "y":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":32,
+                                "key":"y",
+                                "index":0
+                            }],
+                        "x":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":32,
+                                "key":"x",
+                                "index":0
+                            }],
+                        "width":[
+                            {
+                                "value":50,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":32,
+                                "key":"width",
+                                "index":0
+                            }],
+                        "skin":[
+                            {
+                                "value":"role_blue/blue_l_die01.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":32,
+                                "key":"skin",
+                                "index":0
+                            },
+                            {
+                                "value":"role_blue/blue_l_die02.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":32,
+                                "key":"skin",
+                                "index":1
+                            },
+                            {
+                                "value":"role_blue/blue_l_die03.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":32,
+                                "key":"skin",
+                                "index":2
+                            },
+                            {
+                                "value":"role_blue/blue_l_die04.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":32,
+                                "key":"skin",
+                                "index":3
+                            },
+                            {
+                                "value":"role_blue/blue_l_die05.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":32,
+                                "key":"skin",
+                                "index":4
+                            }],
+                        "name":[
+                            {
+                                "value":"blue_l_die",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":32,
+                                "key":"name",
+                                "index":0
+                            }],
+                        "height":[
+                            {
+                                "value":30,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":32,
+                                "key":"height",
+                                "index":0
+                            }]
+                    }
+                },
+                {
+                    "target":33,
+                    "keyframes":{
+
+                    }
+                }],
+            "name":"blue_l_die",
+            "id":21,
+            "frameRate":8,
+            "action":0
+        },
+        {
+            "nodes":[
+                {
+                    "target":3,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":5,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":6,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":10,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":11,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":12,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":13,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":14,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":17,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":18,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":19,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":20,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":22,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":23,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":25,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":26,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":27,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":28,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":30,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":31,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":32,
+                    "keyframes":{
+
+                    }
+                },
+                {
+                    "target":33,
+                    "keyframes":{
+                        "y":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":33,
+                                "key":"y",
+                                "index":0
+                            }],
+                        "x":[
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":33,
+                                "key":"x",
+                                "index":0
+                            }],
+                        "width":[
+                            {
+                                "value":50,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":33,
+                                "key":"width",
+                                "index":0
+                            }],
+                        "skin":[
+                            {
+                                "value":"role_blue/blue_r_die01.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":33,
+                                "key":"skin",
+                                "index":0
+                            },
+                            {
+                                "value":"role_blue/blue_r_die02.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":33,
+                                "key":"skin",
+                                "index":1
+                            },
+                            {
+                                "value":"role_blue/blue_r_die03.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":33,
+                                "key":"skin",
+                                "index":2
+                            },
+                            {
+                                "value":"role_blue/blue_r_die04.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":33,
+                                "key":"skin",
+                                "index":3
+                            },
+                            {
+                                "value":"role_blue/blue_r_die05.png",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":33,
+                                "key":"skin",
+                                "index":4
+                            }],
+                        "name":[
+                            {
+                                "value":"blue_r_die",
+                                "tweenMethod":"linearNone",
+                                "tween":false,
+                                "target":33,
+                                "key":"name",
+                                "index":0
+                            }],
+                        "height":[
+                            {
+                                "value":30,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":33,
+                                "key":"height",
+                                "index":0
+                            }]
+                    }
+                }],
+            "name":"blue_r_die",
+            "id":22,
+            "frameRate":8,
             "action":0
         }]
 }

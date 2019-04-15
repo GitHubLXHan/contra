@@ -84,7 +84,7 @@ package script {
 			ani = new Animation();
 			ani.loadAnimation("GameScene/Role.ani", Handler.create(this, onAniLoaded));
 			
-//			roleSp.pos(100, 0);
+			roleSp.pos(100, 0);
 				
 		}
 		
