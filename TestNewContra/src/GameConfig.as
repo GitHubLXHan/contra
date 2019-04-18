@@ -9,6 +9,7 @@ package {
 	import laya.physics.ChainCollider;
 	import script.Role;
 	import laya.physics.BoxCollider;
+	import script.TouchDestroy;
 	/**
 	 * 游戏初始化配置
 	 */
@@ -35,6 +36,7 @@ package {
 			reg("laya.physics.ChainCollider",ChainCollider);
 			reg("script.Role",Role);
 			reg("laya.physics.BoxCollider",BoxCollider);
+			reg("script.TouchDestroy",TouchDestroy);
 		}
 		GameConfig.init();
 	}

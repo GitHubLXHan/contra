@@ -1,6 +1,7 @@
 package script {
 	import laya.components.Prefab;
 	import laya.components.Script;
+	import laya.d3.core.light.DirectionLight;
 	import laya.display.Sprite;
 	import laya.events.Event;
 	import laya.events.Keyboard;
@@ -12,6 +13,7 @@ package script {
 	import laya.utils.ClassUtils;
 	import laya.utils.Ease;
 	import laya.utils.Handler;
+	import laya.utils.Pool;
 	import laya.utils.Tween;
 	
 	public class Controller extends Script {
@@ -25,10 +27,16 @@ package script {
 		public var boolType: Boolean = true;
 		/** @prop {name:role, tips:"Role脚本", type:prefab}*/
 		public var role:Prefab;
+		/** @prop {name:touchDestroy, tips:"触碰即销毁的地图块", type:prefab}*/
+		public var touchDestroy:Prefab;
 
+		
+		// 触碰即销毁的地图
+		private var touchDestroySp:Sprite;
+		
+		
 		// 三张个合一
 		private var map:Sprite;
-
 		// 人物脚本
 		private var roleClass:Role;
 		// 人物精灵
@@ -112,6 +120,27 @@ package script {
 			roleSp = role.create() as Sprite;
 			map.addChild(roleSp);
 			
+			// 临时变量
+			var tempTouchDestroySp:Sprite;
+			// 为第一处需使用到此地形的地方添加该地形
+			for (var i:int = 0; i < 4; i++) 
+			{
+				// 从对象池中创建对象
+				tempTouchDestroySp = Pool.getItemByCreateFun("touchDestroy",createTouchDestroy, this);
+				tempTouchDestroySp.pos(1025 + (45 * i), 175);
+				map.addChild(tempTouchDestroySp);
+			}
+			// 第二处
+			for (var i:int = 0; i < 4; i++) 
+			{
+				// 从对象池中创建对象
+				tempTouchDestroySp = Pool.getItemByCreateFun("touchDestroy",createTouchDestroy, this);
+				tempTouchDestroySp.pos(1428 + (45 * i), 175);
+				map.addChild(tempTouchDestroySp);
+			}
+			
+			
+			
 			// 获取 Role 类静态访问变量
 			roleClass = Role.ROLE;
 			
@@ -119,6 +148,17 @@ package script {
 			var boxChollider:BoxCollider = roleSp.getComponent(BoxCollider);
 		}
 	
+		
+		
+		
+		private function createTouchDestroy():Sprite {
+			// 创建触碰即销毁的地图
+			return touchDestroy.create() as Sprite;
+		}
+		
+		
+		
+		
 		
 		/**
 		 * 延迟300毫秒后执行此函数
@@ -311,7 +351,7 @@ package script {
 			
 			// 添加侦听事件
 			rockerSmall.on(Event.MOUSE_DOWN, this, this.onMouseClickRockerSmallDown);
-			rockerSmall.on(Event.MOUSE_UP, this, onMouseClickRockerSmallUp)	
+				
 		}
 		
 		
@@ -321,8 +361,9 @@ package script {
 		private var isPressing:Boolean;
 		private function onMouseClickRockerSmallDown():void
 		{
-			// 给摇杆小圆添加鼠点击按下事件
-			rockerSmall.on(Event.MOUSE_MOVE, this, onRockerSmallMove);	
+			// 在舞台上添加鼠标抬起及鼠标移动侦听事件，用于控制人物
+			Laya.stage.on(Event.MOUSE_UP, this, onMouseClickRockerSmallUp)
+			Laya.stage.on(Event.MOUSE_MOVE, this, onRockerSmallMove);	
 			// 修改小圆透明度，当点下去的时候透明度为 1
 			rockerSmall.alpha = 1;		
 			// 值为true表示按下
@@ -335,8 +376,9 @@ package script {
 		 */
 		private function onMouseClickRockerSmallUp():void
 		{
-			// 当鼠标抬起时销毁 摇杆小圆 的鼠标移动事件
-			rockerSmall.off(Event.MOUSE_MOVE, this, onRockerSmallMove);
+			// 当鼠标抬起时销毁舞台的鼠标抬起及鼠标移动侦听事件
+			Laya.stage.off(Event.MOUSE_UP, this, onMouseClickRockerSmallUp);
+			Laya.stage.off(Event.MOUSE_MOVE, this, onRockerSmallMove);
 			// 利用缓动动画将小圆移动回原处
 			Tween.to(rockerSmall, {x:rockerSBY, y:rockerSBY}, 300, Ease.backIn);
 			// 重设透明度
@@ -368,14 +410,29 @@ package script {
 			posY = rocker.mouseY + Laya.stage.scrollRect.y;
 	
 			
-			// 改变小圆的位置
-			rockerSmall.pos(posX, posY, true);
 			//计算小圆是否被拉得太远
-			absX = Math.abs(rockerSmall.x - rockerBig.x);
-			absY = Math.abs(rockerSmall.y - rockerBig.y);
+			absX = Math.abs(posX - rockerBig.x);
+			absY = Math.abs(posY - rockerBig.y);
 			powX = Math.pow(absX, 2);
 			powY = Math.pow(absY, 2);
 			moveRadius = Math.sqrt(powX + powY);
+			
+			
+			// 以 rockerRaidus 为准，超出则销毁移动侦听事件及将小圆复位
+			// 改变小圆的位置
+			if (moveRadius > rocekerRadius) {
+				var smallx:Number = ((rocekerRadius * (posX - rockerBig.x)) / moveRadius) + rockerBig.x;
+				var smally:Number = ((rocekerRadius * (posY - rockerBig.y)) / moveRadius) + rockerBig.y;
+				rockerSmall.pos(smallx, smally, true);
+				//				console.log("超出了  " + moveRadius);
+//				Laya.stage.off(Event.MOUSE_MOVE, this, onRockerSmallMove);
+//				Tween.to(rockerSmall, {x:rockerSBY, y:rockerSBY}, 300, Ease.backIn);
+//				rockerSmall.alpha = 0.6;
+			} else {
+				rockerSmall.pos(posX, posY, true);
+			}
+			
+			
 			// 弧度值
 			var rad:Number = getRad(posX - rockerSBX, posY - rockerSBY, moveRadius);
 			// 弧度转角度
@@ -390,7 +447,9 @@ package script {
 				curDir = "right";
 //				console.log("右");
 			} else if (angle >= 22.5 && angle < 67.5) {
-				
+				roleClass.setDirection("right", isPressing);
+				roleClass.setRoleState("obl_up");
+				curDir = "right";
 //				console.log("右上");
 				
 			} else if (angle >= 67.5 && angle < 112.5) {
@@ -398,7 +457,9 @@ package script {
 //				console.log("上");
 				
 			} else if (angle >= 112.5 && angle < 157.5) {
-				
+				roleClass.setDirection("left", isPressing);
+				roleClass.setRoleState("obl_up");
+				curDir = "left";
 //				console.log("左上");
 				
 			} else if (angle >= 157.5 && angle < 202.5) {
@@ -407,7 +468,9 @@ package script {
 				curDir = "left";
 				//				console.log("左");
 			} else if (angle >= 202.5 && angle < 247.5) {
-				
+				roleClass.setDirection("left", isPressing);
+				roleClass.setRoleState("obl_down");
+				curDir = "left";
 //				console.log("左下");
 				
 			} else if (angle >= 247.5 && angle < 292.5) {
@@ -417,7 +480,9 @@ package script {
 //				console.log("下");
 				
 			} else if (angle >= 292.5 && angle < 337.5){
-				
+				roleClass.setDirection("right", isPressing);
+				roleClass.setRoleState("obl_down");
+				curDir = "right";
 //				console.log("右下");
 			}
 			/* 结束 */
@@ -426,13 +491,7 @@ package script {
 //			roleClass.setRoleState("run");
 			
 			
-			// 以 rockerRaidus 为准，超出则销毁移动侦听事件及将小圆复位
-			if (moveRadius > rocekerRadius) {
-//				console.log("超出了  " + moveRadius);
-				Laya.stage.off(Event.MOUSE_MOVE, this, onRockerSmallMove);
-				Tween.to(rockerSmall, {x:rockerSBY, y:rockerSBY}, 300, Ease.backIn);
-				rockerSmall.alpha = 0.6;
-			}
+
 			
 		}	
 
@@ -441,7 +500,8 @@ package script {
 			isPressing = true;
 			switch(e.keyCode)
 			{
-				case Keyboard.LEFT:
+				// 左
+				case Keyboard.NUMPAD_4:
 				{
 					roleClass.setDirection("left",isPressing);
 					roleClass.setRoleState("run");				
@@ -450,7 +510,8 @@ package script {
 					break;
 				}
 				
-				case Keyboard.RIGHT:
+				// 右
+				case Keyboard.NUMPAD_6:
 				{
 					roleClass.setDirection("right",isPressing);
 					roleClass.setRoleState("run");
@@ -458,19 +519,69 @@ package script {
 					
 					break;
 				}
-				case Keyboard.DOWN:
+					
+				// 下
+				case Keyboard.NUMPAD_2:
 				{
 					roleClass.setDirection(curDir,isPressing);
 					roleClass.setRoleState("lie");
+					break;
+				}
+					
+				// 上
+				case Keyboard.NUMPAD_8:
+				{
 					
 					
 					break;
 				}
+					
+				// 左上
+				case Keyboard.NUMPAD_7:
+				{
+					roleClass.setDirection("left", isPressing);
+					roleClass.setRoleState("obl_up");
+					curDir = "left";
+					break;
+				}
+				
+				// 左下
+				case Keyboard.NUMPAD_1:
+				{
+					roleClass.setDirection("left", isPressing);
+					roleClass.setRoleState("obl_down");
+					curDir = "left";
+					break;
+				}
+					
+				// 右上
+				case Keyboard.NUMPAD_9:
+				{
+					roleClass.setDirection("right", isPressing);
+					roleClass.setRoleState("obl_up");
+					curDir = "right";
+					break;
+					
+					break;
+				}
+					
+				// 右下
+				case Keyboard.NUMPAD_3:
+				{
+					roleClass.setDirection("right", isPressing);
+					roleClass.setRoleState("obl_down");
+					curDir = "right";
+					break;
+				}
+				
+				// 跳
 				case Keyboard.SPACE:
 				{
 					roleClass.jump();	
 					break;
 				}
+					
+				// 打印信息
 				case Keyboard.V:
 				{
 					console.log("状态：" + roleClass.getState());
@@ -490,9 +601,21 @@ package script {
 		override public function onKeyUp(e:Event):void {
 			switch(e.keyCode)
 			{
-				case Keyboard.LEFT:
+				// 左
+				case Keyboard.NUMPAD_4:
 				{
+					// 值为false表示抬起
+					isPressing = false;
+					// 人物状态及方向
+					roleClass.setRoleState("stop");
+					roleClass.setDirection(curDir, isPressing);
 					
+					break;
+				}
+					
+					// 右
+				case Keyboard.NUMPAD_6:
+				{
 					// 值为false表示抬起
 					isPressing = false;
 					// 人物状态及方向
@@ -501,7 +624,8 @@ package script {
 					break;
 				}
 					
-				case Keyboard.RIGHT:
+					// 下
+				case Keyboard.NUMPAD_2:
 				{
 					// 值为false表示抬起
 					isPressing = false;
@@ -510,7 +634,9 @@ package script {
 					roleClass.setDirection(curDir, isPressing);
 					break;
 				}
-				case Keyboard.DOWN:
+					
+					// 上
+				case Keyboard.NUMPAD_8:
 				{
 					// 值为false表示抬起
 					isPressing = false;
@@ -519,7 +645,51 @@ package script {
 					roleClass.setDirection(curDir, isPressing);
 					break;
 				}
-
+					
+					// 左上
+				case Keyboard.NUMPAD_7:
+				{
+					// 值为false表示抬起
+					isPressing = false;
+					// 人物状态及方向
+					roleClass.setRoleState("stop");
+					roleClass.setDirection(curDir, isPressing);
+					break;
+				}
+					
+					// 左下
+				case Keyboard.NUMPAD_1:
+				{
+					// 值为false表示抬起
+					isPressing = false;
+					// 人物状态及方向
+					roleClass.setRoleState("stop");
+					roleClass.setDirection(curDir, isPressing);
+					break;
+				}
+					
+					// 右上
+				case Keyboard.NUMPAD_9:
+				{
+					// 值为false表示抬起
+					isPressing = false;
+					// 人物状态及方向
+					roleClass.setRoleState("stop");
+					roleClass.setDirection(curDir, isPressing);
+					break;
+				}
+					
+					// 右下
+				case Keyboard.NUMPAD_3:
+				{
+					// 值为false表示抬起
+					isPressing = false;
+					// 人物状态及方向
+					roleClass.setRoleState("stop");
+					roleClass.setDirection(curDir, isPressing);
+					break;
+				}
+					
 				default:
 				{
 					break;

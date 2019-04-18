@@ -1,4 +1,36 @@
 D .
+D blut
+P 08A4E015 enemyBlut.png
+P E4D5408A myBlut.png
+P 6A5AF849 myBlut01.png
+P 972A61C0 myBlut02.png
+D boom
+P 5ABC9B52 enemyObjBoom01.png
+P 97C4E939 enemyObjBoom02.png
+P FC833D2D enemyObjBoom03.png
+P F45347D1 enemyRoleBoom01.png
+P A67CA165 enemyRoleBoom02.png
+P 0D7C1BE3 enemyRoleBoom03.png
+D enemy_one
+P A90EF9A9 enemt_one_left01.png
+P EC1549FE enemt_one_left02.png
+P 71C73296 enemt_one_left03.png
+P 101A9DDE enemy_one_right01.png
+P FE44C9BC enemy_one_right02.png
+P CEE30631 enemy_one_right03.png
+D enemy_tow
+P DFDCE0A0 enemy_tow_left01.png
+P E3F3D7BC enemy_tow_left02.png
+P 069E0466 enemy_tow_left03.png
+P C7BF5B71 enemy_tow_left04.png
+P 602A1BC9 enemy_tow_left05.png
+P E10BB32E enemy_tow_left06.png
+P 870BBA8B enemy_tow_right01.png
+P 8F39C130 enemy_tow_right02.png
+P 8D314924 enemy_tow_right03.png
+P C1C5811C enemy_tow_right04.png
+P E59F9EBA enemy_tow_right05.png
+P 600BA91B enemy_tow_right06.png
 D icon
 P 60E36D2A fire.png
 P 3BD444FF jump.png
@@ -6,6 +38,8 @@ P 0419A32F jump_down.png
 P 72C903E5 rocker.png
 P D6F3FDE9 rocker_center.png
 D map
+D other
+P 506CF473 touchDestroy.png
 D role_blue
 P 1284D8CD blue_l_die01.png
 P 3BC63780 blue_l_die02.png
