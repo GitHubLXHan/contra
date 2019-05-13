@@ -7,15 +7,7 @@ package script {
 	import laya.utils.Pool;
 	
 	public class TouchDestroy extends Script {
-		/** @prop {name:intType, tips:"整数类型示例", type:Int, default:1000}*/
-		public var intType: int = 1000;
-		/** @prop {name:numType, tips:"数字类型示例", type:Number, default:1000}*/
-		public var numType: Number = 1000;
-		/** @prop {name:strType, tips:"字符串类型示例", type:String, default:"hello laya"}*/
-		public var strType: String = "hello laya";
-		/** @prop {name:boolType, tips:"布尔类型示例", type:Bool, default:true}*/
-		public var boolType: Boolean = true;
-		// 更多参数说明请访问: https://ldc2.layabox.com/doc/?nav=zh-as-2-4-0
+
 
 		private var thisSp:Sprite;
 		
@@ -41,13 +33,10 @@ package script {
 		}
 		
 		override public function onTriggerEnter(other:*, self:*, contact:*):void {
-			if (other.label === "foot") {
-				console.log(thisSp.x, thisSp.y);
+			if (other.label === "body") {
 				// 通过对象池获取动画
 				var aniBoom:Animation = Pool.getItemByCreateFun("enemyObjBoom", createEnemyObjBoomAni, this);
 				aniBoom.pos(thisSp.x, thisSp.y);
-				console.log("动画");
-				trace(aniBoom);
 				// 将动画添加到父容器中
 				thisSp.parent.addChild(aniBoom);
 				// 播放动画

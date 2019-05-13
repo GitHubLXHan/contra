@@ -2665,8 +2665,9 @@ var GameConfig=(function(){
 		reg("script.Controller",Controller);
 		reg("laya.physics.RigidBody",RigidBody);
 		reg("laya.physics.ChainCollider",ChainCollider);
-		reg("script.Role",Role);
 		reg("laya.physics.BoxCollider",BoxCollider);
+		reg("script.Bullet",Bullet);
+		reg("script.Role",Role);
 		reg("script.TouchDestroy",TouchDestroy);
 	}
 
@@ -20310,6 +20311,65 @@ var ShurikenParticleData=(function(){
 	['_tempVector30',function(){return this._tempVector30=new Vector3();},'_tempQuaternion',function(){return this._tempQuaternion=new Quaternion();},'startColor',function(){return this.startColor=new Vector4();},'startSize',function(){return this.startSize=new Float32Array(3);},'startRotation',function(){return this.startRotation=new Float32Array(3);},'startUVInfo',function(){return this.startUVInfo=new Float32Array(4);},'simulationWorldPostion',function(){return this.simulationWorldPostion=new Float32Array(3);},'simulationWorldRotation',function(){return this.simulationWorldRotation=new Float32Array(4);}
 	]);
 	return ShurikenParticleData;
+})()
+
+
+/**
+*<code>Log</code> 类用于在界面内显示日志记录信息。
+*注意：在加速器内不可使用
+*/
+//class laya.utils.Log
+var Log=(function(){
+	function Log(){}
+	__class(Log,'laya.utils.Log');
+	Log.enable=function(){
+		if (!Log._logdiv){
+			Log._logdiv=Browser.createElement('div');
+			Log._logdiv.style.cssText="border:white;padding:4px;overflow-y:auto;z-index:1000000;background:rgba(100,100,100,0.6);color:white;position: absolute;left:0px;top:0px;width:50%;height:50%;";
+			Browser.document.body.appendChild(Log._logdiv);
+			Log._btn=Browser.createElement("button");
+			Log._btn.innerText="Hide";
+			Log._btn.style.cssText="z-index:1000001;position: absolute;left:10px;top:10px;";
+			Log._btn.onclick=Log.toggle;
+			Browser.document.body.appendChild(Log._btn);
+		}
+	}
+
+	Log.toggle=function(){
+		var style=Log._logdiv.style;
+		if (style.display===""){
+			Log._btn.innerText="Show";
+			style.display="none";
+			}else {
+			Log._btn.innerText="Hide";
+			style.display="";
+		}
+	}
+
+	Log.print=function(value){
+		if (Log._logdiv){
+			if (Log._count >=Log.maxCount)Log.clear();
+			Log._count++;
+			Log._logdiv.innerText+=value+"\n";
+			if (Log.autoScrollToBottom){
+				if (Log._logdiv.scrollHeight-Log._logdiv.scrollTop-Log._logdiv.clientHeight < 50){
+					Log._logdiv.scrollTop=Log._logdiv.scrollHeight;
+				}
+			}
+		}
+	}
+
+	Log.clear=function(){
+		Log._logdiv.innerText="";
+		Log._count=0;
+	}
+
+	Log._logdiv=null;
+	Log._btn=null;
+	Log._count=0;
+	Log.maxCount=50;
+	Log.autoScrollToBottom=true;
+	return Log;
 })()
 
 
@@ -41834,6 +41894,93 @@ var SubmitTexture=(function(_super){
 
 
 /**
+*<code>HemisphereShape</code> 类用于创建半球形粒子形状。
+*/
+//class laya.d3.core.particleShuriKen.module.shape.HemisphereShape extends laya.d3.core.particleShuriKen.module.shape.BaseShape
+var HemisphereShape=(function(_super){
+	function HemisphereShape(){
+		/**发射器半径。*/
+		this.radius=NaN;
+		/**从外壳发射。*/
+		this.emitFromShell=false;
+		HemisphereShape.__super.call(this);
+		this.radius=1.0;
+		this.emitFromShell=false;
+		this.randomDirection=false;
+	}
+
+	__class(HemisphereShape,'laya.d3.core.particleShuriKen.module.shape.HemisphereShape',_super);
+	var __proto=HemisphereShape.prototype;
+	/**
+	*@inheritDoc
+	*/
+	__proto._getShapeBoundBox=function(boundBox){
+		var min=boundBox.min;
+		min.x=min.y=min.z=-this.radius;
+		var max=boundBox.max;
+		max.x=max.y=this.radius;
+		max.z=0;
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto._getSpeedBoundBox=function(boundBox){
+		var min=boundBox.min;
+		min.x=min.y=-1;
+		min.z=0;
+		var max=boundBox.max;
+		max.x=max.y=max.z=1;
+	}
+
+	/**
+	*用于生成粒子初始位置和方向。
+	*@param position 粒子位置。
+	*@param direction 粒子方向。
+	*/
+	__proto.generatePositionAndDirection=function(position,direction,rand,randomSeeds){
+		if (rand){
+			rand.seed=randomSeeds[16];
+			if (this.emitFromShell)
+				ShapeUtils._randomPointUnitSphere(position,rand);
+			else
+			ShapeUtils._randomPointInsideUnitSphere(position,rand);
+			randomSeeds[16]=rand.seed;
+			}else {
+			if (this.emitFromShell)
+				ShapeUtils._randomPointUnitSphere(position);
+			else
+			ShapeUtils._randomPointInsideUnitSphere(position);
+		}
+		Vector3.scale(position,this.radius,position);
+		var z=position.z;
+		(z < 0.0)&& (position.z=z *-1.0);
+		if (this.randomDirection){
+			if (rand){
+				rand.seed=randomSeeds[17];
+				ShapeUtils._randomPointUnitSphere(direction,rand);
+				randomSeeds[17]=rand.seed;
+				}else {
+				ShapeUtils._randomPointUnitSphere(direction);
+			}
+			}else {
+			position.cloneTo(direction);
+		}
+	}
+
+	__proto.cloneTo=function(destObject){
+		_super.prototype.cloneTo.call(this,destObject);
+		var destShape=destObject;
+		destShape.radius=this.radius;
+		destShape.emitFromShell=this.emitFromShell;
+		destShape.randomDirection=this.randomDirection;
+	}
+
+	return HemisphereShape;
+})(BaseShape)
+
+
+/**
 *<code>MeshColliderShape</code> 类用于创建网格碰撞器。
 */
 //class laya.d3.physics.shape.MeshColliderShape extends laya.d3.physics.shape.ColliderShape
@@ -41931,93 +42078,6 @@ var MeshColliderShape=(function(_super){
 
 	return MeshColliderShape;
 })(ColliderShape)
-
-
-/**
-*<code>HemisphereShape</code> 类用于创建半球形粒子形状。
-*/
-//class laya.d3.core.particleShuriKen.module.shape.HemisphereShape extends laya.d3.core.particleShuriKen.module.shape.BaseShape
-var HemisphereShape=(function(_super){
-	function HemisphereShape(){
-		/**发射器半径。*/
-		this.radius=NaN;
-		/**从外壳发射。*/
-		this.emitFromShell=false;
-		HemisphereShape.__super.call(this);
-		this.radius=1.0;
-		this.emitFromShell=false;
-		this.randomDirection=false;
-	}
-
-	__class(HemisphereShape,'laya.d3.core.particleShuriKen.module.shape.HemisphereShape',_super);
-	var __proto=HemisphereShape.prototype;
-	/**
-	*@inheritDoc
-	*/
-	__proto._getShapeBoundBox=function(boundBox){
-		var min=boundBox.min;
-		min.x=min.y=min.z=-this.radius;
-		var max=boundBox.max;
-		max.x=max.y=this.radius;
-		max.z=0;
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto._getSpeedBoundBox=function(boundBox){
-		var min=boundBox.min;
-		min.x=min.y=-1;
-		min.z=0;
-		var max=boundBox.max;
-		max.x=max.y=max.z=1;
-	}
-
-	/**
-	*用于生成粒子初始位置和方向。
-	*@param position 粒子位置。
-	*@param direction 粒子方向。
-	*/
-	__proto.generatePositionAndDirection=function(position,direction,rand,randomSeeds){
-		if (rand){
-			rand.seed=randomSeeds[16];
-			if (this.emitFromShell)
-				ShapeUtils._randomPointUnitSphere(position,rand);
-			else
-			ShapeUtils._randomPointInsideUnitSphere(position,rand);
-			randomSeeds[16]=rand.seed;
-			}else {
-			if (this.emitFromShell)
-				ShapeUtils._randomPointUnitSphere(position);
-			else
-			ShapeUtils._randomPointInsideUnitSphere(position);
-		}
-		Vector3.scale(position,this.radius,position);
-		var z=position.z;
-		(z < 0.0)&& (position.z=z *-1.0);
-		if (this.randomDirection){
-			if (rand){
-				rand.seed=randomSeeds[17];
-				ShapeUtils._randomPointUnitSphere(direction,rand);
-				randomSeeds[17]=rand.seed;
-				}else {
-				ShapeUtils._randomPointUnitSphere(direction);
-			}
-			}else {
-			position.cloneTo(direction);
-		}
-	}
-
-	__proto.cloneTo=function(destObject){
-		_super.prototype.cloneTo.call(this,destObject);
-		var destShape=destObject;
-		destShape.radius=this.radius;
-		destShape.emitFromShell=this.emitFromShell;
-		destShape.randomDirection=this.randomDirection;
-	}
-
-	return HemisphereShape;
-})(BaseShape)
 
 
 /**
@@ -42197,61 +42257,6 @@ var Widget=(function(_super){
 	]);
 	return Widget;
 })(Component)
-
-
-/**
-*<code>SkyBox</code> 类用于创建天空盒。
-*/
-//class laya.d3.resource.models.SkyBox extends laya.d3.resource.models.SkyMesh
-var SkyBox=(function(_super){
-	/**
-	*创建一个 <code>SkyBox</code> 实例。
-	*/
-	function SkyBox(){
-		SkyBox.__super.call(this);
-		var halfHeight=0.5;
-		var halfWidth=0.5;
-		var halfDepth=0.5;
-		var vertices=new Float32Array([-halfDepth,halfHeight,-halfWidth,halfDepth,halfHeight,-halfWidth,halfDepth,halfHeight,halfWidth,-halfDepth,halfHeight,halfWidth,
-		-halfDepth,-halfHeight,-halfWidth,halfDepth,-halfHeight,-halfWidth,halfDepth,-halfHeight,halfWidth,-halfDepth,-halfHeight,halfWidth]);
-		var indices=new Uint8Array([0,1,2,2,3,0,
-		4,7,6,6,5,4,
-		0,3,7,7,4,0,
-		1,5,6,6,2,1,
-		3,2,6,6,7,3,
-		0,4,5,5,1,0]);
-		var verDec=VertexMesh.getVertexDeclaration("POSITION");
-		this._vertexBuffer=new VertexBuffer3D(verDec.vertexStride *8,0x88E4,false);
-		this._vertexBuffer.vertexDeclaration=verDec;
-		this._indexBuffer=new IndexBuffer3D("ubyte",36,0x88E4,false);
-		this._vertexBuffer.setData(vertices);
-		this._indexBuffer.setData(indices);
-		var bufferState=new BufferState();
-		bufferState.bind();
-		bufferState.applyVertexBuffer(this._vertexBuffer);
-		bufferState.applyIndexBuffer(this._indexBuffer);
-		bufferState.unBind();
-		this._bufferState=bufferState;
-	}
-
-	__class(SkyBox,'laya.d3.resource.models.SkyBox',_super);
-	var __proto=SkyBox.prototype;
-	/**
-	*@inheritDoc
-	*/
-	__proto._render=function(state){
-		LayaGL.instance.drawElements(0x0004,36,0x1401,0);
-		Stat.trianglesFaces+=12;
-		Stat.renderBatch++;
-	}
-
-	SkyBox.__init__=function(){
-		SkyBox.instance=new SkyBox();
-	}
-
-	SkyBox.instance=null;
-	return SkyBox;
-})(SkyMesh)
 
 
 /**
@@ -42447,6 +42452,61 @@ var AnimationTransform3D=(function(_super){
 	]);
 	return AnimationTransform3D;
 })(EventDispatcher)
+
+
+/**
+*<code>SkyBox</code> 类用于创建天空盒。
+*/
+//class laya.d3.resource.models.SkyBox extends laya.d3.resource.models.SkyMesh
+var SkyBox=(function(_super){
+	/**
+	*创建一个 <code>SkyBox</code> 实例。
+	*/
+	function SkyBox(){
+		SkyBox.__super.call(this);
+		var halfHeight=0.5;
+		var halfWidth=0.5;
+		var halfDepth=0.5;
+		var vertices=new Float32Array([-halfDepth,halfHeight,-halfWidth,halfDepth,halfHeight,-halfWidth,halfDepth,halfHeight,halfWidth,-halfDepth,halfHeight,halfWidth,
+		-halfDepth,-halfHeight,-halfWidth,halfDepth,-halfHeight,-halfWidth,halfDepth,-halfHeight,halfWidth,-halfDepth,-halfHeight,halfWidth]);
+		var indices=new Uint8Array([0,1,2,2,3,0,
+		4,7,6,6,5,4,
+		0,3,7,7,4,0,
+		1,5,6,6,2,1,
+		3,2,6,6,7,3,
+		0,4,5,5,1,0]);
+		var verDec=VertexMesh.getVertexDeclaration("POSITION");
+		this._vertexBuffer=new VertexBuffer3D(verDec.vertexStride *8,0x88E4,false);
+		this._vertexBuffer.vertexDeclaration=verDec;
+		this._indexBuffer=new IndexBuffer3D("ubyte",36,0x88E4,false);
+		this._vertexBuffer.setData(vertices);
+		this._indexBuffer.setData(indices);
+		var bufferState=new BufferState();
+		bufferState.bind();
+		bufferState.applyVertexBuffer(this._vertexBuffer);
+		bufferState.applyIndexBuffer(this._indexBuffer);
+		bufferState.unBind();
+		this._bufferState=bufferState;
+	}
+
+	__class(SkyBox,'laya.d3.resource.models.SkyBox',_super);
+	var __proto=SkyBox.prototype;
+	/**
+	*@inheritDoc
+	*/
+	__proto._render=function(state){
+		LayaGL.instance.drawElements(0x0004,36,0x1401,0);
+		Stat.trianglesFaces+=12;
+		Stat.renderBatch++;
+	}
+
+	SkyBox.__init__=function(){
+		SkyBox.instance=new SkyBox();
+	}
+
+	SkyBox.instance=null;
+	return SkyBox;
+})(SkyMesh)
 
 
 /**
@@ -55262,6 +55322,53 @@ var Sprite=(function(_super){
 })(Node)
 
 
+//class script.Bullet extends laya.components.Script
+var Bullet=(function(_super){
+	function Bullet(){
+		this.thisSp=null;
+		this.rigid=null;
+		this.ani=null;
+		Bullet.__super.call(this);
+	}
+
+	__class(Bullet,'script.Bullet',_super);
+	var __proto=Bullet.prototype;
+	__proto.onEnable=function(){
+		this.thisSp=this.owner;
+		this.thisSp.visible=false;
+		this.ani=Pool.getItemByCreateFun("myBulletAni",this.createBulletAnimation,this);
+		this.ani.play(0,false,"myBullet_type01");
+		this.thisSp.parent.addChild(this.ani);
+		this.rigid=this.thisSp.getComponent(RigidBody);
+	}
+
+	/**
+	*对象池中没有动画的时候即调用此方法创建动画
+	*/
+	__proto.createBulletAnimation=function(){
+		var tempAni=new Animation();
+		tempAni.loadAnimation("GameScene/Bullet.ani",null,"res/atlas/bullet.atlas");
+		return tempAni;
+	}
+
+	__proto.onAniLoaded=function(){
+		this.thisSp.visible=false;
+		this.thisSp.addChild(this.ani);
+	}
+
+	__proto.onUpdate=function(){
+		this.ani.pos(this.thisSp.x,this.thisSp.y);
+	}
+
+	__proto.onDisable=function(){
+		this.ani.removeSelf();
+		Pool.recover("myBulletAni",this.ani);
+	}
+
+	return Bullet;
+})(Script)
+
+
 //class script.Role extends laya.components.Script
 var Role=(function(_super){
 	function Role(){
@@ -55273,6 +55380,8 @@ var Role=(function(_super){
 		this.strType="hello laya";
 		/**@prop {name:boolType,tips:"布尔类型示例",type:Bool,default:true}*/
 		this.boolType=true;
+		/**@prop {name:bullet,tips:"触碰即销毁的地图块",type:prefab}*/
+		this.bullet=null;
 		//人物动画
 		this.ani=null;
 		// 本对象精灵
@@ -55285,18 +55394,26 @@ var Role=(function(_super){
 		this.bodyBox=null;
 		// 人物精灵脚步碰撞区
 		this.footBox=null;
-		// 人物方向
-		this.direction="right";
-		// 人物状态
-		this.roleState="jump";
-		// 人物速度
-		this.speedX=0;
-		this.speedY=0;
-		// 是否可以行走
-		this.isCanRight=true;
-		this.isCanLeft=true;
-		// 是否按住移动摇杆
-		this.pressing=false;
+		// 人物目前方向,并且初始化
+		this.curDirection="r";
+		// 人物目前倾斜发向
+		this.curOblique="nobl";
+		// 人物目前动作
+		this.curBehavior="jump";
+		//人物目前所处位置
+		this.curWhere="inland";
+		// 人物子弹类型
+		this.bulletType=1;
+		// 人物是否可以跳跃、否正在跳跃，并且初始化
+		this.canJump=true;
+		this.isJumping=true;
+		// 存储子弹的数组
+		this.bullets=null;
+		// blue_r_nobl_run_inwater
+		this.bulletOffsetForRoleX=NaN;
+		this.bulletOffsetForRoleY=NaN;
+		this.bulletVelocityX=NaN;
+		this.bulletVelocityY=NaN;
 		Role.__super.call(this);
 		script.Role.ROLE=this;
 	}
@@ -55310,19 +55427,14 @@ var Role=(function(_super){
 		var boxs=this.roleSp.getComponents(BoxCollider);
 		this.bodyBox=boxs[1];
 		this.footBox=boxs[0];
-		console.log("boxs");
-		console.log(boxs);
 		this.ani=new Animation();
-		this.ani.loadAnimation("GameScene/Role.ani",Handler.create(this,this.onAniLoaded));
+		this.ani.loadAnimation("GameScene/Role.ani",Handler.create(this,this.onAniLoaded),"res/atlas/role_blue.atlas");
+		this.bullets=[];
 		this.roleSp.pos(900,0);
 	}
 
 	__proto.getDir=function(){
-		return this.direction;
-	}
-
-	__proto.getState=function(){
-		return this.roleState;
+		return this.curDirection;
 	}
 
 	__proto.getRigidBound=function(){
@@ -55333,16 +55445,31 @@ var Role=(function(_super){
 		return this.ani.isPlaying;
 	}
 
+	/**
+	*碰撞回调函数
+	*/
 	__proto.onTriggerEnter=function(other,self,contact){
 		if ((other.label==="pass_n" || other.label==="pass_y")&& this.rigid.linearVelocity.y > 0 && self.label==="foot"){
 			this.rigid.type="kinematic";
-			this.rigid.gravityScale=0;
-			this.roleState="touch";
+			this.rigid.setVelocity({x:this.rigid.linearVelocity.x,y:0});
+			this.canJump=true;
+			this.isJumping=false;
+			this.changeAni(this.curDirection,this.curOblique,"fire","inland","run");
 		}
-		if (other.label==="l_wall" && this.roleState !="jump"){
-			this.isCanRight=false;
-			}else if (other.label==="r_wall" && this.roleState !="jump"){
-			this.isCanLeft=false;
+		if (other.label==="water" && this.rigid.linearVelocity.y > 0 && self.label==="foot"){
+			this.isJumping=false;
+			this.canJump=false;
+			this.changeAni(this.curDirection,"nobl","run","inwater","water");
+			this.rigid.type="kinematic";
+			this.rigid.setVelocity({x:this.rigid.linearVelocity.x,y:0});
+		}
+		if (other.label==="wall" && !this.isJumping){
+			this.changeAni(this.curDirection,this.curOblique,"fire","inland","run");
+			this.canJump=true;
+			this.rigid.setVelocity({x:this.rigid.linearVelocity.x,y:-1});
+		}
+		if (other.label==="touchDestroy"){
+			this.canJump=true;
 		}
 	}
 
@@ -55350,262 +55477,149 @@ var Role=(function(_super){
 	*碰撞结束
 	*/
 	__proto.onTriggerExit=function(other,self,contact){
-		if((other.label==="pass_y" || other.label==="pass_n")&& this.roleState !="jump" && self.label==="foot"){
+		if((other.label==="pass_y" || other.label==="pass_n")&& !this.isJumping && self.label==="foot"){
 			this.rigid.type="dynamic";
-			this.rigid.gravityScale=1;
-			this.roleState="jump";
+			this.canJump=false;
 		}
-		if (other.label==="l_wall"){
-			this.isCanRight=true;
-		}
-		if (other.label==="r_wall"){
-			this.isCanLeft=true;
-		}
-	}
-
-	/**
-	*持续碰撞
-	*/
-	__proto.onTriggerStay=function(other,self,contact){
-		self=this.footBox;
 	}
 
 	/**
 	*跳跃
 	*/
 	__proto.jump=function(){
+		if (!this.canJump)return;
 		this.rigid.type="dynamic";
 		this.rigid.gravityScale=1;
-		this.rigid.linearVelocity={x:0,y:-6};
-		this.roleState="jump";
-		this.ani.stop();
+		this.rigid.linearVelocity={x:this.rigid.linearVelocity.x,y:-6};
+		this.canJump=false;
+		this.changeAni(this.curDirection,"nobl","jump","inland","jump");
+		this.isJumping=true;
 	}
 
-	__proto.moveAndChangeAni=function(){
-		switch(this.direction){
-			case "right":{
-					if (!this.ani.isPlaying){
-					switch(this.roleState){
-						case "jump":{
-								if (this.pressing){
-									this.rigid.setVelocity({x:1,y:this.rigid.linearVelocity.y});
-								}
-								this.ani.play(0,true,"blue_r_jump");
-								this.changeCollider("jump");
-								break ;
-							}
-						case "run":{
-								if (this.isCanRight){
-									this.rigid.linearVelocity={x:1,y:0};
-									}else {
-									this.rigid.linearVelocity={x:0,y:0};
-								}
-								this.ani.play(0,true,"blue_r_str_right");
-								this.changeCollider("run");
-								break ;
-							}
-						case "stop":{
-								this.rigid.setVelocity({x:0 ,y:0});
-								this.ani.play(0,false,"blue_r_stand");
-								break ;
-							}
-						case "touch":{
-								if (this.pressing){
-									this.roleState="run";
-									}else {
-									this.roleState="stop";
-								}
-								break ;
-							}
-						case "lie":{
-								if (this.rigid.linearVelocity.y==0){
-									this.ani.play(0,false,"blue_r_lie");
-									this.rigid.setVelocity({x:0,y:0});
-								}
-								break ;
-							}
-						case "obl_down":{
-								this.ani.play(0,true,"blue_r_obl_down");
-								break ;
-							}
-						case "obl_up":{
-								this.ani.play(0,true,"blue_r_obl_up");
-								break ;
-							}
-						default :{
-								break ;
-							}
-						}
-					}else {
-					switch(this.roleState){
-						case "jump":{
-								if (this.pressing){
-									this.rigid.linearVelocity={x:1,y:this.rigid.linearVelocity.y};
-								}
-								this.changeCollider("jump");
-								break ;
-							}
-						case "run":{
-								if (this.isCanRight){
-									this.rigid.linearVelocity={x:1,y:0};
-									}else {
-									this.rigid.linearVelocity={x:0,y:0};
-								}
-								this.changeCollider("run");
-								break ;
-							}
-						case "stop":{
-								this.rigid.setVelocity({x:0 ,y:0});
-								break ;
-							}
-						case "touch":{
-								if (this.pressing){
-									this.ani.stop();
-									this.roleState="run";
-									}else {
-									this.ani.stop();
-									this.roleState="stop";
-								}
-								break ;
-							}
-						case "obl_down":{
-								this.rigid.setVelocity({x:1,y:0});
-								break ;
-							}
-						case "obl_up":{
-								this.rigid.setVelocity({x:1,y:0});
-								break ;
-							}
-						case "lie":{
-								if (this.rigid.linearVelocity.y==0){
-									this.ani.play(0,false,"blue_r_lie");
-									this.rigid.setVelocity({x:0,y:0});
-								}
-								break ;
-							}
-						default :{
-								break ;
-							}
-						}
+	/**
+	*开火
+	*/
+	__proto.onFire=function(){
+		switch(this.bulletType){
+			case 1:{
+					console.log("发送");
+					console.log(this.bulletOffsetForRoleX);
+					console.log(this.bulletOffsetForRoleY);
+					console.log(this.bulletVelocityX);
+					console.log(this.bulletVelocityY);
+					console.log(Laya.stage.scrollRect);
+					console.log(this.roleSp.x);
+					console.log(this.roleSp.y);
+					var bulletSp=Pool.getItemByCreateFun("myBullet",this.bullet.create,this.bullet);
+					bulletSp.pos(this.roleSp.x+this.bulletOffsetForRoleX,this.roleSp.y+this.bulletOffsetForRoleY);
+					var bulletRigid=bulletSp.getComponent(RigidBody);
+					bulletRigid.setVelocity({x:this.bulletVelocityX,y:this.bulletVelocityY});
+					this.roleParentSp.addChild(bulletSp);
+					this.bullets.push(bulletSp);
+					break ;
 				}
-				break ;
-			}
-			case "left":{
-				if (!this.ani.isPlaying){
-					switch(this.roleState){
-						case "jump":{
-								if (this.pressing){
-									this.rigid.setVelocity({x:-1,y:this.rigid.linearVelocity.y});
-								}
-								this.ani.play(0,false,"blue_l_jump");
-								this.changeCollider("jump");
-								break ;
-							}
-						case "run":{
-								if (this.isCanLeft){
-									this.rigid.linearVelocity={x:-1,y:0};
-									}else {
-									this.rigid.linearVelocity={x:0,y:0};
-								}
-								this.ani.play(0,true,"blue_l_str_left");
-								this.changeCollider("run");
-								break ;
-							}
-						case "stop":{
-								this.rigid.setVelocity({x:0 ,y:0});
-								this.ani.play(0,false,"blue_l_stand");
-								break ;
-							}
-						case "touch":{
-								if (this.pressing){
-									this.roleState="run";
-									}else {
-									this.roleState="stop";
-								}
-								break ;
-							}
-						case "obl_down":{
-								this.ani.play(0,true,"blue_l_obl_down");
-								break ;
-							}
-						case "obl_up":{
-								this.ani.play(0,true,"blue_l_obl_up");
-								break ;
-							}
-						case "lie":{
-								if (this.rigid.linearVelocity.y==0){
-									this.ani.play(0,false,"blue_l_lie");
-									this.rigid.setVelocity({x:0,y:0});
-								}
-								break ;
-							}
-						default :{
-								break ;
-							}
-						}
-					}else {
-					switch(this.roleState){
-						case "jump":{
-								if (this.pressing){
-									this.rigid.linearVelocity={x:-1,y:this.rigid.linearVelocity.y};
-								}
-								this.changeCollider("jump");
-								break ;
-							}
-						case "run":{
-								if (this.isCanLeft){
-									this.rigid.linearVelocity={x:-1,y:0};
-									}else {
-									this.rigid.linearVelocity={x:0,y:0};
-								}
-								this.changeCollider("run");
-								break ;
-							}
-						case "stop":{
-								this.rigid.setVelocity({x:0 ,y:0});
-								break ;
-							}
-						case "touch":{
-								if (this.pressing){
-									this.ani.stop();
-									this.roleState="run";
-									}else {
-									this.ani.stop();
-									this.roleState="stop";
-								}
-								break ;
-							}
-						case "obl_down":{
-								this.rigid.setVelocity({x:-1,y:0});
-								break ;
-							}
-						case "obl_up":{
-								this.rigid.setVelocity({x:-1,y:0});
-								break ;
-							}
-						case "lie":{
-								if (this.rigid.linearVelocity.y==0){
-									this.ani.play(0,false,"blue_l_lie");
-									this.rigid.setVelocity({x:0,y:0});
-								}
-								break ;
-							}
-						default :{
-								break ;
-							}
-						}
-				}
-				break ;
-			}
-			case "up":{
-				break ;
-			}
-			case "down":{
-				break ;
-			}
 			default :{
-				break ;
+					break ;
+				}
 			}
+	}
+
+	/**
+	*移动人物，这是一个对外接口
+	*通过摇杆的方向，改变人物当前的各种状态（curDirection/curOblique等等）
+	*再调用动画转换函数（changeAni()）转换动画播放
+	*@param angle:摇杆角度
+	*/
+	__proto.move=function(angle){
+		if (angle >=67.5 && angle < 112.5){
+			this.rigid.linearVelocity={x:0,y:this.rigid.linearVelocity.y};
+			this.changeAni(this.curDirection,"nobl","upfire",this.curWhere,"run");
+			this.setBulletInLand(10,25,-13,0,-2);
+			}else if (angle >=247.5 && angle < 292.5){
+			if (this.rigid.linearVelocity.y !=0)return;
+			this.changeAni(this.curDirection,"nobl","lie",this.curWhere,"lie");
+			this.rigid.setVelocity({x:0,y:0});
+			this.setBulletInLand(-10,40,34,2,0);
+			}else if (angle >=157.5 && angle < 202.5){
+			this.rigid.linearVelocity={x:-1,y:this.rigid.linearVelocity.y};
+			this.changeAni("l","nobl","fire",this.curWhere,"run");
+			this.setBulletInLand(-5,35,18,2,0);
+			}else if ((angle >=0 && angle < 22.5)||(angle >=337.5 && angle < 360)){
+			this.rigid.setVelocity({x:1,y:this.rigid.linearVelocity.y});
+			this.changeAni("r","nobl","fire",this.curWhere,"run");
+			this.setBulletInLand(-5,35,18,2,0);
+			}else if (angle >=112.5 && angle < 157.5){
+			this.rigid.setVelocity({x:-1,y:this.rigid.linearVelocity.y});
+			this.changeAni("l","uobl","fire",this.curWhere,"run");
+			this.setBulletInLand(0,30,0,2,-1.5);
+			}else if (angle >=202.5 && angle < 247.5){
+			this.rigid.setVelocity({x:-1,y:this.rigid.linearVelocity.y});
+			this.changeAni("l","dobl","fire",this.curWhere,"run");
+			this.setBulletInLand(0,30,25,2,1.5);
+			}else if (angle >=22.5 && angle < 67.5){
+			this.rigid.setVelocity({x:1,y:this.rigid.linearVelocity.y});
+			this.changeAni("r","uobl","fire",this.curWhere,"run");
+			this.setBulletInLand(0,30,0,2,-1.5);
+			}else if (angle >=292.5 && angle < 337.5){
+			this.rigid.setVelocity({x:1,y:this.rigid.linearVelocity.y});
+			this.changeAni("r","dobl","fire",this.curWhere,"run");
+			this.setBulletInLand(0,30,25,2,1.5);
+			}else {
+			this.rigid.linearVelocity={x:0,y:this.rigid.linearVelocity.y};
+			if (!this.isJumping){
+				this.changeAni(this.curDirection,"nobl","stand",this.curWhere,"run");
+				this.setBulletInLand(10,30,18,2,0);
+			}
+		}
+	}
+
+	/**
+	*转换人物动画
+	*/
+	__proto.changeAni=function(dir,obl,behavior,where,collider){
+		if ((this.curDirection !=dir ||this.curOblique!=obl || this.curBehavior!=behavior || this.curWhere!=where)&& !this.isJumping){
+			this.ani.stop();
+			var aniName="blue_"+dir+"_"+obl+"_"+behavior+"_"+where;
+			this.ani.play(0,true,aniName);
+			this.curOblique=obl;
+			this.curBehavior=behavior;
+			this.curWhere=where;
+			this.changeCollider(collider);
+		}
+		this.curDirection=dir;
+	}
+
+	/**
+	*在陆地上的情况
+	*设置子弹相对于人物的偏移位置及方向
+	*/
+	__proto.setBulletInLand=function(__args){
+		var args=arguments;
+		if (this.curDirection==="l"){
+			this.bulletOffsetForRoleX=args[0];
+			this.bulletOffsetForRoleY=args[2];
+			this.bulletVelocityX=-args[3];
+			this.bulletVelocityY=args[4];
+			}else if (this.curDirection==="r"){
+			this.bulletOffsetForRoleX=args[1];
+			this.bulletOffsetForRoleY=args[2];
+			this.bulletVelocityX=args[3];
+			this.bulletVelocityY=args[4];
+		}
+	}
+
+	__proto.setBulletInWater=function(__args){
+		var args=arguments;
+		if (this.curDirection==="l"){
+			this.bulletOffsetForRoleX=args[0];
+			this.bulletOffsetForRoleY=args[2];
+			this.bulletVelocityX=-args[3];
+			this.bulletVelocityY=args[4];
+			}else if (this.curDirection==="r"){
+			this.bulletOffsetForRoleX=args[1];
+			this.bulletOffsetForRoleY=args[2];
+			this.bulletVelocityX=args[3];
+			this.bulletVelocityY=args[4];
 		}
 	}
 
@@ -55615,17 +55629,19 @@ var Role=(function(_super){
 	__proto.changeCollider=function(state){
 		switch(state){
 			case "jump":{
-					this.bodyBox.x=0;
-					this.bodyBox.y=0;
-					this.bodyBox.width=23;
-					this.bodyBox.height=28;
+					this.setCollider(0,0,23,28);
 					break ;
 				}
 			case "run":{
-					this.bodyBox.x=4;
-					this.bodyBox.y=0;
-					this.bodyBox.width=23;
-					this.bodyBox.height=45;
+					this.setCollider(4,0,23,45);
+					break ;
+				}
+			case "lie":{
+					this.setCollider(-10,20,50,30);
+					break ;
+				}
+			case "water":{
+					this.setCollider(0,18,30,25);
 					break ;
 				}
 			default :{
@@ -55634,37 +55650,11 @@ var Role=(function(_super){
 			}
 	}
 
-	/**
-	*改变移动方向
-	*/
-	__proto.setDirection=function(dir,clickDown){
-		if (this.direction !=dir){
-			this.direction=dir;
-			this.ani.stop();
-			}else {
-			if (this.roleState==="stop"){
-				this.ani.stop();
-			}
-		}
-		this.pressing=clickDown;
-	}
-
-	/**
-	*改变人物目前的状态
-	*/
-	__proto.setRoleState=function(state){
-		if (this.roleState==="jump"){
-			return;
-			}else {
-			if ((this.roleState !="obl_down" && state==="obl_down")
-				||
-			(this.roleState !="obl_up" && state==="obl_up")
-			||
-			(this.roleState !="run" && state==="run")){
-				this.ani.stop();
-			}
-			this.roleState=state;
-		}
+	__proto.setCollider=function(x,y,width,height){
+		this.bodyBox.x=x;
+		this.bodyBox.y=y;
+		this.bodyBox.width=width;
+		this.bodyBox.height=height;
 	}
 
 	/**
@@ -55673,6 +55663,7 @@ var Role=(function(_super){
 	*/
 	__proto.onAniLoaded=function(){
 		this.roleSp.visible=false;
+		this.changeAni(this.curDirection,this.curOblique,this.curBehavior,this.curWhere,"jump");
 		this.roleParentSp.addChild(this.ani);
 	}
 
@@ -55683,6 +55674,18 @@ var Role=(function(_super){
 	__proto.onUpdate=function(){
 		this.ani.x=this.roleSp.x;
 		this.ani.y=this.roleSp.y;
+		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
+		for (var i=0;i < this.bullets.length;i++){
+			if (this.bullets[i].x > (scrollRect.x+scrollRect.width)||
+				this.bullets[i].y > (scrollRect.y+scrollRect.height)||
+			this.bullets[i].x < scrollRect.x ||
+			this.bullets[i].y < scrollRect.y){
+				this.bullets[i].removeSelf();
+				Pool.recover("myBullet",this.bullets[i]);
+				this.bullets.splice(i,1);
+				console.log("长度 = "+this.bullets.length);
+			}
+		}
 	}
 
 	__proto.onDisable=function(){}
@@ -55751,10 +55754,6 @@ var Controller=(function(_super){
 		this.scrollRectYMax=NaN;
 		this.scrollRectXMin=NaN;
 		this.scrollRectXMax=NaN;
-		/**
-		*鼠标按下事件
-		*/
-		this.isPressing=false;
 		Controller.__super.call(this);
 	}
 
@@ -55774,21 +55773,17 @@ var Controller=(function(_super){
 		this.map.addChild(this.roleSp);
 		var tempTouchDestroySp;
 		for (var i=0;i < 4;i++){
-			tempTouchDestroySp=Pool.getItemByCreateFun("touchDestroy",this.createTouchDestroy,this);
-			tempTouchDestroySp.pos(1050+(45 *i),200);
+			tempTouchDestroySp=Pool.getItemByCreateFun("touchDestroy",this.touchDestroy.create,this.touchDestroy);
+			tempTouchDestroySp.pos(1025+(45 *i),175);
 			this.map.addChild(tempTouchDestroySp);
 		}
 		for (var i=0;i < 4;i++){
-			tempTouchDestroySp=Pool.getItemByCreateFun("touchDestroy",this.createTouchDestroy,this);
-			tempTouchDestroySp.pos(1453+(45 *i),200);
+			tempTouchDestroySp=Pool.getItemByCreateFun("touchDestroy",this.touchDestroy.create,this.touchDestroy);
+			tempTouchDestroySp.pos(1428+(45 *i),175);
 			this.map.addChild(tempTouchDestroySp);
 		}
 		this.roleClass=Role.ROLE;
 		var boxChollider=this.roleSp.getComponent(BoxCollider);
-	}
-
-	__proto.createTouchDestroy=function(){
-		return this.touchDestroy.create();
 	}
 
 	/**
@@ -55824,7 +55819,6 @@ var Controller=(function(_super){
 	*/
 	__proto.onLoop=function(){
 		this.moveMap();
-		this.roleClass.moveAndChangeAni();
 	}
 
 	/**
@@ -55859,7 +55853,6 @@ var Controller=(function(_super){
 
 	__proto.onMouseClickJumpDownDown=function(){
 		console.log(this.roleClass.getDir());
-		console.log(this.roleClass.getState());
 	}
 
 	/**
@@ -55870,10 +55863,19 @@ var Controller=(function(_super){
 		this.jumpUpBtn.size(50,50);
 		this.jumpUpBtn.pos(this.jumpUpBtnX,this.jumpUpBtnY);
 		this.jumpUpBtn.alpha=0.6;
-		this.jumpUpBtn.on("click",this,this.onMousClickJumpUpDown);
+		this.jumpUpBtn.on("mousedown",this,this.onMousClickJumpUpDown);
+		this.jumpUpBtn.on("mouseup",this,this.onMousClickJumpUpUp);
 	}
 
-	__proto.onMousClickJumpUpDown=function(){
+	__proto.onMousClickJumpUpUp=function(e){
+		e.stopPropagation();
+	}
+
+	/**
+	*上跳按钮侦听事件
+	*/
+	__proto.onMousClickJumpUpDown=function(e){
+		e.stopPropagation();
 		this.roleClass.jump();
 	}
 
@@ -55885,6 +55887,23 @@ var Controller=(function(_super){
 		this.fireBtn.size(80,80);
 		this.fireBtn.pos(this.fireBtnX,this.fireBtnY);
 		this.fireBtn.alpha=0.6;
+		this.fireBtn.on("mousedown",this,this.onMouseClickFireDown);
+		this.fireBtn.on("mouseup",this,this.onMouseClickFireUp);
+	}
+
+	/**
+	*开枪按钮抬起侦听事件
+	*
+	*/
+	__proto.onMouseClickFireUp=function(e){
+		e.stopPropagation();
+	}
+
+	/**
+	*开枪按钮按下侦听事件
+	*/
+	__proto.onMouseClickFireDown=function(){
+		this.roleClass.onFire();
 	}
 
 	/**
@@ -55908,25 +55927,27 @@ var Controller=(function(_super){
 		this.rockerSmall.alpha=0.6;
 		this.rockerSmall.pivot(20,20);
 		this.rockerSmall.on("mousedown",this,this.onMouseClickRockerSmallDown);
-		this.rockerSmall.on("mouseup",this,this.onMouseClickRockerSmallUp)
 	}
 
-	__proto.onMouseClickRockerSmallDown=function(){
-		this.rockerSmall.on("mousemove",this,this.onRockerSmallMove);
+	/**
+	*鼠标按下事件
+	*/
+	__proto.onMouseClickRockerSmallDown=function(e){
+		e.stopPropagation();
+		Laya.stage.on("mouseup",this,this.onMouseClickRockerSmallUp)
+		Laya.stage.on("mousemove",this,this.onRockerSmallMove);
 		this.rockerSmall.alpha=1;
-		this.isPressing=true;
 	}
 
 	/**
 	*鼠标抬起事件
 	*/
-	__proto.onMouseClickRockerSmallUp=function(){
-		this.rockerSmall.off("mousemove",this,this.onRockerSmallMove);
+	__proto.onMouseClickRockerSmallUp=function(e){
+		Laya.stage.off("mouseup",this,this.onMouseClickRockerSmallUp);
+		Laya.stage.off("mousemove",this,this.onRockerSmallMove);
 		Tween.to(this.rockerSmall,{x:this.rockerSBY,y:this.rockerSBY},300,Ease.backIn);
 		this.rockerSmall.alpha=0.6;
-		this.isPressing=false;
-		this.roleClass.setRoleState("stop");
-		this.roleClass.setDirection(this.curDir,this.isPressing);
+		this.roleClass.move(-1);
 	}
 
 	/**
@@ -55956,96 +55977,40 @@ var Controller=(function(_super){
 		};
 		var rad=this.getRad(posX-this.rockerSBX,posY-this.rockerSBY,moveRadius);
 		var angle=180 / Math.PI *rad;
-		if ((angle >=0 && angle < 22.5)||(angle >=337.5 && angle < 360)){
-			this.roleClass.setDirection("right",this.isPressing);
-			this.roleClass.setRoleState("run");
-			this.curDir="right";
-			}else if (angle >=22.5 && angle < 67.5){
-			this.roleClass.setDirection("right",this.isPressing);
-			this.roleClass.setRoleState("obl_up");
-			this.curDir="right";
-			}else if (angle >=67.5 && angle < 112.5){
-			this.roleClass.setDirection("up",this.isPressing);
-			}else if (angle >=112.5 && angle < 157.5){
-			this.roleClass.setDirection("left",this.isPressing);
-			this.roleClass.setRoleState("obl_up");
-			this.curDir="left";
-			}else if (angle >=157.5 && angle < 202.5){
-			this.roleClass.setDirection("left",this.isPressing);
-			this.roleClass.setRoleState("run");
-			this.curDir="left";
-			}else if (angle >=202.5 && angle < 247.5){
-			this.roleClass.setDirection("left",this.isPressing);
-			this.roleClass.setRoleState("obl_down");
-			this.curDir="left";
-			}else if (angle >=247.5 && angle < 292.5){
-			this.roleClass.setDirection(this.curDir,this.isPressing);
-			this.roleClass.setRoleState("lie");
-			}else if (angle >=292.5 && angle < 337.5){
-			this.roleClass.setDirection("right",this.isPressing);
-			this.roleClass.setRoleState("obl_down");
-			this.curDir="right";
-		}
+		this.roleClass.move(angle);
 	}
 
-	// roleClass.setRoleState("run");
 	__proto.onKeyDown=function(e){
-		this.isPressing=true;
 		switch(e.keyCode){
 			case 100:{
-					this.roleClass.setDirection("left",this.isPressing);
-					this.roleClass.setRoleState("run");
-					this.curDir="left";
 					break ;
 				}
 			case 102:{
-					this.roleClass.setDirection("right",this.isPressing);
-					this.roleClass.setRoleState("run");
-					this.curDir="right";
 					break ;
 				}
 			case 98:{
-					this.roleClass.setDirection(this.curDir,this.isPressing);
-					this.roleClass.setRoleState("lie");
-					break ;
 				}
 			case 104:{
 					break ;
 				}
 			case 103:{
-					this.roleClass.setDirection("left",this.isPressing);
-					this.roleClass.setRoleState("obl_up");
-					this.curDir="left";
 					break ;
 				}
 			case 97:{
-					this.roleClass.setDirection("left",this.isPressing);
-					this.roleClass.setRoleState("obl_down");
-					this.curDir="left";
 					break ;
 				}
 			case 105:{
-					this.roleClass.setDirection("right",this.isPressing);
-					this.roleClass.setRoleState("obl_up");
-					this.curDir="right";
-					break ;
 					break ;
 				}
 			case 99:{
-					this.roleClass.setDirection("right",this.isPressing);
-					this.roleClass.setRoleState("obl_down");
-					this.curDir="right";
 					break ;
 				}
 			case 32:{
 					this.roleClass.jump();
 					break ;
 				}
-			case 86:{
-					console.log("状态："+this.roleClass.getState());
-					console.log("方向"+this.roleClass.getDir());
-					console.log("播放"+this.roleClass.getIsPlay());
-					console.log("碰撞区"+this.roleClass.getRigidBound());
+			case 86:
+				{this.roleClass.onFire();
 					break ;
 				}
 			default :{
@@ -56057,51 +56022,27 @@ var Controller=(function(_super){
 	__proto.onKeyUp=function(e){
 		switch(e.keyCode){
 			case 100:{
-					this.isPressing=false;
-					this.roleClass.setRoleState("stop");
-					this.roleClass.setDirection(this.curDir,this.isPressing);
 					break ;
 				}
 			case 102:{
-					this.isPressing=false;
-					this.roleClass.setRoleState("stop");
-					this.roleClass.setDirection(this.curDir,this.isPressing);
 					break ;
 				}
 			case 98:{
-					this.isPressing=false;
-					this.roleClass.setRoleState("stop");
-					this.roleClass.setDirection(this.curDir,this.isPressing);
 					break ;
 				}
 			case 104:{
-					this.isPressing=false;
-					this.roleClass.setRoleState("stop");
-					this.roleClass.setDirection(this.curDir,this.isPressing);
 					break ;
 				}
 			case 103:{
-					this.isPressing=false;
-					this.roleClass.setRoleState("stop");
-					this.roleClass.setDirection(this.curDir,this.isPressing);
 					break ;
 				}
 			case 97:{
-					this.isPressing=false;
-					this.roleClass.setRoleState("stop");
-					this.roleClass.setDirection(this.curDir,this.isPressing);
 					break ;
 				}
 			case 105:{
-					this.isPressing=false;
-					this.roleClass.setRoleState("stop");
-					this.roleClass.setDirection(this.curDir,this.isPressing);
 					break ;
 				}
 			case 99:{
-					this.isPressing=false;
-					this.roleClass.setRoleState("stop");
-					this.roleClass.setDirection(this.curDir,this.isPressing);
 					break ;
 				}
 			default :{
@@ -56181,7 +56122,7 @@ var TouchDestroy=(function(_super){
 
 	__proto.createEnemyObjBoomAni=function(){
 		var ani=new Animation();
-		ani.loadAnimation("GameScene/EnemyObjBoom.ani");
+		ani.loadAnimation("GameScene/EnemyObjBoom.ani",null,"res/atlas/boom.atlas");
 		ani.on("complete",null,function(){
 			ani.removeSelf();
 			Pool.recover("enemyObjBoom",ani);
@@ -56193,9 +56134,7 @@ var TouchDestroy=(function(_super){
 		if (other.label==="foot"){
 			console.log(this.thisSp.x,this.thisSp.y);
 			var aniBoom=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
-			aniBoom.pos(this.thisSp.x,this.thisSp.y+100);
-			console.log("动画");
-			console.log(aniBoom);
+			aniBoom.pos(this.thisSp.x,this.thisSp.y);
 			this.thisSp.parent.addChild(aniBoom);
 			aniBoom.play(0,false);
 			var thisCollider=this.owner.getComponent(BoxCollider);
@@ -73984,6 +73923,462 @@ var SpotLight=(function(_super){
 
 
 /**
+*<p><code>Input</code> 类用于创建显示对象以显示和输入文本。</p>
+*<p>Input 类封装了原生的文本输入框，由于不同浏览器的差异，会导致此对象的默认文本的位置与用户点击输入时的文本的位置有少许的偏差。</p>
+*/
+//class laya.display.Input extends laya.display.Text
+var Input=(function(_super){
+	function Input(){
+		/**@private */
+		this._focus=false;
+		/**@private */
+		this._multiline=false;
+		/**@private */
+		this._editable=true;
+		/**@private */
+		this._restrictPattern=null;
+		this._type="text";
+		/**输入提示符。*/
+		this._prompt='';
+		/**输入提示符颜色。*/
+		this._promptColor="#A9A9A9";
+		this._originColor="#000000";
+		this._content='';
+		Input.__super.call(this);
+		this._maxChars=1E5;
+		this._width=100;
+		this._height=20;
+		this.multiline=false;
+		this.overflow="scroll";
+		this.on("mousedown",this,this._onMouseDown);
+		this.on("undisplay",this,this._onUnDisplay);
+	}
+
+	__class(Input,'laya.display.Input',_super);
+	var __proto=Input.prototype;
+	/**
+	*设置光标位置和选取字符。
+	*@param startIndex 光标起始位置。
+	*@param endIndex 光标结束位置。
+	*/
+	__proto.setSelection=function(startIndex,endIndex){
+		this.focus=true;
+		laya.display.Input.inputElement.selectionStart=startIndex;
+		laya.display.Input.inputElement.selectionEnd=endIndex;
+	}
+
+	__proto._onUnDisplay=function(e){
+		this.focus=false;
+	}
+
+	__proto._onMouseDown=function(e){
+		this.focus=true;
+	}
+
+	/**
+	*在输入期间，如果 Input 实例的位置改变，调用_syncInputTransform同步输入框的位置。
+	*/
+	__proto._syncInputTransform=function(){
+		var inputElement=this.nativeInput;
+		var transform=Utils.getTransformRelativeToWindow(this,this.padding[3],this.padding[0]);
+		var inputWid=this._width-this.padding[1]-this.padding[3];
+		var inputHei=this._height-this.padding[0]-this.padding[2];
+		if (Render.isConchApp){
+			inputElement.setScale(transform.scaleX,transform.scaleY);
+			inputElement.setSize(inputWid,inputHei);
+			inputElement.setPos(transform.x,transform.y);
+			}else {
+			Input.inputContainer.style.transform=Input.inputContainer.style.webkitTransform="scale("+transform.scaleX+","+transform.scaleY+") rotate("+(Laya.stage.canvasDegree)+"deg)";
+			inputElement.style.width=inputWid+'px';
+			inputElement.style.height=inputHei+'px';
+			Input.inputContainer.style.left=transform.x+'px';
+			Input.inputContainer.style.top=transform.y+'px';
+		}
+	}
+
+	/**选中当前实例的所有文本。*/
+	__proto.select=function(){
+		this.nativeInput.select();
+	}
+
+	__proto._setInputMethod=function(){
+		Input.input.parentElement && (Input.inputContainer.removeChild(Input.input));
+		Input.area.parentElement && (Input.inputContainer.removeChild(Input.area));
+		Input.inputElement=(this._multiline ? Input.area :Input.input);
+		Input.inputContainer.appendChild(Input.inputElement);
+		if (Text.RightToLeft){
+			Input.inputElement.style.direction="rtl";
+		}
+	}
+
+	__proto._focusIn=function(){
+		laya.display.Input.isInputting=true;
+		var input=this.nativeInput;
+		this._focus=true;
+		var cssStyle=input.style;
+		cssStyle.whiteSpace=(this.wordWrap ? "pre-wrap" :"nowrap");
+		this._setPromptColor();
+		input.readOnly=!this._editable;
+		if (Render.isConchApp){
+			input.setType(this._type);
+			input.setForbidEdit(!this._editable);
+		}
+		input.maxLength=this._maxChars;
+		var padding=this.padding;
+		input.type=this._type;
+		input.value=this._content;
+		input.placeholder=this._prompt;
+		Laya.stage.off("keydown",this,this._onKeyDown);
+		Laya.stage.on("keydown",this,this._onKeyDown);
+		Laya.stage.focus=this;
+		this.event("focus");
+		if (Browser.onPC)input.focus();
+		if(!Browser.onMiniGame && !Browser.onBDMiniGame){
+			var temp=this._text;
+			this._text=null;
+		}
+		this.typeset();
+		input.setColor(this._originColor);
+		input.setFontSize(this.fontSize);
+		input.setFontFace(Browser.onIPhone ? (Text.fontFamilyMap[this.font] || this.font):this.font);
+		if (Render.isConchApp){
+			input.setMultiAble && input.setMultiAble(this._multiline);
+		}
+		cssStyle.lineHeight=(this.leading+this.fontSize)+"px";
+		cssStyle.fontStyle=(this.italic ? "italic" :"normal");
+		cssStyle.fontWeight=(this.bold ? "bold" :"normal");
+		cssStyle.textAlign=this.align;
+		cssStyle.padding="0 0";
+		this._syncInputTransform();
+		if (!Render.isConchApp && Browser.onPC)
+			Laya.systemTimer.frameLoop(1,this,this._syncInputTransform);
+	}
+
+	// 设置DOM输入框提示符颜色。
+	__proto._setPromptColor=function(){
+		Input.promptStyleDOM=Browser.getElementById("promptStyle");
+		if (!Input.promptStyleDOM){
+			Input.promptStyleDOM=Browser.createElement("style");
+			Input.promptStyleDOM.setAttribute("id","promptStyle");
+			Browser.document.head.appendChild(Input.promptStyleDOM);
+		}
+		Input.promptStyleDOM.innerText="input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {"+"color:"+this._promptColor+"}"+"input:-moz-placeholder, textarea:-moz-placeholder {"+"color:"+this._promptColor+"}"+"input::-moz-placeholder, textarea::-moz-placeholder {"+"color:"+this._promptColor+"}"+"input:-ms-input-placeholder, textarea:-ms-input-placeholder {"+"color:"+this._promptColor+"}";
+	}
+
+	/**@private */
+	__proto._focusOut=function(){
+		laya.display.Input.isInputting=false;
+		this._focus=false;
+		this._text=null;
+		this._content=this.nativeInput.value;
+		if (!this._content){
+			Laya.superSet(Text,this,'text',this._prompt);
+			Laya.superSet(Text,this,'color',this._promptColor);
+			}else {
+			Laya.superSet(Text,this,'text',this._content);
+			Laya.superSet(Text,this,'color',this._originColor);
+		}
+		Laya.stage.off("keydown",this,this._onKeyDown);
+		Laya.stage.focus=null;
+		this.event("blur");
+		this.event("change");
+		if (Render.isConchApp)this.nativeInput.blur();
+		Browser.onPC && Laya.systemTimer.clear(this,this._syncInputTransform);
+	}
+
+	/**@private */
+	__proto._onKeyDown=function(e){
+		if (e.keyCode===13){
+			if (Browser.onMobile && !this._multiline)
+				this.focus=false;
+			this.event("enter");
+		}
+	}
+
+	__proto.changeText=function(text){
+		this._content=text;
+		if (this._focus){
+			this.nativeInput.value=text || '';
+			this.event("change");
+		}else
+		_super.prototype.changeText.call(this,text);
+	}
+
+	/**@inheritDoc */
+	__getset(0,__proto,'color',_super.prototype._$get_color,function(value){
+		if (this._focus)
+			this.nativeInput.setColor(value);
+		Laya.superSet(Text,this,'color',this._content?value:this._promptColor);
+		this._originColor=value;
+	});
+
+	/**表示是否是多行输入框。*/
+	__getset(0,__proto,'multiline',function(){
+		return this._multiline;
+		},function(value){
+		this._multiline=value;
+		this.valign=value ? "top" :"middle";
+	});
+
+	/**
+	*<p>字符数量限制，默认为10000。</p>
+	*<p>设置字符数量限制时，小于等于0的值将会限制字符数量为10000。</p>
+	*/
+	__getset(0,__proto,'maxChars',function(){
+		return this._maxChars;
+		},function(value){
+		if (value <=0)
+			value=1E5;
+		this._maxChars=value;
+	});
+
+	/**@inheritDoc */
+	__getset(0,__proto,'text',function(){
+		if (this._focus)
+			return this.nativeInput.value;
+		else
+		return this._content || "";
+		},function(value){
+		Laya.superSet(Text,this,'color',this._originColor);
+		value+='';
+		if (this._focus){
+			this.nativeInput.value=value || '';
+			this.event("change");
+			}else {
+			if (!this._multiline)
+				value=value.replace(/\r?\n/g,'');
+			this._content=value;
+			if (value)
+				Laya.superSet(Text,this,'text',value);
+			else {
+				Laya.superSet(Text,this,'text',this._prompt);
+				Laya.superSet(Text,this,'color',this.promptColor);
+			}
+		}
+	});
+
+	/**
+	*获取对输入框的引用实例。
+	*/
+	__getset(0,__proto,'nativeInput',function(){
+		return this._multiline ? Input.area :Input.input;
+	});
+
+	// 因此 调用focus接口是无法都在移动平台立刻弹出键盘的
+	/**
+	*表示焦点是否在此实例上。
+	*/
+	__getset(0,__proto,'focus',function(){
+		return this._focus;
+		},function(value){
+		var input=this.nativeInput;
+		if (this._focus!==value){
+			if (value){
+				if (input.target){
+					input.target._focusOut();
+					}else {
+					this._setInputMethod();
+				}
+				input.target=this;
+				this._focusIn();
+				}else {
+				input.target=null;
+				this._focusOut();
+				Browser.document.body.scrollTop=0;
+				input.blur();
+				if (Render.isConchApp)input.setPos(-10000,-10000);
+				else if (Input.inputContainer.contains(input))Input.inputContainer.removeChild(input);
+			}
+		}
+	});
+
+	/**
+	*是否可编辑。
+	*/
+	__getset(0,__proto,'editable',function(){
+		return this._editable;
+		},function(value){
+		this._editable=value;
+		if (Render.isConchApp){
+			Input.input.setForbidEdit(!value);
+		}
+	});
+
+	/**@inheritDoc */
+	__getset(0,__proto,'bgColor',_super.prototype._$get_bgColor,function(value){
+		Laya.superSet(Text,this,'bgColor',value);
+		if(Render.isConchApp)
+			this.nativeInput.setBgColor(value);
+	});
+
+	/**限制输入的字符。*/
+	__getset(0,__proto,'restrict',function(){
+		if (this._restrictPattern){
+			return this._restrictPattern.source;
+		}
+		return "";
+		},function(pattern){
+		if (pattern){
+			pattern="[^"+pattern+"]";
+			if (pattern.indexOf("^^")>-1)
+				pattern=pattern.replace("^^","");
+			this._restrictPattern=new RegExp(pattern,"g");
+		}else
+		this._restrictPattern=null;
+	});
+
+	/**
+	*设置输入提示符。
+	*/
+	__getset(0,__proto,'prompt',function(){
+		return this._prompt;
+		},function(value){
+		if (!this._text && value)
+			Laya.superSet(Text,this,'color',this._promptColor);
+		this.promptColor=this._promptColor;
+		if (this._text)
+			Laya.superSet(Text,this,'text',(this._text==this._prompt)?value:this._text);
+		else
+		Laya.superSet(Text,this,'text',value);
+		this._prompt=Text.langPacks && Text.langPacks[value] ? Text.langPacks[value] :value;
+	});
+
+	/**
+	*设置输入提示符颜色。
+	*/
+	__getset(0,__proto,'promptColor',function(){
+		return this._promptColor;
+		},function(value){
+		this._promptColor=value;
+		if (!this._content)Laya.superSet(Text,this,'color',value);
+	});
+
+	/**
+	*<p>输入框类型为Input静态常量之一。</p>
+	*<ul>
+	*<li>TYPE_TEXT</li>
+	*<li>TYPE_PASSWORD</li>
+	*<li>TYPE_EMAIL</li>
+	*<li>TYPE_URL</li>
+	*<li>TYPE_NUMBER</li>
+	*<li>TYPE_RANGE</li>
+	*<li>TYPE_DATE</li>
+	*<li>TYPE_MONTH</li>
+	*<li>TYPE_WEEK</li>
+	*<li>TYPE_TIME</li>
+	*<li>TYPE_DATE_TIME</li>
+	*<li>TYPE_DATE_TIME_LOCAL</li>
+	*</ul>
+	*<p>平台兼容性参见http://www.w3school.com.cn/html5/html_5_form_input_types.asp。</p>
+	*/
+	__getset(0,__proto,'type',function(){
+		return this._type;
+		},function(value){
+		if (value==="password")this._getTextStyle().asPassword=true;
+		else this._getTextStyle().asPassword=false;
+		this._type=value;
+	});
+
+	Input.__init__=function(){
+		Input._createInputElement();
+		if (Browser.onMobile){
+			var isTrue=false;
+			if(Browser.onMiniGame || Browser.onBDMiniGame){
+				isTrue=true;
+			}
+			Render.canvas.addEventListener(Input.IOS_IFRAME ?(isTrue ? "touchend" :"click"):"touchend",Input._popupInputMethod);
+		}
+	}
+
+	Input._popupInputMethod=function(e){
+		if (!laya.display.Input.isInputting)return;
+		var input=laya.display.Input.inputElement;
+		input.focus();
+	}
+
+	Input._createInputElement=function(){
+		Input._initInput(Input.area=Browser.createElement("textarea"));
+		Input._initInput(Input.input=Browser.createElement("input"));
+		Input.inputContainer=Browser.createElement("div");
+		Input.inputContainer.style.position="absolute";
+		Input.inputContainer.style.zIndex=1E5;
+		Browser.container.appendChild(Input.inputContainer);
+		Input.inputContainer.setPos=function (x,y){
+			Input.inputContainer.style.left=x+'px';
+			Input.inputContainer.style.top=y+'px';
+		};
+	}
+
+	Input._initInput=function(input){
+		var style=input.style;
+		style.cssText="position:absolute;overflow:hidden;resize:none;transform-origin:0 0;-webkit-transform-origin:0 0;-moz-transform-origin:0 0;-o-transform-origin:0 0;";
+		style.resize='none';
+		style.backgroundColor='transparent';
+		style.border='none';
+		style.outline='none';
+		style.zIndex=1;
+		input.addEventListener('input',Input._processInputting);
+		input.addEventListener('mousemove',Input._stopEvent);
+		input.addEventListener('mousedown',Input._stopEvent);
+		input.addEventListener('touchmove',Input._stopEvent);
+		input.setFontFace=function (fontFace){input.style.fontFamily=fontFace;};
+		if(!Render.isConchApp){
+			input.setColor=function (color){input.style.color=color;};
+			input.setFontSize=function (fontSize){input.style.fontSize=fontSize+'px';};
+		}
+	}
+
+	Input._processInputting=function(e){
+		var input=laya.display.Input.inputElement.target;
+		if (!input)return;
+		var value=laya.display.Input.inputElement.value;
+		if (input._restrictPattern){
+			value=value.replace(/\u2006|\x27/g,"");
+			if (input._restrictPattern.test(value)){
+				value=value.replace(input._restrictPattern,"");
+				laya.display.Input.inputElement.value=value;
+			}
+		}
+		input._text=value;
+		input.event("input");
+	}
+
+	Input._stopEvent=function(e){
+		if (e.type=='touchmove')
+			e.preventDefault();
+		e.stopPropagation && e.stopPropagation();
+	}
+
+	Input.TYPE_TEXT="text";
+	Input.TYPE_PASSWORD="password";
+	Input.TYPE_EMAIL="email";
+	Input.TYPE_URL="url";
+	Input.TYPE_NUMBER="number";
+	Input.TYPE_RANGE="range";
+	Input.TYPE_DATE="date";
+	Input.TYPE_MONTH="month";
+	Input.TYPE_WEEK="week";
+	Input.TYPE_TIME="time";
+	Input.TYPE_DATE_TIME="datetime";
+	Input.TYPE_DATE_TIME_LOCAL="datetime-local";
+	Input.TYPE_SEARCH="search";
+	Input.input=null;
+	Input.area=null;
+	Input.inputElement=null;
+	Input.inputContainer=null;
+	Input.confirmButton=null;
+	Input.promptStyleDOM=null;
+	Input.inputHeight=45;
+	Input.isInputting=false;
+	Input.stageMatrix=null;
+	__static(Input,
+	['IOS_IFRAME',function(){return this.IOS_IFRAME=(Browser.onIOS && Browser.window.top !=Browser.window.self);}
+	]);
+	return Input;
+})(Text)
+
+
+/**
 *<code>ScrollBar</code> 组件是一个滚动条组件。
 *<p>当数据太多以至于显示区域无法容纳时，最终用户可以使用 <code>ScrollBar</code> 组件控制所显示的数据部分。</p>
 *<p> 滚动条由四部分组成：两个箭头按钮、一个轨道和一个滑块。 </p> *
@@ -74584,462 +74979,6 @@ var ScrollBar=(function(_super){
 
 	return ScrollBar;
 })(UIComponent)
-
-
-/**
-*<p><code>Input</code> 类用于创建显示对象以显示和输入文本。</p>
-*<p>Input 类封装了原生的文本输入框，由于不同浏览器的差异，会导致此对象的默认文本的位置与用户点击输入时的文本的位置有少许的偏差。</p>
-*/
-//class laya.display.Input extends laya.display.Text
-var Input=(function(_super){
-	function Input(){
-		/**@private */
-		this._focus=false;
-		/**@private */
-		this._multiline=false;
-		/**@private */
-		this._editable=true;
-		/**@private */
-		this._restrictPattern=null;
-		this._type="text";
-		/**输入提示符。*/
-		this._prompt='';
-		/**输入提示符颜色。*/
-		this._promptColor="#A9A9A9";
-		this._originColor="#000000";
-		this._content='';
-		Input.__super.call(this);
-		this._maxChars=1E5;
-		this._width=100;
-		this._height=20;
-		this.multiline=false;
-		this.overflow="scroll";
-		this.on("mousedown",this,this._onMouseDown);
-		this.on("undisplay",this,this._onUnDisplay);
-	}
-
-	__class(Input,'laya.display.Input',_super);
-	var __proto=Input.prototype;
-	/**
-	*设置光标位置和选取字符。
-	*@param startIndex 光标起始位置。
-	*@param endIndex 光标结束位置。
-	*/
-	__proto.setSelection=function(startIndex,endIndex){
-		this.focus=true;
-		laya.display.Input.inputElement.selectionStart=startIndex;
-		laya.display.Input.inputElement.selectionEnd=endIndex;
-	}
-
-	__proto._onUnDisplay=function(e){
-		this.focus=false;
-	}
-
-	__proto._onMouseDown=function(e){
-		this.focus=true;
-	}
-
-	/**
-	*在输入期间，如果 Input 实例的位置改变，调用_syncInputTransform同步输入框的位置。
-	*/
-	__proto._syncInputTransform=function(){
-		var inputElement=this.nativeInput;
-		var transform=Utils.getTransformRelativeToWindow(this,this.padding[3],this.padding[0]);
-		var inputWid=this._width-this.padding[1]-this.padding[3];
-		var inputHei=this._height-this.padding[0]-this.padding[2];
-		if (Render.isConchApp){
-			inputElement.setScale(transform.scaleX,transform.scaleY);
-			inputElement.setSize(inputWid,inputHei);
-			inputElement.setPos(transform.x,transform.y);
-			}else {
-			Input.inputContainer.style.transform=Input.inputContainer.style.webkitTransform="scale("+transform.scaleX+","+transform.scaleY+") rotate("+(Laya.stage.canvasDegree)+"deg)";
-			inputElement.style.width=inputWid+'px';
-			inputElement.style.height=inputHei+'px';
-			Input.inputContainer.style.left=transform.x+'px';
-			Input.inputContainer.style.top=transform.y+'px';
-		}
-	}
-
-	/**选中当前实例的所有文本。*/
-	__proto.select=function(){
-		this.nativeInput.select();
-	}
-
-	__proto._setInputMethod=function(){
-		Input.input.parentElement && (Input.inputContainer.removeChild(Input.input));
-		Input.area.parentElement && (Input.inputContainer.removeChild(Input.area));
-		Input.inputElement=(this._multiline ? Input.area :Input.input);
-		Input.inputContainer.appendChild(Input.inputElement);
-		if (Text.RightToLeft){
-			Input.inputElement.style.direction="rtl";
-		}
-	}
-
-	__proto._focusIn=function(){
-		laya.display.Input.isInputting=true;
-		var input=this.nativeInput;
-		this._focus=true;
-		var cssStyle=input.style;
-		cssStyle.whiteSpace=(this.wordWrap ? "pre-wrap" :"nowrap");
-		this._setPromptColor();
-		input.readOnly=!this._editable;
-		if (Render.isConchApp){
-			input.setType(this._type);
-			input.setForbidEdit(!this._editable);
-		}
-		input.maxLength=this._maxChars;
-		var padding=this.padding;
-		input.type=this._type;
-		input.value=this._content;
-		input.placeholder=this._prompt;
-		Laya.stage.off("keydown",this,this._onKeyDown);
-		Laya.stage.on("keydown",this,this._onKeyDown);
-		Laya.stage.focus=this;
-		this.event("focus");
-		if (Browser.onPC)input.focus();
-		if(!Browser.onMiniGame && !Browser.onBDMiniGame){
-			var temp=this._text;
-			this._text=null;
-		}
-		this.typeset();
-		input.setColor(this._originColor);
-		input.setFontSize(this.fontSize);
-		input.setFontFace(Browser.onIPhone ? (Text.fontFamilyMap[this.font] || this.font):this.font);
-		if (Render.isConchApp){
-			input.setMultiAble && input.setMultiAble(this._multiline);
-		}
-		cssStyle.lineHeight=(this.leading+this.fontSize)+"px";
-		cssStyle.fontStyle=(this.italic ? "italic" :"normal");
-		cssStyle.fontWeight=(this.bold ? "bold" :"normal");
-		cssStyle.textAlign=this.align;
-		cssStyle.padding="0 0";
-		this._syncInputTransform();
-		if (!Render.isConchApp && Browser.onPC)
-			Laya.systemTimer.frameLoop(1,this,this._syncInputTransform);
-	}
-
-	// 设置DOM输入框提示符颜色。
-	__proto._setPromptColor=function(){
-		Input.promptStyleDOM=Browser.getElementById("promptStyle");
-		if (!Input.promptStyleDOM){
-			Input.promptStyleDOM=Browser.createElement("style");
-			Input.promptStyleDOM.setAttribute("id","promptStyle");
-			Browser.document.head.appendChild(Input.promptStyleDOM);
-		}
-		Input.promptStyleDOM.innerText="input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {"+"color:"+this._promptColor+"}"+"input:-moz-placeholder, textarea:-moz-placeholder {"+"color:"+this._promptColor+"}"+"input::-moz-placeholder, textarea::-moz-placeholder {"+"color:"+this._promptColor+"}"+"input:-ms-input-placeholder, textarea:-ms-input-placeholder {"+"color:"+this._promptColor+"}";
-	}
-
-	/**@private */
-	__proto._focusOut=function(){
-		laya.display.Input.isInputting=false;
-		this._focus=false;
-		this._text=null;
-		this._content=this.nativeInput.value;
-		if (!this._content){
-			Laya.superSet(Text,this,'text',this._prompt);
-			Laya.superSet(Text,this,'color',this._promptColor);
-			}else {
-			Laya.superSet(Text,this,'text',this._content);
-			Laya.superSet(Text,this,'color',this._originColor);
-		}
-		Laya.stage.off("keydown",this,this._onKeyDown);
-		Laya.stage.focus=null;
-		this.event("blur");
-		this.event("change");
-		if (Render.isConchApp)this.nativeInput.blur();
-		Browser.onPC && Laya.systemTimer.clear(this,this._syncInputTransform);
-	}
-
-	/**@private */
-	__proto._onKeyDown=function(e){
-		if (e.keyCode===13){
-			if (Browser.onMobile && !this._multiline)
-				this.focus=false;
-			this.event("enter");
-		}
-	}
-
-	__proto.changeText=function(text){
-		this._content=text;
-		if (this._focus){
-			this.nativeInput.value=text || '';
-			this.event("change");
-		}else
-		_super.prototype.changeText.call(this,text);
-	}
-
-	/**@inheritDoc */
-	__getset(0,__proto,'color',_super.prototype._$get_color,function(value){
-		if (this._focus)
-			this.nativeInput.setColor(value);
-		Laya.superSet(Text,this,'color',this._content?value:this._promptColor);
-		this._originColor=value;
-	});
-
-	/**表示是否是多行输入框。*/
-	__getset(0,__proto,'multiline',function(){
-		return this._multiline;
-		},function(value){
-		this._multiline=value;
-		this.valign=value ? "top" :"middle";
-	});
-
-	/**
-	*<p>字符数量限制，默认为10000。</p>
-	*<p>设置字符数量限制时，小于等于0的值将会限制字符数量为10000。</p>
-	*/
-	__getset(0,__proto,'maxChars',function(){
-		return this._maxChars;
-		},function(value){
-		if (value <=0)
-			value=1E5;
-		this._maxChars=value;
-	});
-
-	/**@inheritDoc */
-	__getset(0,__proto,'text',function(){
-		if (this._focus)
-			return this.nativeInput.value;
-		else
-		return this._content || "";
-		},function(value){
-		Laya.superSet(Text,this,'color',this._originColor);
-		value+='';
-		if (this._focus){
-			this.nativeInput.value=value || '';
-			this.event("change");
-			}else {
-			if (!this._multiline)
-				value=value.replace(/\r?\n/g,'');
-			this._content=value;
-			if (value)
-				Laya.superSet(Text,this,'text',value);
-			else {
-				Laya.superSet(Text,this,'text',this._prompt);
-				Laya.superSet(Text,this,'color',this.promptColor);
-			}
-		}
-	});
-
-	/**
-	*获取对输入框的引用实例。
-	*/
-	__getset(0,__proto,'nativeInput',function(){
-		return this._multiline ? Input.area :Input.input;
-	});
-
-	// 因此 调用focus接口是无法都在移动平台立刻弹出键盘的
-	/**
-	*表示焦点是否在此实例上。
-	*/
-	__getset(0,__proto,'focus',function(){
-		return this._focus;
-		},function(value){
-		var input=this.nativeInput;
-		if (this._focus!==value){
-			if (value){
-				if (input.target){
-					input.target._focusOut();
-					}else {
-					this._setInputMethod();
-				}
-				input.target=this;
-				this._focusIn();
-				}else {
-				input.target=null;
-				this._focusOut();
-				Browser.document.body.scrollTop=0;
-				input.blur();
-				if (Render.isConchApp)input.setPos(-10000,-10000);
-				else if (Input.inputContainer.contains(input))Input.inputContainer.removeChild(input);
-			}
-		}
-	});
-
-	/**
-	*是否可编辑。
-	*/
-	__getset(0,__proto,'editable',function(){
-		return this._editable;
-		},function(value){
-		this._editable=value;
-		if (Render.isConchApp){
-			Input.input.setForbidEdit(!value);
-		}
-	});
-
-	/**@inheritDoc */
-	__getset(0,__proto,'bgColor',_super.prototype._$get_bgColor,function(value){
-		Laya.superSet(Text,this,'bgColor',value);
-		if(Render.isConchApp)
-			this.nativeInput.setBgColor(value);
-	});
-
-	/**限制输入的字符。*/
-	__getset(0,__proto,'restrict',function(){
-		if (this._restrictPattern){
-			return this._restrictPattern.source;
-		}
-		return "";
-		},function(pattern){
-		if (pattern){
-			pattern="[^"+pattern+"]";
-			if (pattern.indexOf("^^")>-1)
-				pattern=pattern.replace("^^","");
-			this._restrictPattern=new RegExp(pattern,"g");
-		}else
-		this._restrictPattern=null;
-	});
-
-	/**
-	*设置输入提示符。
-	*/
-	__getset(0,__proto,'prompt',function(){
-		return this._prompt;
-		},function(value){
-		if (!this._text && value)
-			Laya.superSet(Text,this,'color',this._promptColor);
-		this.promptColor=this._promptColor;
-		if (this._text)
-			Laya.superSet(Text,this,'text',(this._text==this._prompt)?value:this._text);
-		else
-		Laya.superSet(Text,this,'text',value);
-		this._prompt=Text.langPacks && Text.langPacks[value] ? Text.langPacks[value] :value;
-	});
-
-	/**
-	*设置输入提示符颜色。
-	*/
-	__getset(0,__proto,'promptColor',function(){
-		return this._promptColor;
-		},function(value){
-		this._promptColor=value;
-		if (!this._content)Laya.superSet(Text,this,'color',value);
-	});
-
-	/**
-	*<p>输入框类型为Input静态常量之一。</p>
-	*<ul>
-	*<li>TYPE_TEXT</li>
-	*<li>TYPE_PASSWORD</li>
-	*<li>TYPE_EMAIL</li>
-	*<li>TYPE_URL</li>
-	*<li>TYPE_NUMBER</li>
-	*<li>TYPE_RANGE</li>
-	*<li>TYPE_DATE</li>
-	*<li>TYPE_MONTH</li>
-	*<li>TYPE_WEEK</li>
-	*<li>TYPE_TIME</li>
-	*<li>TYPE_DATE_TIME</li>
-	*<li>TYPE_DATE_TIME_LOCAL</li>
-	*</ul>
-	*<p>平台兼容性参见http://www.w3school.com.cn/html5/html_5_form_input_types.asp。</p>
-	*/
-	__getset(0,__proto,'type',function(){
-		return this._type;
-		},function(value){
-		if (value==="password")this._getTextStyle().asPassword=true;
-		else this._getTextStyle().asPassword=false;
-		this._type=value;
-	});
-
-	Input.__init__=function(){
-		Input._createInputElement();
-		if (Browser.onMobile){
-			var isTrue=false;
-			if(Browser.onMiniGame || Browser.onBDMiniGame){
-				isTrue=true;
-			}
-			Render.canvas.addEventListener(Input.IOS_IFRAME ?(isTrue ? "touchend" :"click"):"touchend",Input._popupInputMethod);
-		}
-	}
-
-	Input._popupInputMethod=function(e){
-		if (!laya.display.Input.isInputting)return;
-		var input=laya.display.Input.inputElement;
-		input.focus();
-	}
-
-	Input._createInputElement=function(){
-		Input._initInput(Input.area=Browser.createElement("textarea"));
-		Input._initInput(Input.input=Browser.createElement("input"));
-		Input.inputContainer=Browser.createElement("div");
-		Input.inputContainer.style.position="absolute";
-		Input.inputContainer.style.zIndex=1E5;
-		Browser.container.appendChild(Input.inputContainer);
-		Input.inputContainer.setPos=function (x,y){
-			Input.inputContainer.style.left=x+'px';
-			Input.inputContainer.style.top=y+'px';
-		};
-	}
-
-	Input._initInput=function(input){
-		var style=input.style;
-		style.cssText="position:absolute;overflow:hidden;resize:none;transform-origin:0 0;-webkit-transform-origin:0 0;-moz-transform-origin:0 0;-o-transform-origin:0 0;";
-		style.resize='none';
-		style.backgroundColor='transparent';
-		style.border='none';
-		style.outline='none';
-		style.zIndex=1;
-		input.addEventListener('input',Input._processInputting);
-		input.addEventListener('mousemove',Input._stopEvent);
-		input.addEventListener('mousedown',Input._stopEvent);
-		input.addEventListener('touchmove',Input._stopEvent);
-		input.setFontFace=function (fontFace){input.style.fontFamily=fontFace;};
-		if(!Render.isConchApp){
-			input.setColor=function (color){input.style.color=color;};
-			input.setFontSize=function (fontSize){input.style.fontSize=fontSize+'px';};
-		}
-	}
-
-	Input._processInputting=function(e){
-		var input=laya.display.Input.inputElement.target;
-		if (!input)return;
-		var value=laya.display.Input.inputElement.value;
-		if (input._restrictPattern){
-			value=value.replace(/\u2006|\x27/g,"");
-			if (input._restrictPattern.test(value)){
-				value=value.replace(input._restrictPattern,"");
-				laya.display.Input.inputElement.value=value;
-			}
-		}
-		input._text=value;
-		input.event("input");
-	}
-
-	Input._stopEvent=function(e){
-		if (e.type=='touchmove')
-			e.preventDefault();
-		e.stopPropagation && e.stopPropagation();
-	}
-
-	Input.TYPE_TEXT="text";
-	Input.TYPE_PASSWORD="password";
-	Input.TYPE_EMAIL="email";
-	Input.TYPE_URL="url";
-	Input.TYPE_NUMBER="number";
-	Input.TYPE_RANGE="range";
-	Input.TYPE_DATE="date";
-	Input.TYPE_MONTH="month";
-	Input.TYPE_WEEK="week";
-	Input.TYPE_TIME="time";
-	Input.TYPE_DATE_TIME="datetime";
-	Input.TYPE_DATE_TIME_LOCAL="datetime-local";
-	Input.TYPE_SEARCH="search";
-	Input.input=null;
-	Input.area=null;
-	Input.inputElement=null;
-	Input.inputContainer=null;
-	Input.confirmButton=null;
-	Input.promptStyleDOM=null;
-	Input.inputHeight=45;
-	Input.isInputting=false;
-	Input.stageMatrix=null;
-	__static(Input,
-	['IOS_IFRAME',function(){return this.IOS_IFRAME=(Browser.onIOS && Browser.window.top !=Browser.window.self);}
-	]);
-	return Input;
-})(Text)
 
 
 /**
@@ -76881,169 +76820,6 @@ var ShuriKenParticle3D=(function(_super){
 
 
 /**
-//*<code>RenderTexture</code> 类用于创建渲染目标。
-*/
-//class laya.d3.resource.RenderTexture extends laya.webgl.resource.BaseTexture
-var RenderTexture=(function(_super){
-	function RenderTexture(width,height,format,depthStencilFormat){
-		/**@private */
-		//this._frameBuffer=null;
-		/**@private */
-		//this._depthStencilBuffer=null;
-		/**@private */
-		//this._depthStencilFormat=0;
-		(format===void 0)&& (format=0);
-		(depthStencilFormat===void 0)&& (depthStencilFormat=0);
-		RenderTexture.__super.call(this,format,false);
-		this._glTextureType=0x0DE1;
-		this._width=width;
-		this._height=height;
-		this._depthStencilFormat=depthStencilFormat;
-		this._create(width,height);
-	}
-
-	__class(RenderTexture,'laya.d3.resource.RenderTexture',_super);
-	var __proto=RenderTexture.prototype;
-	/**
-	*@private
-	*/
-	__proto._create=function(width,height){
-		var gl=LayaGL.instance;
-		this._frameBuffer=gl.createFramebuffer();
-		WebGLContext.bindTexture(gl,this._glTextureType,this._glTexture);
-		var glFormat=this._getGLFormat();
-		gl.texImage2D(this._glTextureType,0,glFormat,width,height,0,glFormat,0x1401,null);
-		this._setGPUMemory(width *height *4);
-		gl.bindFramebuffer(0x8D40,this._frameBuffer);
-		gl.framebufferTexture2D(0x8D40,0x8CE0,0x0DE1,this._glTexture,0);
-		if (this._depthStencilFormat!==3){
-			this._depthStencilBuffer=gl.createRenderbuffer();
-			gl.bindRenderbuffer(0x8D41,this._depthStencilBuffer);
-			switch (this._depthStencilFormat){
-				case 0:
-					gl.renderbufferStorage(0x8D41,0x81A5,width,height);
-					gl.framebufferRenderbuffer(0x8D40,0x8D00,0x8D41,this._depthStencilBuffer);
-					break ;
-				case 1:
-					gl.renderbufferStorage(0x8D41,0x8D48,width,height);
-					gl.framebufferRenderbuffer(0x8D40,0x8D20,0x8D41,this._depthStencilBuffer);
-					break ;
-				case 2:
-					gl.renderbufferStorage(0x8D41,0x84F9,width,height);
-					gl.framebufferRenderbuffer(0x8D40,0x821A,0x8D41,this._depthStencilBuffer);
-					break ;
-				default :
-					throw "RenderTexture: unkonw depth format.";
-				}
-		}
-		gl.bindFramebuffer(0x8D40,null);
-		gl.bindRenderbuffer(0x8D41,null);
-		this._setWarpMode(0x2802,this._wrapModeU);
-		this._setWarpMode(0x2803,this._wrapModeV);
-		this._setFilterMode(this._filterMode);
-		this._setAnisotropy(this._anisoLevel);
-		this._readyed=true;
-		this._activeResource();
-	}
-
-	/**
-	*生成mipMap。
-	*/
-	__proto.generateMipmap=function(){
-		if (this._isPot(this.width)&& this._isPot(this.height)){
-			this._mipmap=true;
-			LayaGL.instance.generateMipmap(this._glTextureType);
-			this._setFilterMode(this._filterMode);
-			this._setGPUMemory(this.width *this.height *4 *(1+1 / 3));
-			}else {
-			this._mipmap=false;
-			this._setGPUMemory(this.width *this.height *4 *(1+1 / 3));
-		}
-	}
-
-	/**
-	*开始绑定。
-	*/
-	__proto.start=function(){
-		LayaGL.instance.bindFramebuffer(0x8D40,this._frameBuffer);
-		RenderTexture._currentActive=this;
-		this._readyed=false;
-	}
-
-	/**
-	*结束绑定。
-	*/
-	__proto.end=function(){
-		LayaGL.instance.bindFramebuffer(0x8D40,null);
-		RenderTexture._currentActive=null;
-		this._readyed=true;
-	}
-
-	/**
-	*获得像素数据。
-	*@param x X像素坐标。
-	*@param y Y像素坐标。
-	*@param width 宽度。
-	*@param height 高度。
-	*@return 像素数据。
-	*/
-	__proto.getData=function(x,y,width,height,out){
-		var gl=LayaGL.instance;
-		gl.bindFramebuffer(0x8D40,this._frameBuffer);
-		var canRead=(gl.checkFramebufferStatus(0x8D40)===0x8CD5);
-		if (!canRead){
-			gl.bindFramebuffer(0x8D40,null);
-			return null;
-		}
-		gl.readPixels(x,y,width,height,0x1908,0x1401,out);
-		gl.bindFramebuffer(0x8D40,null);
-		return out;
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto._disposeResource=function(){
-		if (this._frameBuffer){
-			var gl=LayaGL.instance;
-			gl.deleteTexture(this._glTexture);
-			gl.deleteFramebuffer(this._frameBuffer);
-			gl.deleteRenderbuffer(this._depthStencilBuffer);
-			this._glTexture=null;
-			this._frameBuffer=null;
-			this._depthStencilBuffer=null;
-			this._setGPUMemory(0);
-		}
-	}
-
-	/**
-	*获取深度格式。
-	*@return 深度格式。
-	*/
-	__getset(0,__proto,'depthStencilFormat',function(){
-		return this._depthStencilFormat;
-	});
-
-	/**
-	*@inheritDoc
-	*/
-	__getset(0,__proto,'defaulteTexture',function(){
-		return Texture2D.grayTexture;
-	});
-
-	/**
-	*获取当前激活的Rendertexture
-	*/
-	__getset(1,RenderTexture,'currentActive',function(){
-		return RenderTexture._currentActive;
-	},laya.webgl.resource.BaseTexture._$SET_currentActive);
-
-	RenderTexture._currentActive=null;
-	return RenderTexture;
-})(BaseTexture)
-
-
-/**
 *<p> <code>Label</code> 类用于创建显示对象以显示文本。</p>
 *
 *@example <caption>以下示例代码，创建了一个 <code>Label</code> 实例。</caption>
@@ -77422,6 +77198,169 @@ var Label=(function(_super){
 
 	return Label;
 })(UIComponent)
+
+
+/**
+//*<code>RenderTexture</code> 类用于创建渲染目标。
+*/
+//class laya.d3.resource.RenderTexture extends laya.webgl.resource.BaseTexture
+var RenderTexture=(function(_super){
+	function RenderTexture(width,height,format,depthStencilFormat){
+		/**@private */
+		//this._frameBuffer=null;
+		/**@private */
+		//this._depthStencilBuffer=null;
+		/**@private */
+		//this._depthStencilFormat=0;
+		(format===void 0)&& (format=0);
+		(depthStencilFormat===void 0)&& (depthStencilFormat=0);
+		RenderTexture.__super.call(this,format,false);
+		this._glTextureType=0x0DE1;
+		this._width=width;
+		this._height=height;
+		this._depthStencilFormat=depthStencilFormat;
+		this._create(width,height);
+	}
+
+	__class(RenderTexture,'laya.d3.resource.RenderTexture',_super);
+	var __proto=RenderTexture.prototype;
+	/**
+	*@private
+	*/
+	__proto._create=function(width,height){
+		var gl=LayaGL.instance;
+		this._frameBuffer=gl.createFramebuffer();
+		WebGLContext.bindTexture(gl,this._glTextureType,this._glTexture);
+		var glFormat=this._getGLFormat();
+		gl.texImage2D(this._glTextureType,0,glFormat,width,height,0,glFormat,0x1401,null);
+		this._setGPUMemory(width *height *4);
+		gl.bindFramebuffer(0x8D40,this._frameBuffer);
+		gl.framebufferTexture2D(0x8D40,0x8CE0,0x0DE1,this._glTexture,0);
+		if (this._depthStencilFormat!==3){
+			this._depthStencilBuffer=gl.createRenderbuffer();
+			gl.bindRenderbuffer(0x8D41,this._depthStencilBuffer);
+			switch (this._depthStencilFormat){
+				case 0:
+					gl.renderbufferStorage(0x8D41,0x81A5,width,height);
+					gl.framebufferRenderbuffer(0x8D40,0x8D00,0x8D41,this._depthStencilBuffer);
+					break ;
+				case 1:
+					gl.renderbufferStorage(0x8D41,0x8D48,width,height);
+					gl.framebufferRenderbuffer(0x8D40,0x8D20,0x8D41,this._depthStencilBuffer);
+					break ;
+				case 2:
+					gl.renderbufferStorage(0x8D41,0x84F9,width,height);
+					gl.framebufferRenderbuffer(0x8D40,0x821A,0x8D41,this._depthStencilBuffer);
+					break ;
+				default :
+					throw "RenderTexture: unkonw depth format.";
+				}
+		}
+		gl.bindFramebuffer(0x8D40,null);
+		gl.bindRenderbuffer(0x8D41,null);
+		this._setWarpMode(0x2802,this._wrapModeU);
+		this._setWarpMode(0x2803,this._wrapModeV);
+		this._setFilterMode(this._filterMode);
+		this._setAnisotropy(this._anisoLevel);
+		this._readyed=true;
+		this._activeResource();
+	}
+
+	/**
+	*生成mipMap。
+	*/
+	__proto.generateMipmap=function(){
+		if (this._isPot(this.width)&& this._isPot(this.height)){
+			this._mipmap=true;
+			LayaGL.instance.generateMipmap(this._glTextureType);
+			this._setFilterMode(this._filterMode);
+			this._setGPUMemory(this.width *this.height *4 *(1+1 / 3));
+			}else {
+			this._mipmap=false;
+			this._setGPUMemory(this.width *this.height *4 *(1+1 / 3));
+		}
+	}
+
+	/**
+	*开始绑定。
+	*/
+	__proto.start=function(){
+		LayaGL.instance.bindFramebuffer(0x8D40,this._frameBuffer);
+		RenderTexture._currentActive=this;
+		this._readyed=false;
+	}
+
+	/**
+	*结束绑定。
+	*/
+	__proto.end=function(){
+		LayaGL.instance.bindFramebuffer(0x8D40,null);
+		RenderTexture._currentActive=null;
+		this._readyed=true;
+	}
+
+	/**
+	*获得像素数据。
+	*@param x X像素坐标。
+	*@param y Y像素坐标。
+	*@param width 宽度。
+	*@param height 高度。
+	*@return 像素数据。
+	*/
+	__proto.getData=function(x,y,width,height,out){
+		var gl=LayaGL.instance;
+		gl.bindFramebuffer(0x8D40,this._frameBuffer);
+		var canRead=(gl.checkFramebufferStatus(0x8D40)===0x8CD5);
+		if (!canRead){
+			gl.bindFramebuffer(0x8D40,null);
+			return null;
+		}
+		gl.readPixels(x,y,width,height,0x1908,0x1401,out);
+		gl.bindFramebuffer(0x8D40,null);
+		return out;
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto._disposeResource=function(){
+		if (this._frameBuffer){
+			var gl=LayaGL.instance;
+			gl.deleteTexture(this._glTexture);
+			gl.deleteFramebuffer(this._frameBuffer);
+			gl.deleteRenderbuffer(this._depthStencilBuffer);
+			this._glTexture=null;
+			this._frameBuffer=null;
+			this._depthStencilBuffer=null;
+			this._setGPUMemory(0);
+		}
+	}
+
+	/**
+	*获取深度格式。
+	*@return 深度格式。
+	*/
+	__getset(0,__proto,'depthStencilFormat',function(){
+		return this._depthStencilFormat;
+	});
+
+	/**
+	*@inheritDoc
+	*/
+	__getset(0,__proto,'defaulteTexture',function(){
+		return Texture2D.grayTexture;
+	});
+
+	/**
+	*获取当前激活的Rendertexture
+	*/
+	__getset(1,RenderTexture,'currentActive',function(){
+		return RenderTexture._currentActive;
+	},laya.webgl.resource.BaseTexture._$SET_currentActive);
+
+	RenderTexture._currentActive=null;
+	return RenderTexture;
+})(BaseTexture)
 
 
 /**

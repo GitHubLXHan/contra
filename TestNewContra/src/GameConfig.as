@@ -7,8 +7,19 @@ package {
 	import script.Controller;
 	import laya.physics.RigidBody;
 	import laya.physics.ChainCollider;
-	import script.Role;
+	import laya.physics.CircleCollider;
 	import laya.physics.BoxCollider;
+	import script.Boss;
+	import script.BossBullet;
+	import script.Bullet;
+	import script.EnemyBullet;
+	import script.EnemyFive;
+	import script.EnemyFour;
+	import script.EnemyOne;
+	import script.EnemyThree;
+	import script.EnemyTow;
+	import script.PropFrame;
+	import script.Role;
 	import script.TouchDestroy;
 	/**
 	 * 游戏初始化配置
@@ -34,8 +45,19 @@ package {
 			reg("script.Controller",Controller);
 			reg("laya.physics.RigidBody",RigidBody);
 			reg("laya.physics.ChainCollider",ChainCollider);
-			reg("script.Role",Role);
+			reg("laya.physics.CircleCollider",CircleCollider);
 			reg("laya.physics.BoxCollider",BoxCollider);
+			reg("script.Boss",Boss);
+			reg("script.BossBullet",BossBullet);
+			reg("script.Bullet",Bullet);
+			reg("script.EnemyBullet",EnemyBullet);
+			reg("script.EnemyFive",EnemyFive);
+			reg("script.EnemyFour",EnemyFour);
+			reg("script.EnemyOne",EnemyOne);
+			reg("script.EnemyThree",EnemyThree);
+			reg("script.EnemyTow",EnemyTow);
+			reg("script.PropFrame",PropFrame);
+			reg("script.Role",Role);
 			reg("script.TouchDestroy",TouchDestroy);
 		}
 		GameConfig.init();

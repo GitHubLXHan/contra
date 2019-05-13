@@ -6,6 +6,7 @@ package ui.GameScene {
 	import script.Controller;
 	import laya.physics.RigidBody;
 	import laya.physics.ChainCollider;
+	import laya.physics.CircleCollider;
 
 	public class GameMainSceneUI extends Scene {
 

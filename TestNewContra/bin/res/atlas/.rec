@@ -1,9 +1,4 @@
 D .
-D blut
-P 08A4E015 enemyBlut.png
-P E4D5408A myBlut.png
-P 6A5AF849 myBlut01.png
-P 972A61C0 myBlut02.png
 D boom
 P 5ABC9B52 enemyObjBoom01.png
 P 97C4E939 enemyObjBoom02.png
@@ -11,13 +6,88 @@ P FC833D2D enemyObjBoom03.png
 P F45347D1 enemyRoleBoom01.png
 P A67CA165 enemyRoleBoom02.png
 P 0D7C1BE3 enemyRoleBoom03.png
+D boss
+P F1A62C2E boss01.png
+P 3AC37C03 boss01_foot01.png
+P 1611E503 boss01_foot02.png
+P 28E16FE2 boss01_foot03.png
+P BFBCC099 boss01_top01.png
+P A219EC01 boss01_top02.png
+D bullet
+P 08A4E015 enemyBullet.png
+P 6A5AF849 myBullet01.png
+P 972A61C0 myBullet02.png
+P E4D5408A myBullet03.png
+P 3492981A myBullet04.png
+D enemy_five
+P 1A944B1E enemy_five01_brightness1.png
+P CEBCE7F1 enemy_five01_brightness2.png
+P DE83FA36 enemy_five01_brightness3.png
+P E9206A21 enemy_five02_brightness1.png
+P B8AC3228 enemy_five02_brightness2.png
+P D1D2E7D2 enemy_five02_brightness3.png
+P 728B3A08 enemy_five03_brightness1.png
+P D9A34D07 enemy_five03_brightness2.png
+P 20356D72 enemy_five03_brightness3.png
+P 3E93BF5A enemy_five04_brightness1.png
+P 00826488 enemy_five04_brightness2.png
+P 2D4314A8 enemy_five04_brightness4.png
+P 72F0D555 enemy_five05_brightness1.png
+P 7C9A1444 enemy_five05_brightness2.png
+P 98C88935 enemy_five05_brightness3.png
+D enemy_four
+P 5AAEA1E9 enemy_four01_brightness1.png
+P CF85758D enemy_four01_brightness2.png
+P 8DA26D5C enemy_four01_brightness3.png
+P 4E94B130 enemy_four02_brightness1.png
+P EA5848DE enemy_four02_brightness2.png
+P 731064F4 enemy_four02_brightness3.png
+P E9CC6E96 enemy_four03_brightness1.png
+P 85F64CED enemy_four03_brightness2.png
+P 12404398 enemy_four03_brightness3.png
+P 93E389F8 enemy_four04_brightness1.png
+P 4179167A enemy_four04_brightness2.png
+P 3FB8ACA4 enemy_four04_brightness3.png
+P D6FB0F30 enemy_four05_brightness1.png
+P DDF486BC enemy_four05_brightness2.png
+P CA8920B4 enemy_four05_brightness3.png
+P A4C86DC9 enemy_four06_brightness1.png
+P 2CF35C0C enemy_four06_brightness2.png
+P 2A35E16E enemy_four06_brightness3.png
+P 8C899961 enemy_four07_brightness1.png
+P 437B4D2A enemy_four07_brightness2.png
+P 0EC4F4CD enemy_four07_brightness3.png
+P D647FE02 enemy_four08_brightness1.png
+P 6AF25D8A enemy_four08_brightness2.png
+P CD76C16D enemy_four08_brightness3.png
+P D281A74A enemy_four09_brightness1.png
+P 4C26A919 enemy_four09_brightness2.png
+P E0687E1B enemy_four09_brightness3.png
+P C35CC5CA enemy_four10_brightness1.png
+P F182F6F0 enemy_four10_brightness2.png
+P 7FD4AD4D enemy_four10_brightness3.png
+P 42305156 enemy_four11_brightness1.png
+P D4938C7D enemy_four11_brightness2.png
+P 2458D92D enemy_four11_brightness3.png
+P BF0AAB0C enemy_four12_brightness1.png
+P AC24F590 enemy_four12_brightness2.png
+P D741A363 enemy_four12_brightness3.png
+P F8A6F0AC enemy_four13_brightness1.png
+P A39223F0 enemy_four13_brightness2.png
+P 6D19BAA8 enemy_four13_brightness3.png
+P 146E6969 enemy_four14_brightness1.png
+P B6E87D18 enemy_four14_brightness2.png
+P E4B2F0F4 enemy_four14_brightness3.png
 D enemy_one
-P A90EF9A9 enemt_one_left01.png
-P EC1549FE enemt_one_left02.png
-P 71C73296 enemt_one_left03.png
+P A90EF9A9 enemy_one_left01.png
+P EC1549FE enemy_one_left02.png
+P 71C73296 enemy_one_left03.png
 P 101A9DDE enemy_one_right01.png
 P FE44C9BC enemy_one_right02.png
 P CEE30631 enemy_one_right03.png
+D enemy_three
+P 7D19565C enemy_three.png
+P 357917E5 shade.png
 D enemy_tow
 P DFDCE0A0 enemy_tow_left01.png
 P E3F3D7BC enemy_tow_left02.png
@@ -40,6 +110,21 @@ P D6F3FDE9 rocker_center.png
 D map
 D other
 P 506CF473 touchDestroy.png
+D props
+P 087F08D3 fly_prop.png
+P 929C1402 prop01.png
+P F299152B prop02.png
+P C44E3985 prop03.png
+P C1DD5630 prop04.png
+P 9EFFA732 prop05.png
+P E2105C4D prop06.png
+P 00ECC3DD prop_frame01.png
+P 8D1D155C prop_frame02.png
+P 507268AE prop_frame03.png
+P 8E66AA68 prop_frame04.png
+P A0C352F3 prop_frame05.png
+P 7151DD61 prop_frame06.png
+P 3CE03621 prop_frame07.png
 D role_blue
 P 1284D8CD blue_l_die01.png
 P 3BC63780 blue_l_die02.png
@@ -51,6 +136,7 @@ P 92348AE0 blue_l_jump02.png
 P 5B8AE026 blue_l_jump03.png
 P 8BF9F781 blue_l_jump04.png
 P D5D5D0B8 blue_l_lie.png
+P 5BC999AA blue_l_nobl_ufire_inwater.png
 P 67481892 blue_l_obl_down01.png
 P 9BB2150F blue_l_obl_down02.png
 P 6E06571E blue_l_obl_down03.png
@@ -63,6 +149,7 @@ P CDDA14B2 blue_l_str_left03.png
 P 4A31C714 blue_l_str_up01.png
 P AB759C65 blue_l_str_up02.png
 P 671C7288 blue_l_str_up03.png
+P 3A357886 blue_l_uobl_fire_inwater.png
 P D578342A blue_l_water_run.png
 P 4EBD0D55 blue_l_water_str.png
 P B6A9DE32 blue_left01.png
@@ -80,6 +167,7 @@ P BC3835C1 blue_r_jump02.png
 P D39376C7 blue_r_jump03.png
 P EB40B726 blue_r_jump04.png
 P 9B531940 blue_r_lie.png
+P 8B7817E7 blue_r_nobl_ufire_inwater.png
 P 2626F3DF blue_r_obl_down01.png
 P A8866B78 blue_r_obl_down02.png
 P 54553023 blue_r_obl_down03.png
@@ -92,6 +180,7 @@ P BE901D88 blue_r_str_right03.png
 P DFA62049 blue_r_str_up01.png
 P DC8C03D6 blue_r_str_up02.png
 P 898765F1 blue_r_str_up03.png
+P 3B0E95B4 blue_r_uobl_fire_inwater.png
 P 341E927C blue_r_water_run.png
 P 1F497ABF blue_r_water_str.png
 P 69EB445D blue_right01.png
