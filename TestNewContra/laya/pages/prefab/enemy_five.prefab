@@ -2,11 +2,10 @@
     "x":0,
     "type":"Box",
     "selectedBox":186,
-    "selecteID":191,
     "searchKey":"Box,enemy_five",
-    "props":{"y":0,"x":0,"width":50,"presetID":1,"preset":"laya/pages/prefab/enemy_five.prefab","name":"enemy_five","isPresetRoot":true,"height":50},
+    "props":{"y":25,"x":25,"width":50,"presetID":1,"preset":"laya/pages/prefab/enemy_five.prefab","name":"enemy_five","isPresetRoot":true,"height":50,"anchorY":0.5,"anchorX":0.5},
     "nodeParent":-1,
-    "maxID":193,
+    "maxID":194,
     "label":"enemy_five",
     "isOpen":true,
     "isDirectory":true,
@@ -76,23 +75,6 @@
         },
         {
             "x":15,
-            "type":"Script",
-            "switchAble":true,
-            "source":"src/script/EnemyFive.as",
-            "searchKey":"Script,EnemyFive",
-            "removeAble":true,
-            "props":{"presetID":6,"preset":"laya/pages/prefab/enemy_five.prefab","enemyBullet":"@Prefab:prefab/enemy_bullet.prefab"},
-            "nodeParent":186,
-            "label":"EnemyFive",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":190,
-            "child":[
-                ]
-        },
-        {
-            "x":15,
             "type":"BoxCollider",
             "switchAble":true,
             "searchKey":"BoxCollider",
@@ -120,6 +102,23 @@
             "isAniNode":true,
             "hasChild":false,
             "compId":192,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"Script",
+            "switchAble":true,
+            "source":"src/enemyScript/EnemyFive.as",
+            "searchKey":"Script,EnemyFive",
+            "removeAble":true,
+            "props":{"presetID":9,"preset":"laya/pages/prefab/enemy_five.prefab","enemyBullet":"@Prefab:prefab/enemy_bullet.prefab"},
+            "nodeParent":186,
+            "label":"EnemyFive",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":193,
             "child":[
                 ]
         }],

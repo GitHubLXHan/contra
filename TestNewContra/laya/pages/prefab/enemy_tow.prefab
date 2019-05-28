@@ -2,11 +2,11 @@
     "x":0,
     "type":"Sprite",
     "selectedBox":95,
-    "selecteID":96,
+    "selecteID":100,
     "searchKey":"Sprite,enemy_tow",
     "props":{"y":0,"x":0,"width":30,"texture":"enemy_tow/enemy_tow_left01.png","presetID":1,"preset":"laya/pages/prefab/enemy_tow.prefab","name":"enemy_tow","isPresetRoot":true,"height":55},
     "nodeParent":-1,
-    "maxID":100,
+    "maxID":101,
     "label":"enemy_tow",
     "isOpen":true,
     "isDirectory":true,
@@ -48,23 +48,6 @@
         },
         {
             "x":15,
-            "type":"Script",
-            "switchAble":true,
-            "source":"src/script/EnemyTow.as",
-            "searchKey":"Script,EnemyTow",
-            "removeAble":true,
-            "props":{"presetID":4,"preset":"laya/pages/prefab/enemy_tow.prefab"},
-            "nodeParent":95,
-            "label":"EnemyTow",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":98,
-            "child":[
-                ]
-        },
-        {
-            "x":15,
             "type":"BoxCollider",
             "switchAble":true,
             "searchKey":"BoxCollider",
@@ -76,6 +59,23 @@
             "isAniNode":true,
             "hasChild":false,
             "compId":99,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"Script",
+            "switchAble":true,
+            "source":"src/enemyScript/EnemyTow.as",
+            "searchKey":"Script,EnemyTow",
+            "removeAble":true,
+            "props":{"presetID":6,"preset":"laya/pages/prefab/enemy_tow.prefab"},
+            "nodeParent":95,
+            "label":"EnemyTow",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":100,
             "child":[
                 ]
         }],

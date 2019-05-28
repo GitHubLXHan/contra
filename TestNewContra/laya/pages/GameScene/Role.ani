@@ -1,4 +1,5 @@
 {
+    "x":0,
     "type":"View",
     "selectedBox":2,
     "searchKey":"View",
@@ -998,7 +999,7 @@
                             }],
                         "width":[
                             {
-                                "value":23,
+                                "value":26,
                                 "tweenMethod":"linearNone",
                                 "tween":true,
                                 "target":6,
@@ -1057,7 +1058,7 @@
                             }],
                         "height":[
                             {
-                                "value":28,
+                                "value":30,
                                 "tweenMethod":"linearNone",
                                 "tween":true,
                                 "target":6,
@@ -1276,12 +1277,20 @@
                             }],
                         "width":[
                             {
-                                "value":23,
+                                "value":26,
                                 "tweenMethod":"linearNone",
                                 "tween":true,
                                 "target":10,
                                 "key":"width",
                                 "index":0
+                            },
+                            {
+                                "value":26,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":10,
+                                "key":"width",
+                                "index":3
                             }],
                         "skin":[
                             {
@@ -1327,12 +1336,20 @@
                             }],
                         "height":[
                             {
-                                "value":28,
+                                "value":30,
                                 "tweenMethod":"linearNone",
                                 "tween":true,
                                 "target":10,
                                 "key":"height",
                                 "index":0
+                            },
+                            {
+                                "value":30,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":10,
+                                "key":"height",
+                                "index":3
                             }]
                     }
                 },
@@ -5084,7 +5101,7 @@
                     "keyframes":{
                         "y":[
                             {
-                                "value":0,
+                                "value":35,
                                 "tweenMethod":"linearNone",
                                 "tween":true,
                                 "target":32,
@@ -5102,12 +5119,44 @@
                             }],
                         "width":[
                             {
-                                "value":40,
+                                "value":50,
                                 "tweenMethod":"linearNone",
                                 "tween":true,
                                 "target":32,
                                 "key":"width",
                                 "index":0
+                            },
+                            {
+                                "value":40,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":32,
+                                "key":"width",
+                                "index":1
+                            },
+                            {
+                                "value":50,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":32,
+                                "key":"width",
+                                "index":2
+                            },
+                            {
+                                "value":40,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":32,
+                                "key":"width",
+                                "index":3
+                            },
+                            {
+                                "value":60,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":32,
+                                "key":"width",
+                                "index":4
                             }],
                         "skin":[
                             {
@@ -5161,12 +5210,44 @@
                             }],
                         "height":[
                             {
-                                "value":25,
+                                "value":30,
                                 "tweenMethod":"linearNone",
                                 "tween":true,
                                 "target":32,
                                 "key":"height",
                                 "index":0
+                            },
+                            {
+                                "value":35,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":32,
+                                "key":"height",
+                                "index":1
+                            },
+                            {
+                                "value":30,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":32,
+                                "key":"height",
+                                "index":2
+                            },
+                            {
+                                "value":35,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":32,
+                                "key":"height",
+                                "index":3
+                            },
+                            {
+                                "value":25,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":32,
+                                "key":"height",
+                                "index":4
                             }]
                     }
                 },
@@ -5238,7 +5319,7 @@
                 }],
             "name":"blue_l_nobl_die_any",
             "id":21,
-            "frameRate":8,
+            "frameRate":6,
             "action":0
         },
         {
@@ -5362,7 +5443,7 @@
                     "keyframes":{
                         "y":[
                             {
-                                "value":0,
+                                "value":35,
                                 "tweenMethod":"linearNone",
                                 "tween":true,
                                 "target":33,
@@ -5380,12 +5461,44 @@
                             }],
                         "width":[
                             {
-                                "value":40,
+                                "value":50,
                                 "tweenMethod":"linearNone",
                                 "tween":true,
                                 "target":33,
                                 "key":"width",
                                 "index":0
+                            },
+                            {
+                                "value":40,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":33,
+                                "key":"width",
+                                "index":1
+                            },
+                            {
+                                "value":50,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":33,
+                                "key":"width",
+                                "index":2
+                            },
+                            {
+                                "value":40,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":33,
+                                "key":"width",
+                                "index":3
+                            },
+                            {
+                                "value":60,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":33,
+                                "key":"width",
+                                "index":4
                             }],
                         "skin":[
                             {
@@ -5439,12 +5552,44 @@
                             }],
                         "height":[
                             {
-                                "value":25,
+                                "value":30,
                                 "tweenMethod":"linearNone",
                                 "tween":true,
                                 "target":33,
                                 "key":"height",
                                 "index":0
+                            },
+                            {
+                                "value":35,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":33,
+                                "key":"height",
+                                "index":1
+                            },
+                            {
+                                "value":30,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":33,
+                                "key":"height",
+                                "index":2
+                            },
+                            {
+                                "value":35,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":33,
+                                "key":"height",
+                                "index":3
+                            },
+                            {
+                                "value":25,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":33,
+                                "key":"height",
+                                "index":4
                             }]
                     }
                 },
@@ -5510,7 +5655,7 @@
                 }],
             "name":"blue_r_nobl_die_any",
             "id":22,
-            "frameRate":8,
+            "frameRate":6,
             "action":0
         },
         {

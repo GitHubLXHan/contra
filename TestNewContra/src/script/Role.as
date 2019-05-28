@@ -3,6 +3,7 @@ package script {
 	import laya.components.Script;
 	import laya.display.Animation;
 	import laya.display.Sprite;
+	import laya.media.SoundManager;
 	import laya.physics.BoxCollider;
 	import laya.physics.RigidBody;
 	import laya.ui.Box;
@@ -20,8 +21,8 @@ package script {
 		public var enemyFour: Prefab;
 		/** @prop {name:enemyFive, tips:"第五类敌人", type:prefab}*/
 		public var enemyFive: Prefab;
-		/** @prop {name:enemyBoss01, tips:"第一关Boss", type:prefab}*/
-		public var enemyBoss01: Prefab;
+		/** @prop {name:enemyBossOne, tips:"第一关Boss", type:prefab}*/
+		public var enemyBossOne: Prefab;
 		/** @prop {name:propFrame, tips:"道具框架", type:prefab}*/
 		public var propFrame:Prefab;
 		
@@ -67,6 +68,8 @@ package script {
 		// 人物是否可以跳跃、否正在跳跃，并且初始化
 		private var canJump:Boolean = true;
 		private var isJumping:Boolean = true;
+		// 人物是否存活
+		public var isAlive:Boolean = true;
 		
 		
 		public function Role():void {
@@ -78,7 +81,7 @@ package script {
 			
 			// 获取本对象精灵
 			roleSp = this.owner as Sprite;
-			
+			roleSp.pos(66, 0);
 			
 			
 			// 获取父节点
@@ -92,15 +95,11 @@ package script {
 			var boxs:Array = roleSp.getComponents(BoxCollider);
 			bodyBox = boxs[1];
 			footBox = boxs[0];
+			
 			// 实例化动画并加载动画资源
 			ani = new Animation();
 			ani.loadAnimation("GameScene/Role.ani", Handler.create(this, onAniLoaded), "res/atlas/role_blue.atlas" );
-
-			roleSp.pos(4720, 0);
-				
 		}
-		
-
 		
 		/**
 		 * 碰撞回调函数
@@ -110,37 +109,42 @@ package script {
 			if ((other.label === "pass_n" || other.label === "pass_y") && rigid.linearVelocity.y > 0 && self.label === "foot") {
 				rigid.type = "kinematic";
 				
-				rigid.setVelocity({x:rigid.linearVelocity.x, y:0});
-				// 设置此时可以跳跃
-				canJump = true;
-				// 设置不是跳跃
-				isJumping = false;
-				// 改变动画
-				changeAni(curDirection, curOblique, "fire", "inland", "run");	
+				if (isAlive) {
+					rigid.setVelocity({x:rigid.linearVelocity.x, y:0});
+					// 设置此时可以跳跃
+					canJump = true;
+					// 设置不是跳跃
+					isJumping = false;
+					// 改变动画
+					changeAni(curDirection, curOblique, "fire", "inland", "run");	
+				} else {
+					rigid.setVelocity({x:0, y:0});
+					ani.gotoAndStop(4);
+					rigid.enabled = false;
+				}
+					
 				// 触碰到地面时是否显示站立动画
 				if (lastAngle == -1) {
 					move(lastAngle);
 				}
 			}
-			
-			
-			if (other.label === "enemy_five" && self.label === "foot") {
-				console.log("撞到敌人五");
-			}
-			
-			
-			
+		
 			
 			// 掉落水中时
 			if (other.label === "water" && rigid.linearVelocity.y > 0 && self.label === "foot"){
-				
-				// 设置不是跳跃并且不可跳跃
-				isJumping = false;
-				canJump = false;
-				
-				changeAni(curDirection, "nobl", "run", "inwater", "water");
 				rigid.type = "kinematic";
-				rigid.setVelocity({x:rigid.linearVelocity.x, y:0});
+				if (isAlive) {
+					// 设置不是跳跃并且不可跳跃
+					isJumping = false;
+					canJump = false;
+					changeAni(curDirection, "nobl", "run", "inwater", "run");
+					rigid.setVelocity({x:rigid.linearVelocity.x, y:0});
+				} else {
+					rigid.setVelocity({x:0, y:0});
+					ani.gotoAndStop(4);
+					rigid.enabled = false;
+				}
+				
 				// 触碰到水面时是否显示站立动画
 				if (lastAngle == -1) {
 					move(lastAngle);
@@ -154,7 +158,6 @@ package script {
 				changeAni(curDirection, curOblique, "fire", "inland", "run");	
 				canJump = true;
 				rigid.setVelocity({x:rigid.linearVelocity.x, y:-1});
-
 			}
 			
 			
@@ -165,112 +168,62 @@ package script {
 			}
 			
 			
-			if (other.label === "produceOne" && self.label === "produce") {
-				Laya.stage.timer.loop(1500, this, produceEnemyTow, [900, 128, {x:-1, y:0}]);
-				
-			}
-			if (other.label === "cancelProduceOne" && self.label === "produce") {
-				Laya.stage.clearTimer(this, produceEnemyTow);
-				Laya.stage.timer.once(0, this, produceEnemyOne, ([1000, 290]));
-			}
-			
-			
-			if (other.label === "produceTow" && self.label === "produce") {
-				Laya.stage.timer.loop(1500, this, produceEnemyTow, [483, 290, {x:2, y:0}]);
-			}
-			
-			if (other.label === "cancelProduceTow" && self.label === "produce") {
-				Laya.stage.clearTimer(this, produceEnemyTow);
-				Laya.stage.timer.loop(1500, this, produceEnemyTow, [1670, 130, {x:-1, y:0}]);
-			}
-			
-			if (other.label === "cancelProduceThree" && self.label === "produce") {
-				Laya.stage.clearTimer(this, produceEnemyTow);
-			}
-			
-			
-			if (other.label === "produceFour" && self.label === "produce") {
-				Laya.stage.timer.loop(2000, this, produceEnemyTow, [1940, 130, {x: -1, y:0}]);
-				Laya.stage.timer.once(0, this, produceEnemyOne, ([2000, 128]));
-				Laya.stage.timer.once(0, this, produceEnemyThree, ([2200, 154]));
-				Laya.stage.timer.once(0, this, produceEnemyFour, ([2040, 240]));
-				
-			}
-			
-			if (other.label === "cancelProduceFour" && self.label === "produce") {
-				Laya.stage.clearTimer(this, produceEnemyTow);
-				Laya.stage.timer.loop(2000, this, produceEnemyTow, [2960, 182, {x: -1, y:0}]);
-			}
-
-			
-			if (other.label === "cancelProduceFive" && self.label === "produce") {
-				Laya.stage.clearTimer(this, produceEnemyTow);
-				Laya.stage.timer.loop(2000, this, produceEnemyTow, [3060, 76, {x: -1, y:0}]);
-				Laya.stage.timer.once(0, this, produceEnemyThree, ([2500, 100]));
-				Laya.stage.timer.once(0, this, producePropFrame, ([2574, 230]));
-			}
-			
-			
-			if (other.label === "cancelProduceSix" && self.label === "produce") {
-				Laya.stage.clearTimer(this, produceEnemyTow);
-				Laya.stage.timer.once(0, this, produceEnemyFour, ([2680, 186]));
-			}
-			
-			if (other.label === "cancelProduceSix" && self.label === "produce") {
-				Laya.stage.clearTimer(this, produceEnemyTow);
-				Laya.stage.timer.once(0, this, produceEnemyFour, ([2680, 186]));
-			}
-			
-			if (other.label === "produceSeven" && self.label === "produce") {
-				Laya.stage.timer.once(0, this, produceEnemyFour, ([2950, 201]));
-				Laya.stage.timer.loop(2000, this, produceEnemyTow, [3130, 290, {x: -1, y:0}]);
-			}
-			
-			if (other.label === "cancelProduceSeven" && self.label === "produce") {
-				Laya.stage.timer.clear(this, produceEnemyTow);
-				Laya.stage.timer.once(0, this, produceEnemyTow, [3400, 130, {x: -1, y:0}]);
-			}
-			
-			if (other.label === "produceEight" && self.label === "produce") {
-				Laya.stage.timer.once(0, this, produceEnemyFive, ([3380, 240]));
-			}
-			
-			if (other.label === "cancelProduceEight" && self.label === "produce") {
-				Laya.stage.timer.once(0, this, produceEnemyFive, ([3593, 78]));
-				Laya.stage.timer.once(0, this, producePropFrame, ([3755, 283]));
-			}
-			
-			if (other.label === "produceNine" && self.label === "produce") {
-				Laya.stage.timer.once(0, this, produceEnemyOne, ([3893, 182]));
-				Laya.stage.timer.once(0, this, produceEnemyTow, [4046, 238, {x: -1, y:0}]);
-			}
-			
-			if (other.label === "cancelProduceNine" && self.label === "produce") {
-				// 在这里产生飞行道具
-				
-				
-				Laya.stage.timer.once(0, this, produceEnemyTow, [4582, 183, {x: -1, y:0}]);
-				
-			}
-			
-			
-			if (other.label === "produceTen" && self.label === "produce") {
-				Laya.stage.timer.once(0, this, produceEnemyFive, ([4585, 188]));
-				Laya.stage.timer.once(0, this, produceEnemyTow, [4632, 290, {x: -1, y:0}]);
-			}
-			
-			
-			if (other.label === "cancelProduceTen" && self.label === "produce") {
-				Laya.stage.timer.once(0, this, produceEnemyFour, ([4931, 282]));
-				Laya.stage.timer.once(0, this, produceEnemyFour, ([5198, 282]));
-			}
-			
-			if (other.label === "produceEleven" && self.label === "produce") {
-				Laya.stage.timer.once(0, this, produceBoss01, ([5382, 67]));
+			if ((other.label === "enemy_bullet" || 
+				other.label === "bossOneBullet" || 
+				other.label === "enemy_one" ||
+				other.label === "enemy_tow" ||
+				other.label === "enemy_three") && 
+				self.label === "body" &&
+				isAlive) {
+				isAlive = false;
+				ani.play(0, false, "blue_" + curDirection + "_nobl_die_any");
+				rigid.type = "dynamic";
+				rigid.setVelocity({x:-rigid.linearVelocity.x, y: -5});
+				Laya.stage.timer.clearAll(Controller);
 			}
 		}
 		
-
+		
+		/**
+		 * 重新设置人物状态，相当于复活
+		 */
+		public function reStart():void {
+			// 人物目前方向,并且初始化
+			curDirection = "r";
+			// 人物目前倾斜发向
+			curOblique = "nobl";
+			// 人物目前动作
+			curBehavior = "jump";
+			//人物目前所处位置
+			curWhere = "inland";
+			// 人物子弹类型
+			bulletType = 1;
+			// 摇杆最后一次移动的角度
+			lastAngle = -1; // -1表示没有移动
+			
+			
+			// 人物是否可以跳跃、否正在跳跃，并且初始化
+			canJump = false;
+			isJumping = true;
+			// 人物是否存活
+			isAlive = true;
+			
+			// 播放跳跃动画
+			ani.play(0, true, "blue_r_nobl_jump_inland");
+			
+			
+			// 重新启动刚体
+			rigid.enabled = true;
+			rigid.type = "dynamic";
+			
+			
+		}
+		
+		
+		public function pause():void {
+			SoundManager.stopAll();
+			
+		}
 		
 		/**
 		 * 碰撞结束
@@ -283,98 +236,13 @@ package script {
 				
 			}
 		}
-		
 
 		
-		private function producePropFrame(...args):void
-		{
-			// 测试--道具框架
-			var propFrameSp:Box;
-			propFrameSp = propFrame.create() as Box;
-			propFrameSp.pos(args[0], args[1]);
-			roleSp.parent.addChild(propFrameSp);			
-		}
-		
-		
 		/**
-		 * 产生第一类敌人
+		 * 向上跳跃
 		 */
-		private function produceEnemyOne(...args):void {
-			// 第一类敌人临时变量
-			var enemyOneSp:Sprite;
-			enemyOneSp = Pool.getItemByCreateFun("enemyOne", enemyOne.create, enemyOne);
-			enemyOneSp.pos(args[0], args[1]);
-			roleSp.parent.addChild(enemyOneSp);
-		}
-		
-		
-		/**
-		 * 产生第二类敌人
-		 */
-		private function produceEnemyTow(...args):void
-		{
-			// 第二类敌人临时变量
-			var enemyTowSp:Sprite;
-			// 初始化第二类敌人
-			enemyTowSp = Pool.getItemByCreateFun("enemyTow", enemyTow.create, enemyTow);
-			enemyTowSp.pos(args[0], args[1]);
-			//设置速度
-			var r:RigidBody = enemyTowSp.getComponent(RigidBody);
-			r.setVelocity(args[2]);
-			roleSp.parent.addChild(enemyTowSp);
-		}	
-		
-		
-		/**
-		 * 产生第一类敌人
-		 */
-		private function produceEnemyThree(...args):void {
-			// 第三类敌人临时变量
-			var enemyThreeSp:Sprite;
-			enemyThreeSp = Pool.getItemByCreateFun("enemyThree", enemyThree.create, enemyThree);
-			enemyThreeSp.pos(args[0], args[1]);
-			roleSp.parent.addChild(enemyThreeSp);
-		}
-		
-		
-		/**
-		 * 产生第四类敌人
-		 */
-		private function produceEnemyFour(...args):void {
-			// 测试--第四类敌人
-			var enemyFourSp:Box;
-			enemyFourSp = Pool.getItemByCreateFun("enemyFour", enemyFour.create, enemyFour);
-			enemyFourSp.pos(args[0], args[1]);
-			roleSp.parent.addChild(enemyFourSp);
-		}
-		
-		/**
-		 * 生产第五类敌人
-		 */
-		private function produceEnemyFive(...args):void
-		{
-			var enemyFiveSp:Sprite;
-			enemyFiveSp = Pool.getItemByCreateFun("enemyFive", enemyFive.create, enemyFive);
-			enemyFiveSp.pos(args[0],args[1]);
-			roleSp.parent.addChild(enemyFiveSp);	
-		}
-		
-		
-		/**
-		 * 生产第一关BOSS
-		 */
-		private function produceBoss01(...args):void {
-			var enemyBoss01Sp:Sprite;
-			enemyBoss01Sp = Pool.getItemByCreateFun("enemyBoss01", enemyBoss01.create, enemyBoss01);
-			enemyBoss01Sp.pos(args[0], args[1]);
-			roleSp.parent.addChild(enemyBoss01Sp);
-			trace(enemyBoss01Sp);
-		}
-		
-		/**
-		 * 跳跃
-		 */
-		public function jump():void {
+		public function jumpUp():void {
+			if (!isAlive) return;  // 死亡状态下无法操作 
 			if (!canJump) return;
 			rigid.type = "dynamic";
 			rigid.gravityScale = 1;
@@ -386,11 +254,30 @@ package script {
 			isJumping = true;
 		}
 		
+		
+		/**
+		 * 向下跳跃
+		 */
+		public function jimpDown():void {
+			if (curBehavior === "lie") {
+				console.log("下去");
+				rigid.type = "dynamic";
+				rigid.applyForceToCenter({x:0, y:-50});
+				changeAni(curDirection, "nobl", "jump", "inland", "jump");
+			}
+		}
+		
+		
 
 		/**
 		 * 开火
 		 */
 		public function onFire():void {
+			
+			if (!isAlive) return;  // 死亡状态下无法操作 
+			
+			// 播放音效
+			SoundManager.playSound("sound/hitsnd1.wav");
 			
 			switch(bulletType)
 			{
@@ -462,7 +349,9 @@ package script {
 		 * @param angle:摇杆角度
 		 */
 		public function move(angle:Number):void {
-			lastAngle = angle;
+			if (!isAlive) return;  // 死亡状态下无法操作 
+			
+			lastAngle = angle; // 记录最后一次角度
 			
 			if (angle >= 67.5 && angle < 112.5) { // 上
 				rigid.linearVelocity = {x:0, y:rigid.linearVelocity.y};		
@@ -475,17 +364,22 @@ package script {
 					setBulletInWater(3, 24, 20, 0, -3);
 				}
 			}else if (angle >= 247.5 && angle < 292.5){ // 下
-				if (rigid.linearVelocity.y != 0) return; 
-				// 更改播放动画
-				changeAni(curDirection, "nobl", "lie", curWhere, "lie");
-				// 停止移动
-				rigid.setVelocity({x:0, y:0});
-				// 设置子弹的位置及方向
-				if (curWhere === "inland") {
-					setBulletInLand(-10, 40, 45, 3, 0);
-				} else if (curWhere === "inwater") {
-					setBulletInWater(-15, 45, 51, 3, 0);
+				if (rigid.linearVelocity.y == 0) { // 无跳跃时
+					// 更改播放动画
+					changeAni(curDirection, "nobl", "lie", curWhere, "lie");
+					// 停止移动
+					rigid.setVelocity({x:0, y:0});
+					// 设置子弹的位置及方向
+					if (curWhere === "inland") {
+						setBulletInLand(-10, 40, 45, 3, 0);
+					} else if (curWhere === "inwater") {
+						setBulletInWater(-15, 45, 51, 3, 0);
+					}	
+				} else {
+					// 跳跃时	
+					setBulletInLand(10, 10, 30, 0, 3);
 				}
+				
 			} else if (angle >= 157.5 && angle < 202.5) { // 左
 				// 播放向左走动画
 				rigid.linearVelocity = {x:-1.5, y:rigid.linearVelocity.y};
@@ -537,7 +431,7 @@ package script {
 				changeAni("r","uobl", "fire", curWhere, "run");
 				// 设置子弹的位置及方向
 				if (curWhere === "inland") {
-					setBulletInLand(-10, 35, 0, 3, -2);
+					setBulletInLand(10, 35, 0, 3, -2);
 				} else if (curWhere === "inwater") {
 					setBulletInWater(-10, 35, 32, 3, -2);
 				}
@@ -558,7 +452,7 @@ package script {
 					changeAni(curDirection,"nobl", "stand", curWhere, "run");	
 					// 设置子弹的位置及方向
 					if (curWhere === "inland") {
-						setBulletInLand(-10, 35, 35, 3, 2);
+						setBulletInLand(-15, 45, 19, 3, 0);
 					} else if (curWhere === "inwater") {
 						setBulletInWater(-15, 45, 51, 3, 0);
 					}
@@ -633,24 +527,27 @@ package script {
 				// 跳跃时碰撞区域
 				case "jump":
 				{
-					setCollider(0, 0, 23, 28);
+					if (curWhere === "inwater") return;
+					setCollider(0, 0, 26, 30);
 					break;
 				}
 				// 行走时碰撞区域
 				case "run":
 				{
-					setCollider(0, 0, 25, 55);
+					if (curBehavior === "jump") return;
+					if (curWhere === "inland") {
+						setCollider(0, 0, 25, 55);	
+					} else {
+						setCollider(0, 34, 25, 25);		
+					}
+					
 					break;
 				}
 				case "lie":
 				{
+					if (curBehavior === "jump" || curWhere === "inwater") return;
 					setCollider(-12, 34, 55, 28);
 					break;					
-				}
-				case "water":
-				{
-					setCollider(0, 32, 25, 25);
-					break;
 				}
 				default:
 				{

@@ -2,11 +2,10 @@
     "x":0,
     "type":"Box",
     "selectedBox":133,
-    "selecteID":148,
     "searchKey":"Box,enemy_four",
-    "props":{"y":-25,"x":-25,"width":50,"presetID":1,"preset":"laya/pages/prefab/enemy_four.prefab","name":"enemy_four","isPresetRoot":true,"height":50,"anchorY":0,"anchorX":0},
+    "props":{"y":0,"x":0,"width":50,"presetID":1,"preset":"laya/pages/prefab/enemy_four.prefab","name":"enemy_four","isPresetRoot":true,"height":50,"anchorY":0.5,"anchorX":0.5},
     "nodeParent":-1,
-    "maxID":150,
+    "maxID":151,
     "label":"enemy_four",
     "isOpen":true,
     "isDirectory":true,
@@ -226,23 +225,6 @@
         },
         {
             "x":15,
-            "type":"Script",
-            "switchAble":true,
-            "source":"src/script/EnemyFour.as",
-            "searchKey":"Script,EnemyFour",
-            "removeAble":true,
-            "props":{"presetID":16,"preset":"laya/pages/prefab/enemy_four.prefab","enemyBullet":"@Prefab:prefab/enemy_bullet.prefab"},
-            "nodeParent":133,
-            "label":"EnemyFour",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":147,
-            "child":[
-                ]
-        },
-        {
-            "x":15,
             "type":"BoxCollider",
             "switchAble":true,
             "searchKey":"BoxCollider",
@@ -270,6 +252,23 @@
             "isAniNode":true,
             "hasChild":false,
             "compId":149,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"Script",
+            "switchAble":true,
+            "source":"src/enemyScript/EnemyFour.as",
+            "searchKey":"Script,EnemyFour",
+            "removeAble":true,
+            "props":{"presetID":19,"preset":"laya/pages/prefab/enemy_four.prefab","enemyBullet":"@Prefab:prefab/enemy_bullet.prefab"},
+            "nodeParent":133,
+            "label":"EnemyFour",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":150,
             "child":[
                 ]
         }],

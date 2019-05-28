@@ -2,11 +2,11 @@
     "x":0,
     "type":"Sprite",
     "selectedBox":114,
-    "selecteID":116,
+    "selecteID":118,
     "searchKey":"Sprite,enemy_three",
     "props":{"y":0,"x":0,"width":30,"texture":"enemy_three/enemy_three.png","presetID":1,"preset":"laya/pages/prefab/enemy_three.prefab","name":"enemy_three","isPresetRoot":true,"height":25},
     "nodeParent":-1,
-    "maxID":118,
+    "maxID":119,
     "label":"enemy_three",
     "isOpen":true,
     "isDirectory":true,
@@ -14,23 +14,6 @@
     "hasChild":true,
     "compId":114,
     "child":[
-        {
-            "x":15,
-            "type":"Script",
-            "switchAble":true,
-            "source":"src/script/EnemyThree.as",
-            "searchKey":"Script,EnemyThree",
-            "removeAble":true,
-            "props":{"presetID":2,"preset":"laya/pages/prefab/enemy_three.prefab","enemyBullet":"@Prefab:prefab/enemy_bullet.prefab"},
-            "nodeParent":114,
-            "label":"EnemyThree",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":115,
-            "child":[
-                ]
-        },
         {
             "x":15,
             "type":"BoxCollider",
@@ -60,6 +43,23 @@
             "isAniNode":true,
             "hasChild":false,
             "compId":117,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"Script",
+            "switchAble":true,
+            "source":"src/enemyScript/EnemyThree.as",
+            "searchKey":"Script,EnemyThree",
+            "removeAble":true,
+            "props":{"presetID":5,"preset":"laya/pages/prefab/enemy_three.prefab","enemyBullet":"@Prefab:prefab/enemy_bullet.prefab"},
+            "nodeParent":114,
+            "label":"EnemyThree",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":118,
             "child":[
                 ]
         }],

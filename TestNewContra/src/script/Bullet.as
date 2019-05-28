@@ -64,7 +64,10 @@ package script {
 				other.label === "enemy_three" || 
 				other.label === "enemy_four" ||
 				other.label === "enemy_five" ||
-				other.label === "can_shoot") {
+				other.label === "can_shoot" ||
+				other.lanel === "boss_top01" ||
+				other.label === "boss_top02" ||
+				other.label === "boss_foot") {
 				thisSp.removeSelf();
 				Pool.recover("myBullet", thisSp);
 			}

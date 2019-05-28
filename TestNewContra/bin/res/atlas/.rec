@@ -13,6 +13,8 @@ P 1611E503 boss01_foot02.png
 P 28E16FE2 boss01_foot03.png
 P BFBCC099 boss01_top01.png
 P A219EC01 boss01_top02.png
+P 4797DA1F boss_one_top01_boomed.png
+P 2A51215A boss_one_top02_boomed.png
 D bullet
 P 08A4E015 enemyBullet.png
 P 6A5AF849 myBullet01.png
@@ -188,3 +190,13 @@ P C4A8A3CF blue_right02.png
 P 75456EC3 blue_right03.png
 P CA88E328 blue_right04.png
 P A1829120 blue_right05.png
+D sound
+R E4CE3711 background.mp3
+R D9FEC2DD boss01_boom.wav
+R B24A498D enemy_four_five_boom.wav
+R CB96FB6B gameover.wav
+R 71F8EB63 get_prop.wav
+R 447ACDE3 hitsnd1.wav
+R 1231770F hitsnd2.wav
+R F4AFB513 pause.wav
+R 64B2FF3B stone_boom.wav

@@ -9,18 +9,28 @@ package {
 	import laya.physics.ChainCollider;
 	import laya.physics.CircleCollider;
 	import laya.physics.BoxCollider;
-	import script.Boss;
-	import script.BossBullet;
+	import enemyScript.BossTopOne;
+	import enemyScript.BossTopTow;
+	import enemyScript.BossFoot;
+	import enemyScript.BossOne;
+	import enemyScript.BossOneBullet;
 	import script.Bullet;
-	import script.EnemyBullet;
-	import script.EnemyFive;
-	import script.EnemyFour;
-	import script.EnemyOne;
-	import script.EnemyThree;
-	import script.EnemyTow;
-	import script.PropFrame;
+	import enemyScript.EnemyBullet;
+	import enemyScript.EnemyFive;
+	import enemyScript.EnemyFour;
+	import enemyScript.EnemyOne;
+	import enemyScript.EnemyThree;
+	import enemyScript.EnemyTow;
+	import propScript.FlyProp;
+	import propScript.PropB;
+	import propScript.PropF;
+	import propScript.PropFrame;
+	import propScript.PropL;
+	import propScript.PropM;
+	import propScript.PropR;
+	import propScript.PropS;
 	import script.Role;
-	import script.TouchDestroy;
+	import propScript.TouchDestroy;
 	/**
 	 * 游戏初始化配置
 	 */
@@ -47,18 +57,28 @@ package {
 			reg("laya.physics.ChainCollider",ChainCollider);
 			reg("laya.physics.CircleCollider",CircleCollider);
 			reg("laya.physics.BoxCollider",BoxCollider);
-			reg("script.Boss",Boss);
-			reg("script.BossBullet",BossBullet);
+			reg("enemyScript.BossTopOne",BossTopOne);
+			reg("enemyScript.BossTopTow",BossTopTow);
+			reg("enemyScript.BossFoot",BossFoot);
+			reg("enemyScript.BossOne",BossOne);
+			reg("enemyScript.BossOneBullet",BossOneBullet);
 			reg("script.Bullet",Bullet);
-			reg("script.EnemyBullet",EnemyBullet);
-			reg("script.EnemyFive",EnemyFive);
-			reg("script.EnemyFour",EnemyFour);
-			reg("script.EnemyOne",EnemyOne);
-			reg("script.EnemyThree",EnemyThree);
-			reg("script.EnemyTow",EnemyTow);
-			reg("script.PropFrame",PropFrame);
+			reg("enemyScript.EnemyBullet",EnemyBullet);
+			reg("enemyScript.EnemyFive",EnemyFive);
+			reg("enemyScript.EnemyFour",EnemyFour);
+			reg("enemyScript.EnemyOne",EnemyOne);
+			reg("enemyScript.EnemyThree",EnemyThree);
+			reg("enemyScript.EnemyTow",EnemyTow);
+			reg("propScript.FlyProp",FlyProp);
+			reg("propScript.PropB",PropB);
+			reg("propScript.PropF",PropF);
+			reg("propScript.PropFrame",PropFrame);
+			reg("propScript.PropL",PropL);
+			reg("propScript.PropM",PropM);
+			reg("propScript.PropR",PropR);
+			reg("propScript.PropS",PropS);
 			reg("script.Role",Role);
-			reg("script.TouchDestroy",TouchDestroy);
+			reg("propScript.TouchDestroy",TouchDestroy);
 		}
 		GameConfig.init();
 	}

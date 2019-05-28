@@ -1,6 +1,7 @@
 package script {
 	import laya.display.Stage;
 	import laya.maths.Point;
+	import laya.media.SoundManager;
 	import laya.physics.ChainCollider;
 	import laya.utils.Stat;
 	import laya.webgl.WebGL;
@@ -26,7 +27,8 @@ package script {
 			Laya.init(667, 375, WebGL);
 			Laya.stage.screenMode = Stage.SCREEN_HORIZONTAL;			
 			Laya.stage.scaleMode = Stage.SCALE_FIXED_WIDTH;	
-			Stat.show();						
+			// Laya.enableDebugPanel();
+			// Stat.show();						
 		}
 		
 		override public function onDisable():void {

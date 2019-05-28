@@ -2665,10 +2665,30 @@ var GameConfig=(function(){
 		reg("script.Controller",Controller);
 		reg("laya.physics.RigidBody",RigidBody);
 		reg("laya.physics.ChainCollider",ChainCollider);
+		reg("laya.physics.CircleCollider",CircleCollider);
 		reg("laya.physics.BoxCollider",BoxCollider);
+		reg("enemyScript.BossTopOne",BossTopOne);
+		reg("enemyScript.BossTopTow",BossTopTow);
+		reg("enemyScript.BossFoot",BossFoot);
+		reg("enemyScript.BossOne",BossOne);
+		reg("enemyScript.BossOneBullet",BossOneBullet);
 		reg("script.Bullet",Bullet);
+		reg("enemyScript.EnemyBullet",EnemyBullet);
+		reg("enemyScript.EnemyFive",EnemyFive);
+		reg("enemyScript.EnemyFour",EnemyFour);
+		reg("enemyScript.EnemyOne",EnemyOne);
+		reg("enemyScript.EnemyThree",EnemyThree);
+		reg("enemyScript.EnemyTow",EnemyTow);
+		reg("propScript.FlyProp",FlyProp);
+		reg("propScript.PropB",PropB);
+		reg("propScript.PropF",PropF);
+		reg("propScript.PropFrame",PropFrame);
+		reg("propScript.PropL",PropL);
+		reg("propScript.PropM",PropM);
+		reg("propScript.PropR",PropR);
+		reg("propScript.PropS",PropS);
 		reg("script.Role",Role);
-		reg("script.TouchDestroy",TouchDestroy);
+		reg("propScript.TouchDestroy",TouchDestroy);
 	}
 
 	GameConfig.width=640;
@@ -20315,65 +20335,6 @@ var ShurikenParticleData=(function(){
 
 
 /**
-*<code>Log</code> 类用于在界面内显示日志记录信息。
-*注意：在加速器内不可使用
-*/
-//class laya.utils.Log
-var Log=(function(){
-	function Log(){}
-	__class(Log,'laya.utils.Log');
-	Log.enable=function(){
-		if (!Log._logdiv){
-			Log._logdiv=Browser.createElement('div');
-			Log._logdiv.style.cssText="border:white;padding:4px;overflow-y:auto;z-index:1000000;background:rgba(100,100,100,0.6);color:white;position: absolute;left:0px;top:0px;width:50%;height:50%;";
-			Browser.document.body.appendChild(Log._logdiv);
-			Log._btn=Browser.createElement("button");
-			Log._btn.innerText="Hide";
-			Log._btn.style.cssText="z-index:1000001;position: absolute;left:10px;top:10px;";
-			Log._btn.onclick=Log.toggle;
-			Browser.document.body.appendChild(Log._btn);
-		}
-	}
-
-	Log.toggle=function(){
-		var style=Log._logdiv.style;
-		if (style.display===""){
-			Log._btn.innerText="Show";
-			style.display="none";
-			}else {
-			Log._btn.innerText="Hide";
-			style.display="";
-		}
-	}
-
-	Log.print=function(value){
-		if (Log._logdiv){
-			if (Log._count >=Log.maxCount)Log.clear();
-			Log._count++;
-			Log._logdiv.innerText+=value+"\n";
-			if (Log.autoScrollToBottom){
-				if (Log._logdiv.scrollHeight-Log._logdiv.scrollTop-Log._logdiv.clientHeight < 50){
-					Log._logdiv.scrollTop=Log._logdiv.scrollHeight;
-				}
-			}
-		}
-	}
-
-	Log.clear=function(){
-		Log._logdiv.innerText="";
-		Log._count=0;
-	}
-
-	Log._logdiv=null;
-	Log._btn=null;
-	Log._count=0;
-	Log.maxCount=50;
-	Log.autoScrollToBottom=true;
-	return Log;
-})()
-
-
-/**
 *Config 用于配置一些全局参数。如需更改，请在初始化引擎之前设置。
 */
 //class Config
@@ -37021,32 +36982,6 @@ var Script=(function(_super){
 })(Component)
 
 
-//class laya.webgl.shader.d2.value.TextureSV extends laya.webgl.shader.d2.value.Value2D
-var TextureSV=(function(_super){
-	function TextureSV(subID){
-		this.u_colorMatrix=null;
-		this.strength=0;
-		this.blurInfo=null;
-		this.colorMat=null;
-		this.colorAlpha=null;
-		(subID===void 0)&& (subID=0);
-		TextureSV.__super.call(this,0x01,subID);
-		this._attribLocation=['posuv',0,'attribColor',1,'attribFlags',2];
-	}
-
-	__class(TextureSV,'laya.webgl.shader.d2.value.TextureSV',_super);
-	var __proto=TextureSV.prototype;
-	// ,'clipDir',3,'clipRect',4];
-	__proto.clear=function(){
-		this.texture=null;
-		this.shader=null;
-		this.defines._value=this.subID+(WebGL.shaderHighPrecision?0x400:0);
-	}
-
-	return TextureSV;
-})(Value2D)
-
-
 /**
 *<code>Render</code> 类用于渲染器的父类，抽象类不允许实例。
 */
@@ -37553,137 +37488,30 @@ var BaseRender=(function(_super){
 })(EventDispatcher)
 
 
-/**
-*<code>VertexShurikenParticle</code> 类用于创建粒子顶点结构。
-*/
-//class laya.d3.graphics.Vertex.VertexShurikenParticleMesh extends laya.d3.graphics.Vertex.VertexShuriKenParticle
-var VertexShurikenParticleMesh=(function(_super){
-	function VertexShurikenParticleMesh(cornerTextureCoordinate,positionStartLifeTime,velocity,startColor,startSize,startRotation0,startRotation1,startRotation2,ageAddScale,time,startSpeed,randoms0,randoms1,simulationWorldPostion){
-		/**@private */
-		this._cornerTextureCoordinate=null;
-		/**@private */
-		this._positionStartLifeTime=null;
-		/**@private */
-		this._velocity=null;
-		/**@private */
-		this._startColor=null;
-		/**@private */
-		this._startSize=null;
-		/**@private */
-		this._startRotation0=null;
-		/**@private */
-		this._startRotation1=null;
-		/**@private */
-		this._startRotation2=null;
-		/**@private */
-		this._startLifeTime=NaN;
-		/**@private */
-		this._time=NaN;
-		/**@private */
-		this._startSpeed=NaN;
-		/**@private */
-		this._randoms0=null;
-		/**@private */
-		this._randoms1=null;
-		/**@private */
-		this._simulationWorldPostion=null;
-		VertexShurikenParticleMesh.__super.call(this);
-		this._cornerTextureCoordinate=cornerTextureCoordinate;
-		this._positionStartLifeTime=positionStartLifeTime;
-		this._velocity=velocity;
-		this._startColor=startColor;
-		this._startSize=startSize;
-		this._startRotation0=startRotation0;
-		this._startRotation1=startRotation1;
-		this._startRotation2=startRotation2;
-		this._startLifeTime=ageAddScale;
-		this._time=time;
-		this._startSpeed=startSpeed;
-		this._randoms0=this.random0;
-		this._randoms1=this.random1;
-		this._simulationWorldPostion=simulationWorldPostion;
+//class laya.webgl.shader.d2.value.TextureSV extends laya.webgl.shader.d2.value.Value2D
+var TextureSV=(function(_super){
+	function TextureSV(subID){
+		this.u_colorMatrix=null;
+		this.strength=0;
+		this.blurInfo=null;
+		this.colorMat=null;
+		this.colorAlpha=null;
+		(subID===void 0)&& (subID=0);
+		TextureSV.__super.call(this,0x01,subID);
+		this._attribLocation=['posuv',0,'attribColor',1,'attribFlags',2];
 	}
 
-	__class(VertexShurikenParticleMesh,'laya.d3.graphics.Vertex.VertexShurikenParticleMesh',_super);
-	var __proto=VertexShurikenParticleMesh.prototype;
-	__getset(0,__proto,'cornerTextureCoordinate',function(){
-		return this._cornerTextureCoordinate;
-	});
+	__class(TextureSV,'laya.webgl.shader.d2.value.TextureSV',_super);
+	var __proto=TextureSV.prototype;
+	// ,'clipDir',3,'clipRect',4];
+	__proto.clear=function(){
+		this.texture=null;
+		this.shader=null;
+		this.defines._value=this.subID+(WebGL.shaderHighPrecision?0x400:0);
+	}
 
-	__getset(0,__proto,'velocity',function(){
-		return this._velocity;
-	});
-
-	__getset(0,__proto,'position',function(){
-		return this._positionStartLifeTime;
-	});
-
-	__getset(0,__proto,'random0',function(){
-		return this._randoms0;
-	});
-
-	__getset(0,__proto,'startSize',function(){
-		return this._startSize;
-	});
-
-	__getset(0,__proto,'startColor',function(){
-		return this._startColor;
-	});
-
-	__getset(0,__proto,'startRotation0',function(){
-		return this._startRotation0;
-	});
-
-	__getset(0,__proto,'startRotation1',function(){
-		return this._startRotation1;
-	});
-
-	__getset(0,__proto,'random1',function(){
-		return this._randoms1;
-	});
-
-	__getset(0,__proto,'startRotation2',function(){
-		return this._startRotation2;
-	});
-
-	__getset(0,__proto,'startLifeTime',function(){
-		return this._startLifeTime;
-	});
-
-	__getset(0,__proto,'time',function(){
-		return this._time;
-	});
-
-	__getset(0,__proto,'startSpeed',function(){
-		return this._startSpeed;
-	});
-
-	__getset(0,__proto,'simulationWorldPostion',function(){
-		return this._simulationWorldPostion;
-	});
-
-	__getset(1,VertexShurikenParticleMesh,'vertexDeclaration',function(){
-		return VertexShurikenParticleMesh._vertexDeclaration;
-	},laya.d3.graphics.Vertex.VertexShuriKenParticle._$SET_vertexDeclaration);
-
-	__static(VertexShurikenParticleMesh,
-	['_vertexDeclaration',function(){return this._vertexDeclaration=new VertexDeclaration(172,[
-		new VertexElement(0,"vector3",1),
-		new VertexElement(12,"vector4",2),
-		new VertexElement(28,"vector2",3),
-		new VertexElement(36,"vector4",4),
-		new VertexElement(52,"vector4",5),
-		new VertexElement(68,"vector4",6),
-		new VertexElement(84,"vector3",8),
-		new VertexElement(96,"vector3",9),
-		new VertexElement(108,"single",10),
-		new VertexElement(112,"vector4",11),
-		new VertexElement(128,"vector4",12),
-		new VertexElement(144,"vector3",13),
-		new VertexElement(156,"vector4",14)]);}
-	]);
-	return VertexShurikenParticleMesh;
-})(VertexShuriKenParticle)
+	return TextureSV;
+})(Value2D)
 
 
 /**
@@ -38050,6 +37878,139 @@ var Resource=(function(_super){
 	Resource._gpuMemory=0;
 	return Resource;
 })(EventDispatcher)
+
+
+/**
+*<code>VertexShurikenParticle</code> 类用于创建粒子顶点结构。
+*/
+//class laya.d3.graphics.Vertex.VertexShurikenParticleMesh extends laya.d3.graphics.Vertex.VertexShuriKenParticle
+var VertexShurikenParticleMesh=(function(_super){
+	function VertexShurikenParticleMesh(cornerTextureCoordinate,positionStartLifeTime,velocity,startColor,startSize,startRotation0,startRotation1,startRotation2,ageAddScale,time,startSpeed,randoms0,randoms1,simulationWorldPostion){
+		/**@private */
+		this._cornerTextureCoordinate=null;
+		/**@private */
+		this._positionStartLifeTime=null;
+		/**@private */
+		this._velocity=null;
+		/**@private */
+		this._startColor=null;
+		/**@private */
+		this._startSize=null;
+		/**@private */
+		this._startRotation0=null;
+		/**@private */
+		this._startRotation1=null;
+		/**@private */
+		this._startRotation2=null;
+		/**@private */
+		this._startLifeTime=NaN;
+		/**@private */
+		this._time=NaN;
+		/**@private */
+		this._startSpeed=NaN;
+		/**@private */
+		this._randoms0=null;
+		/**@private */
+		this._randoms1=null;
+		/**@private */
+		this._simulationWorldPostion=null;
+		VertexShurikenParticleMesh.__super.call(this);
+		this._cornerTextureCoordinate=cornerTextureCoordinate;
+		this._positionStartLifeTime=positionStartLifeTime;
+		this._velocity=velocity;
+		this._startColor=startColor;
+		this._startSize=startSize;
+		this._startRotation0=startRotation0;
+		this._startRotation1=startRotation1;
+		this._startRotation2=startRotation2;
+		this._startLifeTime=ageAddScale;
+		this._time=time;
+		this._startSpeed=startSpeed;
+		this._randoms0=this.random0;
+		this._randoms1=this.random1;
+		this._simulationWorldPostion=simulationWorldPostion;
+	}
+
+	__class(VertexShurikenParticleMesh,'laya.d3.graphics.Vertex.VertexShurikenParticleMesh',_super);
+	var __proto=VertexShurikenParticleMesh.prototype;
+	__getset(0,__proto,'cornerTextureCoordinate',function(){
+		return this._cornerTextureCoordinate;
+	});
+
+	__getset(0,__proto,'velocity',function(){
+		return this._velocity;
+	});
+
+	__getset(0,__proto,'position',function(){
+		return this._positionStartLifeTime;
+	});
+
+	__getset(0,__proto,'random0',function(){
+		return this._randoms0;
+	});
+
+	__getset(0,__proto,'startSize',function(){
+		return this._startSize;
+	});
+
+	__getset(0,__proto,'startColor',function(){
+		return this._startColor;
+	});
+
+	__getset(0,__proto,'startRotation0',function(){
+		return this._startRotation0;
+	});
+
+	__getset(0,__proto,'startRotation1',function(){
+		return this._startRotation1;
+	});
+
+	__getset(0,__proto,'random1',function(){
+		return this._randoms1;
+	});
+
+	__getset(0,__proto,'startRotation2',function(){
+		return this._startRotation2;
+	});
+
+	__getset(0,__proto,'startLifeTime',function(){
+		return this._startLifeTime;
+	});
+
+	__getset(0,__proto,'time',function(){
+		return this._time;
+	});
+
+	__getset(0,__proto,'startSpeed',function(){
+		return this._startSpeed;
+	});
+
+	__getset(0,__proto,'simulationWorldPostion',function(){
+		return this._simulationWorldPostion;
+	});
+
+	__getset(1,VertexShurikenParticleMesh,'vertexDeclaration',function(){
+		return VertexShurikenParticleMesh._vertexDeclaration;
+	},laya.d3.graphics.Vertex.VertexShuriKenParticle._$SET_vertexDeclaration);
+
+	__static(VertexShurikenParticleMesh,
+	['_vertexDeclaration',function(){return this._vertexDeclaration=new VertexDeclaration(172,[
+		new VertexElement(0,"vector3",1),
+		new VertexElement(12,"vector4",2),
+		new VertexElement(28,"vector2",3),
+		new VertexElement(36,"vector4",4),
+		new VertexElement(52,"vector4",5),
+		new VertexElement(68,"vector4",6),
+		new VertexElement(84,"vector3",8),
+		new VertexElement(96,"vector3",9),
+		new VertexElement(108,"single",10),
+		new VertexElement(112,"vector4",11),
+		new VertexElement(128,"vector4",12),
+		new VertexElement(144,"vector3",13),
+		new VertexElement(156,"vector4",14)]);}
+	]);
+	return VertexShurikenParticleMesh;
+})(VertexShuriKenParticle)
 
 
 /**
@@ -41809,277 +41770,6 @@ var BufferState2D=(function(_super){
 })(BufferStateBase)
 
 
-//class laya.webgl.submit.SubmitTexture extends laya.webgl.submit.Submit
-var SubmitTexture=(function(_super){
-	function SubmitTexture(renderType){
-		(renderType===void 0)&& (renderType=10000);
-		SubmitTexture.__super.call(this,renderType);
-	}
-
-	__class(SubmitTexture,'laya.webgl.submit.SubmitTexture',_super);
-	var __proto=SubmitTexture.prototype;
-	__proto.clone=function(context,mesh,pos){
-		var o=SubmitTexture._poolSize ? SubmitTexture.POOL[--SubmitTexture._poolSize] :new SubmitTexture();
-		this._cloneInit(o,context,mesh,pos);
-		return o;
-	}
-
-	__proto.releaseRender=function(){
-		if ((--this._ref)< 1){
-			SubmitTexture.POOL[SubmitTexture._poolSize++]=this;
-			this.shaderValue.release();
-			this._mesh=null;
-			this._parent && (this._parent.releaseRender(),this._parent=null);
-		}
-	}
-
-	__proto.renderSubmit=function(){
-		if (this._numEle===0)
-			return 1;
-		var tex=this.shaderValue.textureHost;
-		if(tex){
-			var source=tex?tex._getSource():null;
-			if (!source)return 1;
-		};
-		var gl=WebGL.mainContext;
-		this._mesh.useMesh(gl);
-		var lastSubmit=Submit.preRender;
-		var prekey=(Submit.preRender)._key;
-		if (this._key.blendShader===0 && (this._key.submitType===prekey.submitType && this._key.blendShader===prekey.blendShader)&& BaseShader.activeShader &&
-			(Submit.preRender).clipInfoID==this.clipInfoID &&
-		lastSubmit.shaderValue.defines._value===this.shaderValue.defines._value &&
-		(this.shaderValue.defines._value & ShaderDefines2D.NOOPTMASK)==0){
-			(BaseShader.activeShader).uploadTexture2D(source);
-		}
-		else{
-			if (BlendMode.activeBlendFunction!==this._blendFn){
-				WebGLContext.setBlend(gl,true);
-				this._blendFn(gl);
-				BlendMode.activeBlendFunction=this._blendFn;
-			}
-			this.shaderValue.texture=source;
-			this.shaderValue.upload();
-		}
-		gl.drawElements(0x0004,this._numEle,0x1403,this._startIdx);
-		Stat.renderBatch++;
-		Stat.trianglesFaces+=this._numEle / 3;
-		return 1;
-	}
-
-	SubmitTexture.create=function(context,mesh,sv){
-		var o=SubmitTexture._poolSize ? SubmitTexture.POOL[--SubmitTexture._poolSize] :new SubmitTexture(10016);
-		o._mesh=mesh;
-		o._key.clear();
-		o._key.submitType=2;
-		o._ref=1;
-		o._startIdx=mesh.indexNum *CONST3D2D.BYTES_PIDX;
-		o._numEle=0;
-		var blendType=context._nBlendType;
-		o._key.blendShader=blendType;
-		o._blendFn=context._targets ? BlendMode.targetFns[blendType] :BlendMode.fns[blendType];
-		o.shaderValue=sv;
-		if (context._colorFiler){
-			var ft=context._colorFiler;
-			sv.defines.add(ft.type);
-			(sv).colorMat=ft._mat;
-			(sv).colorAlpha=ft._alpha;
-		}
-		return o;
-	}
-
-	SubmitTexture._poolSize=0;
-	SubmitTexture.POOL=[];
-	return SubmitTexture;
-})(Submit)
-
-
-/**
-*<code>HemisphereShape</code> 类用于创建半球形粒子形状。
-*/
-//class laya.d3.core.particleShuriKen.module.shape.HemisphereShape extends laya.d3.core.particleShuriKen.module.shape.BaseShape
-var HemisphereShape=(function(_super){
-	function HemisphereShape(){
-		/**发射器半径。*/
-		this.radius=NaN;
-		/**从外壳发射。*/
-		this.emitFromShell=false;
-		HemisphereShape.__super.call(this);
-		this.radius=1.0;
-		this.emitFromShell=false;
-		this.randomDirection=false;
-	}
-
-	__class(HemisphereShape,'laya.d3.core.particleShuriKen.module.shape.HemisphereShape',_super);
-	var __proto=HemisphereShape.prototype;
-	/**
-	*@inheritDoc
-	*/
-	__proto._getShapeBoundBox=function(boundBox){
-		var min=boundBox.min;
-		min.x=min.y=min.z=-this.radius;
-		var max=boundBox.max;
-		max.x=max.y=this.radius;
-		max.z=0;
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto._getSpeedBoundBox=function(boundBox){
-		var min=boundBox.min;
-		min.x=min.y=-1;
-		min.z=0;
-		var max=boundBox.max;
-		max.x=max.y=max.z=1;
-	}
-
-	/**
-	*用于生成粒子初始位置和方向。
-	*@param position 粒子位置。
-	*@param direction 粒子方向。
-	*/
-	__proto.generatePositionAndDirection=function(position,direction,rand,randomSeeds){
-		if (rand){
-			rand.seed=randomSeeds[16];
-			if (this.emitFromShell)
-				ShapeUtils._randomPointUnitSphere(position,rand);
-			else
-			ShapeUtils._randomPointInsideUnitSphere(position,rand);
-			randomSeeds[16]=rand.seed;
-			}else {
-			if (this.emitFromShell)
-				ShapeUtils._randomPointUnitSphere(position);
-			else
-			ShapeUtils._randomPointInsideUnitSphere(position);
-		}
-		Vector3.scale(position,this.radius,position);
-		var z=position.z;
-		(z < 0.0)&& (position.z=z *-1.0);
-		if (this.randomDirection){
-			if (rand){
-				rand.seed=randomSeeds[17];
-				ShapeUtils._randomPointUnitSphere(direction,rand);
-				randomSeeds[17]=rand.seed;
-				}else {
-				ShapeUtils._randomPointUnitSphere(direction);
-			}
-			}else {
-			position.cloneTo(direction);
-		}
-	}
-
-	__proto.cloneTo=function(destObject){
-		_super.prototype.cloneTo.call(this,destObject);
-		var destShape=destObject;
-		destShape.radius=this.radius;
-		destShape.emitFromShell=this.emitFromShell;
-		destShape.randomDirection=this.randomDirection;
-	}
-
-	return HemisphereShape;
-})(BaseShape)
-
-
-/**
-*<code>MeshColliderShape</code> 类用于创建网格碰撞器。
-*/
-//class laya.d3.physics.shape.MeshColliderShape extends laya.d3.physics.shape.ColliderShape
-var MeshColliderShape=(function(_super){
-	function MeshColliderShape(){
-		/**@private */
-		this._mesh=null;
-		/**@private */
-		this._convex=false;
-		MeshColliderShape.__super.call(this);
-	}
-
-	__class(MeshColliderShape,'laya.d3.physics.shape.MeshColliderShape',_super);
-	var __proto=MeshColliderShape.prototype;
-	/**
-	*@inheritDoc
-	*/
-	__proto._setScale=function(value){
-		if (this._compoundParent){
-			this.updateLocalTransformations();
-			}else {
-			ColliderShape._nativeScale.setValue(value.x,value.y,value.z);
-			this._nativeShape.setLocalScaling(ColliderShape._nativeScale);
-			this._nativeShape.updateBound();
-		}
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto.cloneTo=function(destObject){
-		var destMeshCollider=destObject;
-		destMeshCollider.convex=this._convex;
-		destMeshCollider.mesh=this._mesh;
-		_super.prototype.cloneTo.call(this,destObject);
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto.clone=function(){
-		var dest=new MeshColliderShape();
-		this.cloneTo(dest);
-		return dest;
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto.destroy=function(){
-		if (this._nativeShape){
-			var physics3D=Laya3D._physics3D;
-			physics3D.destroy(this._nativeShape);
-			this._nativeShape=null;
-		}
-	}
-
-	/**
-	*设置网格。
-	*@param 网格。
-	*/
-	/**
-	*获取网格。
-	*@return 网格。
-	*/
-	__getset(0,__proto,'mesh',function(){
-		return this._mesh;
-		},function(value){
-		if (this._mesh!==value){
-			var physics3D=Laya3D._physics3D;
-			if (this._mesh){
-				physics3D.destroy(this._nativeShape);
-			}
-			if (value){
-				this._nativeShape=new physics3D.btGImpactMeshShape(value._getPhysicMesh());
-				this._nativeShape.updateBound();
-			}
-			this._mesh=value;
-		}
-	});
-
-	/**
-	*设置是否使用凸多边形。
-	*@param value 是否使用凸多边形。
-	*/
-	/**
-	*获取是否使用凸多边形。
-	*@return 是否使用凸多边形。
-	*/
-	__getset(0,__proto,'convex',function(){
-		return this._convex;
-		},function(value){
-		this._convex=value;
-	});
-
-	return MeshColliderShape;
-})(ColliderShape)
-
-
 /**
 *相对布局插件
 */
@@ -42257,6 +41947,177 @@ var Widget=(function(_super){
 	]);
 	return Widget;
 })(Component)
+
+
+//class laya.webgl.submit.SubmitTexture extends laya.webgl.submit.Submit
+var SubmitTexture=(function(_super){
+	function SubmitTexture(renderType){
+		(renderType===void 0)&& (renderType=10000);
+		SubmitTexture.__super.call(this,renderType);
+	}
+
+	__class(SubmitTexture,'laya.webgl.submit.SubmitTexture',_super);
+	var __proto=SubmitTexture.prototype;
+	__proto.clone=function(context,mesh,pos){
+		var o=SubmitTexture._poolSize ? SubmitTexture.POOL[--SubmitTexture._poolSize] :new SubmitTexture();
+		this._cloneInit(o,context,mesh,pos);
+		return o;
+	}
+
+	__proto.releaseRender=function(){
+		if ((--this._ref)< 1){
+			SubmitTexture.POOL[SubmitTexture._poolSize++]=this;
+			this.shaderValue.release();
+			this._mesh=null;
+			this._parent && (this._parent.releaseRender(),this._parent=null);
+		}
+	}
+
+	__proto.renderSubmit=function(){
+		if (this._numEle===0)
+			return 1;
+		var tex=this.shaderValue.textureHost;
+		if(tex){
+			var source=tex?tex._getSource():null;
+			if (!source)return 1;
+		};
+		var gl=WebGL.mainContext;
+		this._mesh.useMesh(gl);
+		var lastSubmit=Submit.preRender;
+		var prekey=(Submit.preRender)._key;
+		if (this._key.blendShader===0 && (this._key.submitType===prekey.submitType && this._key.blendShader===prekey.blendShader)&& BaseShader.activeShader &&
+			(Submit.preRender).clipInfoID==this.clipInfoID &&
+		lastSubmit.shaderValue.defines._value===this.shaderValue.defines._value &&
+		(this.shaderValue.defines._value & ShaderDefines2D.NOOPTMASK)==0){
+			(BaseShader.activeShader).uploadTexture2D(source);
+		}
+		else{
+			if (BlendMode.activeBlendFunction!==this._blendFn){
+				WebGLContext.setBlend(gl,true);
+				this._blendFn(gl);
+				BlendMode.activeBlendFunction=this._blendFn;
+			}
+			this.shaderValue.texture=source;
+			this.shaderValue.upload();
+		}
+		gl.drawElements(0x0004,this._numEle,0x1403,this._startIdx);
+		Stat.renderBatch++;
+		Stat.trianglesFaces+=this._numEle / 3;
+		return 1;
+	}
+
+	SubmitTexture.create=function(context,mesh,sv){
+		var o=SubmitTexture._poolSize ? SubmitTexture.POOL[--SubmitTexture._poolSize] :new SubmitTexture(10016);
+		o._mesh=mesh;
+		o._key.clear();
+		o._key.submitType=2;
+		o._ref=1;
+		o._startIdx=mesh.indexNum *CONST3D2D.BYTES_PIDX;
+		o._numEle=0;
+		var blendType=context._nBlendType;
+		o._key.blendShader=blendType;
+		o._blendFn=context._targets ? BlendMode.targetFns[blendType] :BlendMode.fns[blendType];
+		o.shaderValue=sv;
+		if (context._colorFiler){
+			var ft=context._colorFiler;
+			sv.defines.add(ft.type);
+			(sv).colorMat=ft._mat;
+			(sv).colorAlpha=ft._alpha;
+		}
+		return o;
+	}
+
+	SubmitTexture._poolSize=0;
+	SubmitTexture.POOL=[];
+	return SubmitTexture;
+})(Submit)
+
+
+/**
+*<code>HemisphereShape</code> 类用于创建半球形粒子形状。
+*/
+//class laya.d3.core.particleShuriKen.module.shape.HemisphereShape extends laya.d3.core.particleShuriKen.module.shape.BaseShape
+var HemisphereShape=(function(_super){
+	function HemisphereShape(){
+		/**发射器半径。*/
+		this.radius=NaN;
+		/**从外壳发射。*/
+		this.emitFromShell=false;
+		HemisphereShape.__super.call(this);
+		this.radius=1.0;
+		this.emitFromShell=false;
+		this.randomDirection=false;
+	}
+
+	__class(HemisphereShape,'laya.d3.core.particleShuriKen.module.shape.HemisphereShape',_super);
+	var __proto=HemisphereShape.prototype;
+	/**
+	*@inheritDoc
+	*/
+	__proto._getShapeBoundBox=function(boundBox){
+		var min=boundBox.min;
+		min.x=min.y=min.z=-this.radius;
+		var max=boundBox.max;
+		max.x=max.y=this.radius;
+		max.z=0;
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto._getSpeedBoundBox=function(boundBox){
+		var min=boundBox.min;
+		min.x=min.y=-1;
+		min.z=0;
+		var max=boundBox.max;
+		max.x=max.y=max.z=1;
+	}
+
+	/**
+	*用于生成粒子初始位置和方向。
+	*@param position 粒子位置。
+	*@param direction 粒子方向。
+	*/
+	__proto.generatePositionAndDirection=function(position,direction,rand,randomSeeds){
+		if (rand){
+			rand.seed=randomSeeds[16];
+			if (this.emitFromShell)
+				ShapeUtils._randomPointUnitSphere(position,rand);
+			else
+			ShapeUtils._randomPointInsideUnitSphere(position,rand);
+			randomSeeds[16]=rand.seed;
+			}else {
+			if (this.emitFromShell)
+				ShapeUtils._randomPointUnitSphere(position);
+			else
+			ShapeUtils._randomPointInsideUnitSphere(position);
+		}
+		Vector3.scale(position,this.radius,position);
+		var z=position.z;
+		(z < 0.0)&& (position.z=z *-1.0);
+		if (this.randomDirection){
+			if (rand){
+				rand.seed=randomSeeds[17];
+				ShapeUtils._randomPointUnitSphere(direction,rand);
+				randomSeeds[17]=rand.seed;
+				}else {
+				ShapeUtils._randomPointUnitSphere(direction);
+			}
+			}else {
+			position.cloneTo(direction);
+		}
+	}
+
+	__proto.cloneTo=function(destObject){
+		_super.prototype.cloneTo.call(this,destObject);
+		var destShape=destObject;
+		destShape.radius=this.radius;
+		destShape.emitFromShell=this.emitFromShell;
+		destShape.randomDirection=this.randomDirection;
+	}
+
+	return HemisphereShape;
+})(BaseShape)
 
 
 /**
@@ -42452,6 +42313,106 @@ var AnimationTransform3D=(function(_super){
 	]);
 	return AnimationTransform3D;
 })(EventDispatcher)
+
+
+/**
+*<code>MeshColliderShape</code> 类用于创建网格碰撞器。
+*/
+//class laya.d3.physics.shape.MeshColliderShape extends laya.d3.physics.shape.ColliderShape
+var MeshColliderShape=(function(_super){
+	function MeshColliderShape(){
+		/**@private */
+		this._mesh=null;
+		/**@private */
+		this._convex=false;
+		MeshColliderShape.__super.call(this);
+	}
+
+	__class(MeshColliderShape,'laya.d3.physics.shape.MeshColliderShape',_super);
+	var __proto=MeshColliderShape.prototype;
+	/**
+	*@inheritDoc
+	*/
+	__proto._setScale=function(value){
+		if (this._compoundParent){
+			this.updateLocalTransformations();
+			}else {
+			ColliderShape._nativeScale.setValue(value.x,value.y,value.z);
+			this._nativeShape.setLocalScaling(ColliderShape._nativeScale);
+			this._nativeShape.updateBound();
+		}
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto.cloneTo=function(destObject){
+		var destMeshCollider=destObject;
+		destMeshCollider.convex=this._convex;
+		destMeshCollider.mesh=this._mesh;
+		_super.prototype.cloneTo.call(this,destObject);
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto.clone=function(){
+		var dest=new MeshColliderShape();
+		this.cloneTo(dest);
+		return dest;
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto.destroy=function(){
+		if (this._nativeShape){
+			var physics3D=Laya3D._physics3D;
+			physics3D.destroy(this._nativeShape);
+			this._nativeShape=null;
+		}
+	}
+
+	/**
+	*设置网格。
+	*@param 网格。
+	*/
+	/**
+	*获取网格。
+	*@return 网格。
+	*/
+	__getset(0,__proto,'mesh',function(){
+		return this._mesh;
+		},function(value){
+		if (this._mesh!==value){
+			var physics3D=Laya3D._physics3D;
+			if (this._mesh){
+				physics3D.destroy(this._nativeShape);
+			}
+			if (value){
+				this._nativeShape=new physics3D.btGImpactMeshShape(value._getPhysicMesh());
+				this._nativeShape.updateBound();
+			}
+			this._mesh=value;
+		}
+	});
+
+	/**
+	*设置是否使用凸多边形。
+	*@param value 是否使用凸多边形。
+	*/
+	/**
+	*获取是否使用凸多边形。
+	*@return 是否使用凸多边形。
+	*/
+	__getset(0,__proto,'convex',function(){
+		return this._convex;
+		},function(value){
+		this._convex=value;
+	});
+
+	return MeshColliderShape;
+})(ColliderShape)
 
 
 /**
@@ -42762,291 +42723,6 @@ var Script3D=(function(_super){
 
 	return Script3D;
 })(Component)
-
-
-/**
-*@private
-*<code>MeshSprite3DStaticBatchManager</code> 类用于网格精灵静态批处理管理。
-*/
-//class laya.d3.graphics.MeshRenderStaticBatchManager extends laya.d3.graphics.StaticBatchManager
-var MeshRenderStaticBatchManager=(function(_super){
-	function MeshRenderStaticBatchManager(){
-		/**@private [只读]*/
-		//this._updateCountMark=0;
-		this._opaqueBatchMarks=[];
-		MeshRenderStaticBatchManager.__super.call(this);
-		this._updateCountMark=0;
-	}
-
-	__class(MeshRenderStaticBatchManager,'laya.d3.graphics.MeshRenderStaticBatchManager',_super);
-	var __proto=MeshRenderStaticBatchManager.prototype;
-	/**
-	*@inheritDoc
-	*/
-	__proto._compare=function(left,right){
-		var lRender=left._render,rRender=right._render;
-		var leftGeo=(left).meshFilter.sharedMesh,rightGeo=(right).meshFilter.sharedMesh;
-		var lightOffset=lRender.lightmapIndex-rRender.lightmapIndex;
-		if (lightOffset===0){
-			var receiveShadowOffset=(lRender.receiveShadow ? 1 :0)-(rRender.receiveShadow ? 1 :0);
-			if (receiveShadowOffset===0){
-				var materialOffset=lRender.sharedMaterial.id-rRender.sharedMaterial.id;
-				if (materialOffset===0){
-					var verDec=leftGeo._vertexBuffers[0].vertexDeclaration.id-rightGeo._vertexBuffers[0].vertexDeclaration.id;
-					if (verDec===0){
-						return rightGeo._indexBuffer.indexCount-leftGeo._indexBuffer.indexCount;
-						}else {
-						return verDec;
-					}
-					}else {
-					return materialOffset;
-				}
-				}else {
-				return receiveShadowOffset;
-			}
-			}else {
-			return lightOffset;
-		}
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto._getBatchRenderElementFromPool=function(){
-		var renderElement=this._batchRenderElementPool[this._batchRenderElementPoolIndex++];
-		if (!renderElement){
-			renderElement=new SubMeshRenderElement();
-			this._batchRenderElementPool[this._batchRenderElementPoolIndex-1]=renderElement;
-			renderElement.staticBatchElementList=[];
-		}
-		return renderElement;
-	}
-
-	/**
-	*@private
-	*/
-	__proto._getStaticBatch=function(rootOwner,number){
-		var key=rootOwner ? rootOwner.id :0;
-		var batchOwner=this._staticBatches[key];
-		(batchOwner)|| (batchOwner=this._staticBatches[key]=new MeshRenderStaticBatchOwner(rootOwner));
-		var batches=batchOwner._batches;
-		return (batches[number])|| (batches[number]=new SubMeshStaticBatch(batchOwner,number,MeshRenderStaticBatchManager._verDec));
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto._initStaticBatchs=function(rootOwner){
-		this._quickSort(this._initBatchSprites,0,this._initBatchSprites.length-1);
-		var lastCanMerage=false;
-		var curStaticBatch;
-		var batchNumber=0;
-		for (var i=0,n=this._initBatchSprites.length;i < n;i++){
-			var sprite=this._initBatchSprites[i];
-			if (lastCanMerage){
-				if (curStaticBatch.addTest(sprite)){
-					curStaticBatch.add(sprite);
-					}else {
-					lastCanMerage=false;
-					batchNumber++;
-				}
-				}else {
-				var lastIndex=n-1;
-				if (i!==lastIndex){
-					curStaticBatch=this._getStaticBatch(rootOwner,batchNumber);
-					curStaticBatch.add(sprite);
-					lastCanMerage=true;
-				}
-			}
-		}
-		for (var key in this._staticBatches){
-			var batches=this._staticBatches[key]._batches;
-			for (i=0,n=batches.length;i < n;i++)
-			batches[i].finishInit();
-		}
-		this._initBatchSprites.length=0;
-	}
-
-	/**
-	*@private
-	*/
-	__proto._destroyRenderSprite=function(sprite){
-		var staticBatch=sprite._render._staticBatch;
-		staticBatch.remove(sprite);
-		if (staticBatch._batchElements.length===0){
-			var owner=staticBatch.batchOwner._owner;
-			var ownerID=owner ? owner.id :0;
-			var batches=this._staticBatches[ownerID]._batches;
-			batches.splice(staticBatch.number,1)
-			if (batches.length===0)
-				delete this._staticBatches[ownerID];
-			staticBatch.dispose();
-		}
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto._clear=function(){
-		_super.prototype._clear.call(this);
-		this._updateCountMark++;
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto._garbageCollection=function(){
-		for (var key in this._staticBatches){
-			var batches=this._staticBatches[key]._batches;
-			for (var i=0,n=batches.length;i < n;i++){
-				var staticBatch=batches[i];
-				if (staticBatch._batchElements.length===0){
-					staticBatch.dispose();
-					batches.splice(i,1);
-					i--,n--;
-					if (n===0)
-						delete this._staticBatches[key];
-				}
-			}
-		}
-	}
-
-	__static(MeshRenderStaticBatchManager,
-	['_verDec',function(){return this._verDec=VertexMesh.getVertexDeclaration("POSITION,NORMAL,COLOR,UV,UV1,TANGENT");},'instance',function(){return this.instance=new MeshRenderStaticBatchManager();}
-	]);
-	return MeshRenderStaticBatchManager;
-})(StaticBatchManager)
-
-
-/**
-*<code>VertexShurikenParticle</code> 类用于创建粒子顶点结构。
-*/
-//class laya.d3.graphics.Vertex.VertexShurikenParticleBillboard extends laya.d3.graphics.Vertex.VertexShuriKenParticle
-var VertexShurikenParticleBillboard=(function(_super){
-	function VertexShurikenParticleBillboard(cornerTextureCoordinate,positionStartLifeTime,velocity,startColor,startSize,startRotation0,startRotation1,startRotation2,ageAddScale,time,startSpeed,randoms0,randoms1,simulationWorldPostion){
-		/**@private */
-		this._cornerTextureCoordinate=null;
-		/**@private */
-		this._positionStartLifeTime=null;
-		/**@private */
-		this._velocity=null;
-		/**@private */
-		this._startColor=null;
-		/**@private */
-		this._startSize=null;
-		/**@private */
-		this._startRotation0=null;
-		/**@private */
-		this._startRotation1=null;
-		/**@private */
-		this._startRotation2=null;
-		/**@private */
-		this._startLifeTime=NaN;
-		/**@private */
-		this._time=NaN;
-		/**@private */
-		this._startSpeed=NaN;
-		/**@private */
-		this._randoms0=null;
-		/**@private */
-		this._randoms1=null;
-		/**@private */
-		this._simulationWorldPostion=null;
-		VertexShurikenParticleBillboard.__super.call(this);
-		this._cornerTextureCoordinate=cornerTextureCoordinate;
-		this._positionStartLifeTime=positionStartLifeTime;
-		this._velocity=velocity;
-		this._startColor=startColor;
-		this._startSize=startSize;
-		this._startRotation0=startRotation0;
-		this._startRotation1=startRotation1;
-		this._startRotation2=startRotation2;
-		this._startLifeTime=ageAddScale;
-		this._time=time;
-		this._startSpeed=startSpeed;
-		this._randoms0=this.random0;
-		this._randoms1=this.random1;
-		this._simulationWorldPostion=simulationWorldPostion;
-	}
-
-	__class(VertexShurikenParticleBillboard,'laya.d3.graphics.Vertex.VertexShurikenParticleBillboard',_super);
-	var __proto=VertexShurikenParticleBillboard.prototype;
-	__getset(0,__proto,'cornerTextureCoordinate',function(){
-		return this._cornerTextureCoordinate;
-	});
-
-	__getset(0,__proto,'random1',function(){
-		return this._randoms1;
-	});
-
-	__getset(0,__proto,'startRotation2',function(){
-		return this._startRotation2;
-	});
-
-	__getset(0,__proto,'positionStartLifeTime',function(){
-		return this._positionStartLifeTime;
-	});
-
-	__getset(0,__proto,'velocity',function(){
-		return this._velocity;
-	});
-
-	__getset(0,__proto,'random0',function(){
-		return this._randoms0;
-	});
-
-	__getset(0,__proto,'startSize',function(){
-		return this._startSize;
-	});
-
-	__getset(0,__proto,'startColor',function(){
-		return this._startColor;
-	});
-
-	__getset(0,__proto,'startRotation0',function(){
-		return this._startRotation0;
-	});
-
-	__getset(0,__proto,'startRotation1',function(){
-		return this._startRotation1;
-	});
-
-	__getset(0,__proto,'startLifeTime',function(){
-		return this._startLifeTime;
-	});
-
-	__getset(0,__proto,'time',function(){
-		return this._time;
-	});
-
-	__getset(0,__proto,'startSpeed',function(){
-		return this._startSpeed;
-	});
-
-	__getset(0,__proto,'simulationWorldPostion',function(){
-		return this._simulationWorldPostion;
-	});
-
-	__getset(1,VertexShurikenParticleBillboard,'vertexDeclaration',function(){
-		return VertexShurikenParticleBillboard._vertexDeclaration;
-	},laya.d3.graphics.Vertex.VertexShuriKenParticle._$SET_vertexDeclaration);
-
-	__static(VertexShurikenParticleBillboard,
-	['_vertexDeclaration',function(){return this._vertexDeclaration=new VertexDeclaration(152,[
-		new VertexElement(0,"vector4",0),
-		new VertexElement(16,"vector4",4),
-		new VertexElement(32,"vector4",5),
-		new VertexElement(48,"vector4",6),
-		new VertexElement(64,"vector3",8),
-		new VertexElement(76,"vector3",9),
-		new VertexElement(88,"single",10),
-		new VertexElement(92,"vector4",11),
-		new VertexElement(108,"vector4",12),
-		new VertexElement(124,"vector3",13),
-		new VertexElement(136,"vector4",14)]);}
-	]);
-	return VertexShurikenParticleBillboard;
-})(VertexShuriKenParticle)
 
 
 /**
@@ -43590,6 +43266,291 @@ var PhysicsComponent=(function(_super){
 
 
 /**
+*@private
+*<code>MeshSprite3DStaticBatchManager</code> 类用于网格精灵静态批处理管理。
+*/
+//class laya.d3.graphics.MeshRenderStaticBatchManager extends laya.d3.graphics.StaticBatchManager
+var MeshRenderStaticBatchManager=(function(_super){
+	function MeshRenderStaticBatchManager(){
+		/**@private [只读]*/
+		//this._updateCountMark=0;
+		this._opaqueBatchMarks=[];
+		MeshRenderStaticBatchManager.__super.call(this);
+		this._updateCountMark=0;
+	}
+
+	__class(MeshRenderStaticBatchManager,'laya.d3.graphics.MeshRenderStaticBatchManager',_super);
+	var __proto=MeshRenderStaticBatchManager.prototype;
+	/**
+	*@inheritDoc
+	*/
+	__proto._compare=function(left,right){
+		var lRender=left._render,rRender=right._render;
+		var leftGeo=(left).meshFilter.sharedMesh,rightGeo=(right).meshFilter.sharedMesh;
+		var lightOffset=lRender.lightmapIndex-rRender.lightmapIndex;
+		if (lightOffset===0){
+			var receiveShadowOffset=(lRender.receiveShadow ? 1 :0)-(rRender.receiveShadow ? 1 :0);
+			if (receiveShadowOffset===0){
+				var materialOffset=lRender.sharedMaterial.id-rRender.sharedMaterial.id;
+				if (materialOffset===0){
+					var verDec=leftGeo._vertexBuffers[0].vertexDeclaration.id-rightGeo._vertexBuffers[0].vertexDeclaration.id;
+					if (verDec===0){
+						return rightGeo._indexBuffer.indexCount-leftGeo._indexBuffer.indexCount;
+						}else {
+						return verDec;
+					}
+					}else {
+					return materialOffset;
+				}
+				}else {
+				return receiveShadowOffset;
+			}
+			}else {
+			return lightOffset;
+		}
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto._getBatchRenderElementFromPool=function(){
+		var renderElement=this._batchRenderElementPool[this._batchRenderElementPoolIndex++];
+		if (!renderElement){
+			renderElement=new SubMeshRenderElement();
+			this._batchRenderElementPool[this._batchRenderElementPoolIndex-1]=renderElement;
+			renderElement.staticBatchElementList=[];
+		}
+		return renderElement;
+	}
+
+	/**
+	*@private
+	*/
+	__proto._getStaticBatch=function(rootOwner,number){
+		var key=rootOwner ? rootOwner.id :0;
+		var batchOwner=this._staticBatches[key];
+		(batchOwner)|| (batchOwner=this._staticBatches[key]=new MeshRenderStaticBatchOwner(rootOwner));
+		var batches=batchOwner._batches;
+		return (batches[number])|| (batches[number]=new SubMeshStaticBatch(batchOwner,number,MeshRenderStaticBatchManager._verDec));
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto._initStaticBatchs=function(rootOwner){
+		this._quickSort(this._initBatchSprites,0,this._initBatchSprites.length-1);
+		var lastCanMerage=false;
+		var curStaticBatch;
+		var batchNumber=0;
+		for (var i=0,n=this._initBatchSprites.length;i < n;i++){
+			var sprite=this._initBatchSprites[i];
+			if (lastCanMerage){
+				if (curStaticBatch.addTest(sprite)){
+					curStaticBatch.add(sprite);
+					}else {
+					lastCanMerage=false;
+					batchNumber++;
+				}
+				}else {
+				var lastIndex=n-1;
+				if (i!==lastIndex){
+					curStaticBatch=this._getStaticBatch(rootOwner,batchNumber);
+					curStaticBatch.add(sprite);
+					lastCanMerage=true;
+				}
+			}
+		}
+		for (var key in this._staticBatches){
+			var batches=this._staticBatches[key]._batches;
+			for (i=0,n=batches.length;i < n;i++)
+			batches[i].finishInit();
+		}
+		this._initBatchSprites.length=0;
+	}
+
+	/**
+	*@private
+	*/
+	__proto._destroyRenderSprite=function(sprite){
+		var staticBatch=sprite._render._staticBatch;
+		staticBatch.remove(sprite);
+		if (staticBatch._batchElements.length===0){
+			var owner=staticBatch.batchOwner._owner;
+			var ownerID=owner ? owner.id :0;
+			var batches=this._staticBatches[ownerID]._batches;
+			batches.splice(staticBatch.number,1)
+			if (batches.length===0)
+				delete this._staticBatches[ownerID];
+			staticBatch.dispose();
+		}
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto._clear=function(){
+		_super.prototype._clear.call(this);
+		this._updateCountMark++;
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto._garbageCollection=function(){
+		for (var key in this._staticBatches){
+			var batches=this._staticBatches[key]._batches;
+			for (var i=0,n=batches.length;i < n;i++){
+				var staticBatch=batches[i];
+				if (staticBatch._batchElements.length===0){
+					staticBatch.dispose();
+					batches.splice(i,1);
+					i--,n--;
+					if (n===0)
+						delete this._staticBatches[key];
+				}
+			}
+		}
+	}
+
+	__static(MeshRenderStaticBatchManager,
+	['_verDec',function(){return this._verDec=VertexMesh.getVertexDeclaration("POSITION,NORMAL,COLOR,UV,UV1,TANGENT");},'instance',function(){return this.instance=new MeshRenderStaticBatchManager();}
+	]);
+	return MeshRenderStaticBatchManager;
+})(StaticBatchManager)
+
+
+/**
+*<code>VertexShurikenParticle</code> 类用于创建粒子顶点结构。
+*/
+//class laya.d3.graphics.Vertex.VertexShurikenParticleBillboard extends laya.d3.graphics.Vertex.VertexShuriKenParticle
+var VertexShurikenParticleBillboard=(function(_super){
+	function VertexShurikenParticleBillboard(cornerTextureCoordinate,positionStartLifeTime,velocity,startColor,startSize,startRotation0,startRotation1,startRotation2,ageAddScale,time,startSpeed,randoms0,randoms1,simulationWorldPostion){
+		/**@private */
+		this._cornerTextureCoordinate=null;
+		/**@private */
+		this._positionStartLifeTime=null;
+		/**@private */
+		this._velocity=null;
+		/**@private */
+		this._startColor=null;
+		/**@private */
+		this._startSize=null;
+		/**@private */
+		this._startRotation0=null;
+		/**@private */
+		this._startRotation1=null;
+		/**@private */
+		this._startRotation2=null;
+		/**@private */
+		this._startLifeTime=NaN;
+		/**@private */
+		this._time=NaN;
+		/**@private */
+		this._startSpeed=NaN;
+		/**@private */
+		this._randoms0=null;
+		/**@private */
+		this._randoms1=null;
+		/**@private */
+		this._simulationWorldPostion=null;
+		VertexShurikenParticleBillboard.__super.call(this);
+		this._cornerTextureCoordinate=cornerTextureCoordinate;
+		this._positionStartLifeTime=positionStartLifeTime;
+		this._velocity=velocity;
+		this._startColor=startColor;
+		this._startSize=startSize;
+		this._startRotation0=startRotation0;
+		this._startRotation1=startRotation1;
+		this._startRotation2=startRotation2;
+		this._startLifeTime=ageAddScale;
+		this._time=time;
+		this._startSpeed=startSpeed;
+		this._randoms0=this.random0;
+		this._randoms1=this.random1;
+		this._simulationWorldPostion=simulationWorldPostion;
+	}
+
+	__class(VertexShurikenParticleBillboard,'laya.d3.graphics.Vertex.VertexShurikenParticleBillboard',_super);
+	var __proto=VertexShurikenParticleBillboard.prototype;
+	__getset(0,__proto,'cornerTextureCoordinate',function(){
+		return this._cornerTextureCoordinate;
+	});
+
+	__getset(0,__proto,'random1',function(){
+		return this._randoms1;
+	});
+
+	__getset(0,__proto,'startRotation2',function(){
+		return this._startRotation2;
+	});
+
+	__getset(0,__proto,'positionStartLifeTime',function(){
+		return this._positionStartLifeTime;
+	});
+
+	__getset(0,__proto,'velocity',function(){
+		return this._velocity;
+	});
+
+	__getset(0,__proto,'random0',function(){
+		return this._randoms0;
+	});
+
+	__getset(0,__proto,'startSize',function(){
+		return this._startSize;
+	});
+
+	__getset(0,__proto,'startColor',function(){
+		return this._startColor;
+	});
+
+	__getset(0,__proto,'startRotation0',function(){
+		return this._startRotation0;
+	});
+
+	__getset(0,__proto,'startRotation1',function(){
+		return this._startRotation1;
+	});
+
+	__getset(0,__proto,'startLifeTime',function(){
+		return this._startLifeTime;
+	});
+
+	__getset(0,__proto,'time',function(){
+		return this._time;
+	});
+
+	__getset(0,__proto,'startSpeed',function(){
+		return this._startSpeed;
+	});
+
+	__getset(0,__proto,'simulationWorldPostion',function(){
+		return this._simulationWorldPostion;
+	});
+
+	__getset(1,VertexShurikenParticleBillboard,'vertexDeclaration',function(){
+		return VertexShurikenParticleBillboard._vertexDeclaration;
+	},laya.d3.graphics.Vertex.VertexShuriKenParticle._$SET_vertexDeclaration);
+
+	__static(VertexShurikenParticleBillboard,
+	['_vertexDeclaration',function(){return this._vertexDeclaration=new VertexDeclaration(152,[
+		new VertexElement(0,"vector4",0),
+		new VertexElement(16,"vector4",4),
+		new VertexElement(32,"vector4",5),
+		new VertexElement(48,"vector4",6),
+		new VertexElement(64,"vector3",8),
+		new VertexElement(76,"vector3",9),
+		new VertexElement(88,"single",10),
+		new VertexElement(92,"vector4",11),
+		new VertexElement(108,"vector4",12),
+		new VertexElement(124,"vector3",13),
+		new VertexElement(136,"vector4",14)]);}
+	]);
+	return VertexShurikenParticleBillboard;
+})(VertexShuriKenParticle)
+
+
+/**
 *<code>QuaternionKeyframe</code> 类用于创建四元数关键帧实例。
 */
 //class laya.d3.core.QuaternionKeyframe extends laya.d3.core.Keyframe
@@ -43617,150 +43578,6 @@ var QuaternionKeyframe=(function(_super){
 
 	return QuaternionKeyframe;
 })(Keyframe)
-
-
-/**
-*<code>CompoundColliderShape</code> 类用于创建盒子形状碰撞器。
-*/
-//class laya.d3.physics.shape.CompoundColliderShape extends laya.d3.physics.shape.ColliderShape
-var CompoundColliderShape=(function(_super){
-	function CompoundColliderShape(){
-		CompoundColliderShape.__super.call(this);
-		this._childColliderShapes=[];
-		this._type=5;
-		this._nativeShape=new Laya3D._physics3D.btCompoundShape();
-	}
-
-	__class(CompoundColliderShape,'laya.d3.physics.shape.CompoundColliderShape',_super);
-	var __proto=CompoundColliderShape.prototype;
-	/**
-	*@private
-	*/
-	__proto._clearChildShape=function(shape){
-		shape._attatched=false;
-		shape._compoundParent=null;
-		shape._indexInCompound=-1;
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto._addReference=function(){}
-	/**
-	*@inheritDoc
-	*/
-	__proto._removeReference=function(){}
-	/**
-	*@private
-	*/
-	__proto._updateChildTransform=function(shape){
-		var offset=shape.localOffset;
-		var rotation=shape.localRotation;
-		var nativeOffset=ColliderShape._nativeVector30;
-		var nativeQuaternion=ColliderShape._nativQuaternion0;
-		var nativeTransform=ColliderShape._nativeTransform0;
-		nativeOffset.setValue(-offset.x,offset.y,offset.z);
-		nativeQuaternion.setValue(-rotation.x,rotation.y,rotation.z,-rotation.w);
-		nativeTransform.setOrigin(nativeOffset);
-		nativeTransform.setRotation(nativeQuaternion);
-		this._nativeShape.updateChildTransform(shape._indexInCompound,nativeTransform,true);
-	}
-
-	/**
-	*添加子碰撞器形状。
-	*@param shape 子碰撞器形状。
-	*/
-	__proto.addChildShape=function(shape){
-		if (shape._attatched)
-			throw "CompoundColliderShape: this shape has attatched to other entity.";
-		shape._attatched=true;
-		shape._compoundParent=this;
-		shape._indexInCompound=this._childColliderShapes.length;
-		this._childColliderShapes.push(shape);
-		var offset=shape.localOffset;
-		var rotation=shape.localRotation;
-		CompoundColliderShape._nativeOffset.setValue(-offset.x,offset.y,offset.z);
-		CompoundColliderShape._nativRotation.setValue(-rotation.x,rotation.y,rotation.z,-rotation.w);
-		CompoundColliderShape._nativeTransform.setOrigin(CompoundColliderShape._nativeOffset);
-		CompoundColliderShape._nativeTransform.setRotation(CompoundColliderShape._nativRotation);
-		var nativeScale=this._nativeShape.getLocalScaling();
-		this._nativeShape.setLocalScaling(CompoundColliderShape._nativeVector3One);
-		this._nativeShape.addChildShape(CompoundColliderShape._nativeTransform,shape._nativeShape);
-		this._nativeShape.setLocalScaling(nativeScale);
-		(this._attatchedCollisionObject)&& (this._attatchedCollisionObject.colliderShape=this);
-	}
-
-	/**
-	*移除子碰撞器形状。
-	*@param shape 子碰撞器形状。
-	*/
-	__proto.removeChildShape=function(shape){
-		if (shape._compoundParent===this){
-			var index=shape._indexInCompound;
-			this._clearChildShape(shape);
-			var endShape=this._childColliderShapes[this._childColliderShapes.length-1];
-			endShape._indexInCompound=index;
-			this._childColliderShapes[index]=endShape;
-			this._childColliderShapes.pop();
-			this._nativeShape.removeChildShapeByIndex(index);
-		}
-	}
-
-	/**
-	*清空子碰撞器形状。
-	*/
-	__proto.clearChildShape=function(){
-		for (var i=0,n=this._childColliderShapes.length;i < n;i++){
-			this._clearChildShape(this._childColliderShapes[i]);
-			this._nativeShape.removeChildShapeByIndex(0);
-		}
-		this._childColliderShapes.length=0;
-	}
-
-	/**
-	*获取子形状数量。
-	*@return
-	*/
-	__proto.getChildShapeCount=function(){
-		return this._childColliderShapes.length;
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto.cloneTo=function(destObject){
-		var destCompoundColliderShape=destObject;
-		destCompoundColliderShape.clearChildShape();
-		for (var i=0,n=this._childColliderShapes.length;i < n;i++)
-		destCompoundColliderShape.addChildShape(this._childColliderShapes[i].clone());
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto.clone=function(){
-		var dest=new CompoundColliderShape();
-		this.cloneTo(dest);
-		return dest;
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto.destroy=function(){
-		_super.prototype.destroy.call(this);
-		for (var i=0,n=this._childColliderShapes.length;i < n;i++){
-			var childShape=this._childColliderShapes[i];
-			if (childShape._referenceCount===0)
-				childShape.destroy();
-		}
-	}
-
-	__static(CompoundColliderShape,
-	['_nativeVector3One',function(){return this._nativeVector3One=new Laya3D._physics3D.btVector3(1,1,1);},'_nativeTransform',function(){return this._nativeTransform=new Laya3D._physics3D.btTransform();},'_nativeOffset',function(){return this._nativeOffset=new Laya3D._physics3D.btVector3(0,0,0);},'_nativRotation',function(){return this._nativRotation=new Laya3D._physics3D.btQuaternion(0,0,0,1);}
-	]);
-	return CompoundColliderShape;
-})(ColliderShape)
 
 
 /**
@@ -44101,79 +43918,146 @@ var Texture=(function(_super){
 
 
 /**
-*<code>CylinderColliderShape</code> 类用于创建圆柱碰撞器。
+*<code>CompoundColliderShape</code> 类用于创建盒子形状碰撞器。
 */
-//class laya.d3.physics.shape.CylinderColliderShape extends laya.d3.physics.shape.ColliderShape
-var CylinderColliderShape=(function(_super){
-	function CylinderColliderShape(radius,height,orientation){
-		/**@private */
-		//this._orientation=0;
-		/**@private */
-		this._radius=1;
-		/**@private */
-		this._height=0.5;
-		CylinderColliderShape.__super.call(this);
-		(radius===void 0)&& (radius=0.5);
-		(height===void 0)&& (height=1.0);
-		(orientation===void 0)&& (orientation=1);
-		this._radius=radius;
-		this._height=height;
-		this._orientation=orientation;
-		this._type=2;
-		switch (orientation){
-			case 0:
-				CylinderColliderShape._nativeSize.setValue(height / 2,radius,radius);
-				this._nativeShape=new Laya3D._physics3D.btCylinderShapeX(CylinderColliderShape._nativeSize);
-				break ;
-			case 1:
-				CylinderColliderShape._nativeSize.setValue(radius,height / 2,radius);
-				this._nativeShape=new Laya3D._physics3D.btCylinderShape(CylinderColliderShape._nativeSize);
-				break ;
-			case 2:
-				CylinderColliderShape._nativeSize.setValue(radius,radius,height / 2);
-				this._nativeShape=new Laya3D._physics3D.btCylinderShapeZ(CylinderColliderShape._nativeSize);
-				break ;
-			default :
-				throw "CapsuleColliderShape:unknown orientation.";
-			}
+//class laya.d3.physics.shape.CompoundColliderShape extends laya.d3.physics.shape.ColliderShape
+var CompoundColliderShape=(function(_super){
+	function CompoundColliderShape(){
+		CompoundColliderShape.__super.call(this);
+		this._childColliderShapes=[];
+		this._type=5;
+		this._nativeShape=new Laya3D._physics3D.btCompoundShape();
 	}
 
-	__class(CylinderColliderShape,'laya.d3.physics.shape.CylinderColliderShape',_super);
-	var __proto=CylinderColliderShape.prototype;
+	__class(CompoundColliderShape,'laya.d3.physics.shape.CompoundColliderShape',_super);
+	var __proto=CompoundColliderShape.prototype;
+	/**
+	*@private
+	*/
+	__proto._clearChildShape=function(shape){
+		shape._attatched=false;
+		shape._compoundParent=null;
+		shape._indexInCompound=-1;
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto._addReference=function(){}
+	/**
+	*@inheritDoc
+	*/
+	__proto._removeReference=function(){}
+	/**
+	*@private
+	*/
+	__proto._updateChildTransform=function(shape){
+		var offset=shape.localOffset;
+		var rotation=shape.localRotation;
+		var nativeOffset=ColliderShape._nativeVector30;
+		var nativeQuaternion=ColliderShape._nativQuaternion0;
+		var nativeTransform=ColliderShape._nativeTransform0;
+		nativeOffset.setValue(-offset.x,offset.y,offset.z);
+		nativeQuaternion.setValue(-rotation.x,rotation.y,rotation.z,-rotation.w);
+		nativeTransform.setOrigin(nativeOffset);
+		nativeTransform.setRotation(nativeQuaternion);
+		this._nativeShape.updateChildTransform(shape._indexInCompound,nativeTransform,true);
+	}
+
+	/**
+	*添加子碰撞器形状。
+	*@param shape 子碰撞器形状。
+	*/
+	__proto.addChildShape=function(shape){
+		if (shape._attatched)
+			throw "CompoundColliderShape: this shape has attatched to other entity.";
+		shape._attatched=true;
+		shape._compoundParent=this;
+		shape._indexInCompound=this._childColliderShapes.length;
+		this._childColliderShapes.push(shape);
+		var offset=shape.localOffset;
+		var rotation=shape.localRotation;
+		CompoundColliderShape._nativeOffset.setValue(-offset.x,offset.y,offset.z);
+		CompoundColliderShape._nativRotation.setValue(-rotation.x,rotation.y,rotation.z,-rotation.w);
+		CompoundColliderShape._nativeTransform.setOrigin(CompoundColliderShape._nativeOffset);
+		CompoundColliderShape._nativeTransform.setRotation(CompoundColliderShape._nativRotation);
+		var nativeScale=this._nativeShape.getLocalScaling();
+		this._nativeShape.setLocalScaling(CompoundColliderShape._nativeVector3One);
+		this._nativeShape.addChildShape(CompoundColliderShape._nativeTransform,shape._nativeShape);
+		this._nativeShape.setLocalScaling(nativeScale);
+		(this._attatchedCollisionObject)&& (this._attatchedCollisionObject.colliderShape=this);
+	}
+
+	/**
+	*移除子碰撞器形状。
+	*@param shape 子碰撞器形状。
+	*/
+	__proto.removeChildShape=function(shape){
+		if (shape._compoundParent===this){
+			var index=shape._indexInCompound;
+			this._clearChildShape(shape);
+			var endShape=this._childColliderShapes[this._childColliderShapes.length-1];
+			endShape._indexInCompound=index;
+			this._childColliderShapes[index]=endShape;
+			this._childColliderShapes.pop();
+			this._nativeShape.removeChildShapeByIndex(index);
+		}
+	}
+
+	/**
+	*清空子碰撞器形状。
+	*/
+	__proto.clearChildShape=function(){
+		for (var i=0,n=this._childColliderShapes.length;i < n;i++){
+			this._clearChildShape(this._childColliderShapes[i]);
+			this._nativeShape.removeChildShapeByIndex(0);
+		}
+		this._childColliderShapes.length=0;
+	}
+
+	/**
+	*获取子形状数量。
+	*@return
+	*/
+	__proto.getChildShapeCount=function(){
+		return this._childColliderShapes.length;
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto.cloneTo=function(destObject){
+		var destCompoundColliderShape=destObject;
+		destCompoundColliderShape.clearChildShape();
+		for (var i=0,n=this._childColliderShapes.length;i < n;i++)
+		destCompoundColliderShape.addChildShape(this._childColliderShapes[i].clone());
+	}
+
 	/**
 	*@inheritDoc
 	*/
 	__proto.clone=function(){
-		var dest=new CylinderColliderShape(this._radius,this._height,this._orientation);
+		var dest=new CompoundColliderShape();
 		this.cloneTo(dest);
 		return dest;
 	}
 
 	/**
-	*获取半径。
+	*@inheritDoc
 	*/
-	__getset(0,__proto,'radius',function(){
-		return this._radius;
-	});
+	__proto.destroy=function(){
+		_super.prototype.destroy.call(this);
+		for (var i=0,n=this._childColliderShapes.length;i < n;i++){
+			var childShape=this._childColliderShapes[i];
+			if (childShape._referenceCount===0)
+				childShape.destroy();
+		}
+	}
 
-	/**
-	*获取高度。
-	*/
-	__getset(0,__proto,'height',function(){
-		return this._height;
-	});
-
-	/**
-	*获取方向。
-	*/
-	__getset(0,__proto,'orientation',function(){
-		return this._orientation;
-	});
-
-	__static(CylinderColliderShape,
-	['_nativeSize',function(){return this._nativeSize=new Laya3D._physics3D.btVector3(0,0,0);}
+	__static(CompoundColliderShape,
+	['_nativeVector3One',function(){return this._nativeVector3One=new Laya3D._physics3D.btVector3(1,1,1);},'_nativeTransform',function(){return this._nativeTransform=new Laya3D._physics3D.btTransform();},'_nativeOffset',function(){return this._nativeOffset=new Laya3D._physics3D.btVector3(0,0,0);},'_nativRotation',function(){return this._nativRotation=new Laya3D._physics3D.btQuaternion(0,0,0,1);}
 	]);
-	return CylinderColliderShape;
+	return CompoundColliderShape;
 })(ColliderShape)
 
 
@@ -44696,6 +44580,83 @@ var Loader=(function(_super){
 	Loader._startIndex=0;
 	return Loader;
 })(EventDispatcher)
+
+
+/**
+*<code>CylinderColliderShape</code> 类用于创建圆柱碰撞器。
+*/
+//class laya.d3.physics.shape.CylinderColliderShape extends laya.d3.physics.shape.ColliderShape
+var CylinderColliderShape=(function(_super){
+	function CylinderColliderShape(radius,height,orientation){
+		/**@private */
+		//this._orientation=0;
+		/**@private */
+		this._radius=1;
+		/**@private */
+		this._height=0.5;
+		CylinderColliderShape.__super.call(this);
+		(radius===void 0)&& (radius=0.5);
+		(height===void 0)&& (height=1.0);
+		(orientation===void 0)&& (orientation=1);
+		this._radius=radius;
+		this._height=height;
+		this._orientation=orientation;
+		this._type=2;
+		switch (orientation){
+			case 0:
+				CylinderColliderShape._nativeSize.setValue(height / 2,radius,radius);
+				this._nativeShape=new Laya3D._physics3D.btCylinderShapeX(CylinderColliderShape._nativeSize);
+				break ;
+			case 1:
+				CylinderColliderShape._nativeSize.setValue(radius,height / 2,radius);
+				this._nativeShape=new Laya3D._physics3D.btCylinderShape(CylinderColliderShape._nativeSize);
+				break ;
+			case 2:
+				CylinderColliderShape._nativeSize.setValue(radius,radius,height / 2);
+				this._nativeShape=new Laya3D._physics3D.btCylinderShapeZ(CylinderColliderShape._nativeSize);
+				break ;
+			default :
+				throw "CapsuleColliderShape:unknown orientation.";
+			}
+	}
+
+	__class(CylinderColliderShape,'laya.d3.physics.shape.CylinderColliderShape',_super);
+	var __proto=CylinderColliderShape.prototype;
+	/**
+	*@inheritDoc
+	*/
+	__proto.clone=function(){
+		var dest=new CylinderColliderShape(this._radius,this._height,this._orientation);
+		this.cloneTo(dest);
+		return dest;
+	}
+
+	/**
+	*获取半径。
+	*/
+	__getset(0,__proto,'radius',function(){
+		return this._radius;
+	});
+
+	/**
+	*获取高度。
+	*/
+	__getset(0,__proto,'height',function(){
+		return this._height;
+	});
+
+	/**
+	*获取方向。
+	*/
+	__getset(0,__proto,'orientation',function(){
+		return this._orientation;
+	});
+
+	__static(CylinderColliderShape,
+	['_nativeSize',function(){return this._nativeSize=new Laya3D._physics3D.btVector3(0,0,0);}
+	]);
+	return CylinderColliderShape;
+})(ColliderShape)
 
 
 /**
@@ -45588,199 +45549,6 @@ var CapsuleColliderShape=(function(_super){
 	]);
 	return CapsuleColliderShape;
 })(ColliderShape)
-
-
-/**
-*<code>FloatKeyFrame</code> 类用于创建浮点关键帧实例。
-*/
-//class laya.d3.core.FloatKeyframe extends laya.d3.core.Keyframe
-var FloatKeyframe=(function(_super){
-	function FloatKeyframe(){
-		//this.inTangent=NaN;
-		//this.outTangent=NaN;
-		//this.value=NaN;
-		FloatKeyframe.__super.call(this);
-	}
-
-	__class(FloatKeyframe,'laya.d3.core.FloatKeyframe',_super);
-	var __proto=FloatKeyframe.prototype;
-	/**
-	*@inheritDoc
-	*/
-	__proto.cloneTo=function(destObject){
-		_super.prototype.cloneTo.call(this,destObject);
-		var destKeyFrame=destObject;
-		destKeyFrame.inTangent=this.inTangent;
-		destKeyFrame.outTangent=this.outTangent;
-		destKeyFrame.value=this.value;
-	}
-
-	return FloatKeyframe;
-})(Keyframe)
-
-
-/**
-*<code>ConeColliderShape</code> 类用于创建圆柱碰撞器。
-*/
-//class laya.d3.physics.shape.ConeColliderShape extends laya.d3.physics.shape.ColliderShape
-var ConeColliderShape=(function(_super){
-	function ConeColliderShape(radius,height,orientation){
-		/**@private */
-		//this._orientation=0;
-		/**@private */
-		this._radius=1;
-		/**@private */
-		this._height=0.5;
-		ConeColliderShape.__super.call(this);
-		(radius===void 0)&& (radius=0.5);
-		(height===void 0)&& (height=1.0);
-		(orientation===void 0)&& (orientation=1);
-		this._radius=radius;
-		this._height=height;
-		this._orientation=orientation;
-		this._type=2;
-		switch (orientation){
-			case 0:
-				this._nativeShape=new Laya3D._physics3D.btConeShapeX(radius,height);
-				break ;
-			case 1:
-				this._nativeShape=new Laya3D._physics3D.btConeShape(radius,height);
-				break ;
-			case 2:
-				this._nativeShape=new Laya3D._physics3D.btConeShapeZ(radius,height);
-				break ;
-			default :
-				throw "ConeColliderShape:unknown orientation.";
-			}
-	}
-
-	__class(ConeColliderShape,'laya.d3.physics.shape.ConeColliderShape',_super);
-	var __proto=ConeColliderShape.prototype;
-	/**
-	*@inheritDoc
-	*/
-	__proto.clone=function(){
-		var dest=new ConeColliderShape(this._radius,this._height,this._orientation);
-		this.cloneTo(dest);
-		return dest;
-	}
-
-	/**
-	*获取半径。
-	*/
-	__getset(0,__proto,'radius',function(){
-		return this._radius;
-	});
-
-	/**
-	*获取高度。
-	*/
-	__getset(0,__proto,'height',function(){
-		return this._height;
-	});
-
-	/**
-	*获取方向。
-	*/
-	__getset(0,__proto,'orientation',function(){
-		return this._orientation;
-	});
-
-	return ConeColliderShape;
-})(ColliderShape)
-
-
-/**
-*<code>BoxShape</code> 类用于创建球形粒子形状。
-*/
-//class laya.d3.core.particleShuriKen.module.shape.BoxShape extends laya.d3.core.particleShuriKen.module.shape.BaseShape
-var BoxShape=(function(_super){
-	function BoxShape(){
-		/**发射器X轴长度。*/
-		this.x=NaN;
-		/**发射器Y轴长度。*/
-		this.y=NaN;
-		/**发射器Z轴长度。*/
-		this.z=NaN;
-		BoxShape.__super.call(this);
-		this.x=1.0;
-		this.y=1.0;
-		this.z=1.0;
-		this.randomDirection=false;
-	}
-
-	__class(BoxShape,'laya.d3.core.particleShuriKen.module.shape.BoxShape',_super);
-	var __proto=BoxShape.prototype;
-	/**
-	*@inheritDoc
-	*/
-	__proto._getShapeBoundBox=function(boundBox){
-		var min=boundBox.min;
-		min.x=-this.x *0.5;
-		min.y=-this.y *0.5;
-		min.z=-this.z *0.5;
-		var max=boundBox.max;
-		max.x=this.x *0.5;
-		max.y=this.y *0.5;
-		max.z=this.z *0.5;
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto._getSpeedBoundBox=function(boundBox){
-		var min=boundBox.min;
-		min.x=0.0;
-		min.y=0.0;
-		min.z=0.0;
-		var max=boundBox.max;
-		max.x=0.0;
-		max.y=1.0;
-		max.z=0.0;
-	}
-
-	/**
-	*用于生成粒子初始位置和方向。
-	*@param position 粒子位置。
-	*@param direction 粒子方向。
-	*/
-	__proto.generatePositionAndDirection=function(position,direction,rand,randomSeeds){
-		if (rand){
-			rand.seed=randomSeeds[16];
-			ShapeUtils._randomPointInsideHalfUnitBox(position,rand);
-			randomSeeds[16]=rand.seed;
-			}else {
-			ShapeUtils._randomPointInsideHalfUnitBox(position);
-		}
-		position.x=this.x *position.x;
-		position.y=this.y *position.y;
-		position.z=this.z *position.z;
-		if (this.randomDirection){
-			if (rand){
-				rand.seed=randomSeeds[17];
-				ShapeUtils._randomPointUnitSphere(direction,rand);
-				randomSeeds[17]=rand.seed;
-				}else {
-				ShapeUtils._randomPointUnitSphere(direction);
-			}
-			}else {
-			direction.x=0.0;
-			direction.y=0.0;
-			direction.z=1.0;
-		}
-	}
-
-	__proto.cloneTo=function(destObject){
-		_super.prototype.cloneTo.call(this,destObject);
-		var destShape=destObject;
-		destShape.x=this.x;
-		destShape.y=this.y;
-		destShape.z=this.z;
-		destShape.randomDirection=this.randomDirection;
-	}
-
-	return BoxShape;
-})(BaseShape)
 
 
 /**
@@ -47124,6 +46892,199 @@ var Animator=(function(_super){
 
 
 /**
+*<code>FloatKeyFrame</code> 类用于创建浮点关键帧实例。
+*/
+//class laya.d3.core.FloatKeyframe extends laya.d3.core.Keyframe
+var FloatKeyframe=(function(_super){
+	function FloatKeyframe(){
+		//this.inTangent=NaN;
+		//this.outTangent=NaN;
+		//this.value=NaN;
+		FloatKeyframe.__super.call(this);
+	}
+
+	__class(FloatKeyframe,'laya.d3.core.FloatKeyframe',_super);
+	var __proto=FloatKeyframe.prototype;
+	/**
+	*@inheritDoc
+	*/
+	__proto.cloneTo=function(destObject){
+		_super.prototype.cloneTo.call(this,destObject);
+		var destKeyFrame=destObject;
+		destKeyFrame.inTangent=this.inTangent;
+		destKeyFrame.outTangent=this.outTangent;
+		destKeyFrame.value=this.value;
+	}
+
+	return FloatKeyframe;
+})(Keyframe)
+
+
+/**
+*<code>ConeColliderShape</code> 类用于创建圆柱碰撞器。
+*/
+//class laya.d3.physics.shape.ConeColliderShape extends laya.d3.physics.shape.ColliderShape
+var ConeColliderShape=(function(_super){
+	function ConeColliderShape(radius,height,orientation){
+		/**@private */
+		//this._orientation=0;
+		/**@private */
+		this._radius=1;
+		/**@private */
+		this._height=0.5;
+		ConeColliderShape.__super.call(this);
+		(radius===void 0)&& (radius=0.5);
+		(height===void 0)&& (height=1.0);
+		(orientation===void 0)&& (orientation=1);
+		this._radius=radius;
+		this._height=height;
+		this._orientation=orientation;
+		this._type=2;
+		switch (orientation){
+			case 0:
+				this._nativeShape=new Laya3D._physics3D.btConeShapeX(radius,height);
+				break ;
+			case 1:
+				this._nativeShape=new Laya3D._physics3D.btConeShape(radius,height);
+				break ;
+			case 2:
+				this._nativeShape=new Laya3D._physics3D.btConeShapeZ(radius,height);
+				break ;
+			default :
+				throw "ConeColliderShape:unknown orientation.";
+			}
+	}
+
+	__class(ConeColliderShape,'laya.d3.physics.shape.ConeColliderShape',_super);
+	var __proto=ConeColliderShape.prototype;
+	/**
+	*@inheritDoc
+	*/
+	__proto.clone=function(){
+		var dest=new ConeColliderShape(this._radius,this._height,this._orientation);
+		this.cloneTo(dest);
+		return dest;
+	}
+
+	/**
+	*获取半径。
+	*/
+	__getset(0,__proto,'radius',function(){
+		return this._radius;
+	});
+
+	/**
+	*获取高度。
+	*/
+	__getset(0,__proto,'height',function(){
+		return this._height;
+	});
+
+	/**
+	*获取方向。
+	*/
+	__getset(0,__proto,'orientation',function(){
+		return this._orientation;
+	});
+
+	return ConeColliderShape;
+})(ColliderShape)
+
+
+/**
+*<code>BoxShape</code> 类用于创建球形粒子形状。
+*/
+//class laya.d3.core.particleShuriKen.module.shape.BoxShape extends laya.d3.core.particleShuriKen.module.shape.BaseShape
+var BoxShape=(function(_super){
+	function BoxShape(){
+		/**发射器X轴长度。*/
+		this.x=NaN;
+		/**发射器Y轴长度。*/
+		this.y=NaN;
+		/**发射器Z轴长度。*/
+		this.z=NaN;
+		BoxShape.__super.call(this);
+		this.x=1.0;
+		this.y=1.0;
+		this.z=1.0;
+		this.randomDirection=false;
+	}
+
+	__class(BoxShape,'laya.d3.core.particleShuriKen.module.shape.BoxShape',_super);
+	var __proto=BoxShape.prototype;
+	/**
+	*@inheritDoc
+	*/
+	__proto._getShapeBoundBox=function(boundBox){
+		var min=boundBox.min;
+		min.x=-this.x *0.5;
+		min.y=-this.y *0.5;
+		min.z=-this.z *0.5;
+		var max=boundBox.max;
+		max.x=this.x *0.5;
+		max.y=this.y *0.5;
+		max.z=this.z *0.5;
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto._getSpeedBoundBox=function(boundBox){
+		var min=boundBox.min;
+		min.x=0.0;
+		min.y=0.0;
+		min.z=0.0;
+		var max=boundBox.max;
+		max.x=0.0;
+		max.y=1.0;
+		max.z=0.0;
+	}
+
+	/**
+	*用于生成粒子初始位置和方向。
+	*@param position 粒子位置。
+	*@param direction 粒子方向。
+	*/
+	__proto.generatePositionAndDirection=function(position,direction,rand,randomSeeds){
+		if (rand){
+			rand.seed=randomSeeds[16];
+			ShapeUtils._randomPointInsideHalfUnitBox(position,rand);
+			randomSeeds[16]=rand.seed;
+			}else {
+			ShapeUtils._randomPointInsideHalfUnitBox(position);
+		}
+		position.x=this.x *position.x;
+		position.y=this.y *position.y;
+		position.z=this.z *position.z;
+		if (this.randomDirection){
+			if (rand){
+				rand.seed=randomSeeds[17];
+				ShapeUtils._randomPointUnitSphere(direction,rand);
+				randomSeeds[17]=rand.seed;
+				}else {
+				ShapeUtils._randomPointUnitSphere(direction);
+			}
+			}else {
+			direction.x=0.0;
+			direction.y=0.0;
+			direction.z=1.0;
+		}
+	}
+
+	__proto.cloneTo=function(destObject){
+		_super.prototype.cloneTo.call(this,destObject);
+		var destShape=destObject;
+		destShape.x=this.x;
+		destShape.y=this.y;
+		destShape.z=this.z;
+		destShape.randomDirection=this.randomDirection;
+	}
+
+	return BoxShape;
+})(BaseShape)
+
+
+/**
 *<code>TrailGeometry</code> 类用于创建拖尾渲染单元。
 */
 //class laya.d3.core.trail.TrailGeometry extends laya.d3.core.GeometryElement
@@ -47432,90 +47393,6 @@ var TrailGeometry=(function(_super){
 	]);
 	return TrailGeometry;
 })(GeometryElement)
-
-
-/**
-*与MeshQuadTexture基本相同。不过index不是固定的
-*/
-//class laya.webgl.utils.MeshTexture extends laya.webgl.utils.Mesh2D
-var MeshTexture=(function(_super){
-	function MeshTexture(){
-		MeshTexture.__super.call(this,laya.webgl.utils.MeshTexture.const_stride,4,4);
-		this.canReuse=true;
-		this.setAttributes(laya.webgl.utils.MeshTexture._fixattriInfo);
-	}
-
-	__class(MeshTexture,'laya.webgl.utils.MeshTexture',_super);
-	var __proto=MeshTexture.prototype;
-	__proto.addData=function(vertices,uvs,idx,matrix,rgba,ctx){
-		var vertsz=vertices.length / 2;
-		var startpos=this._vb.needSize(vertsz *MeshTexture.const_stride);
-		var f32pos=startpos >> 2;
-		var vbdata=this._vb._floatArray32 || this._vb.getFloat32Array();
-		var vbu32Arr=this._vb._uint32Array;
-		var ci=0;
-		for (var i=0;i < vertsz;i++){
-			var x=vertices[ci],y=vertices[ci+1];
-			var x1=x *matrix.a+y *matrix.c+matrix.tx;
-			var y1=x *matrix.b+y *matrix.d+matrix.ty;
-			vbdata[f32pos++]=x1;vbdata[f32pos++]=y1;
-			vbdata[f32pos++]=uvs[ci];vbdata[f32pos++]=uvs[ci+1];
-			ci+=2;
-			vbu32Arr[f32pos++]=rgba;
-			vbu32Arr[f32pos++]=0xff;
-		}
-		this._vb.setNeedUpload();
-		var vertN=this.vertNum;
-		if (vertN > 0){
-			var sz=idx.length;
-			if (sz > MeshTexture.tmpIdx.length)MeshTexture.tmpIdx=new Uint16Array(sz);
-			for (var ii=0;ii < sz;ii++){
-				MeshTexture.tmpIdx[ii]=idx[ii]+vertN;
-			}
-			this._ib.appendU16Array(MeshTexture.tmpIdx,idx.length);
-			}else {
-			this._ib.append(idx);
-		}
-		this._ib.setNeedUpload();
-		this.vertNum+=vertsz;
-		this.indexNum+=idx.length;
-	}
-
-	/**
-	*把本对象放到回收池中，以便getMesh能用。
-	*/
-	__proto.releaseMesh=function(){
-		this._vb.setByteLength(0);
-		this._ib.setByteLength(0);
-		this.vertNum=0;
-		this.indexNum=0;
-		laya.webgl.utils.MeshTexture._POOL.push(this);
-	}
-
-	__proto.destroy=function(){
-		this._ib.destroy();
-		this._vb.destroy();
-		this._ib.disposeResource();
-		this._vb.deleteBuffer();
-	}
-
-	MeshTexture.getAMesh=function(){
-		if (laya.webgl.utils.MeshTexture._POOL.length){
-			return laya.webgl.utils.MeshTexture._POOL.pop();
-		}
-		return new MeshTexture();
-	}
-
-	MeshTexture.const_stride=24;
-	MeshTexture._POOL=[];
-	__static(MeshTexture,
-	['_fixattriInfo',function(){return this._fixattriInfo=[
-		0x1406,4,0,
-		0x1401,4,16,
-		0x1401,4,20];},'tmpIdx',function(){return this.tmpIdx=new Uint16Array(4);}
-	]);
-	return MeshTexture;
-})(Mesh2D)
 
 
 /**
@@ -48084,16 +47961,88 @@ var AudioSound=(function(_super){
 })(EventDispatcher)
 
 
-//class laya.webgl.shader.d2.value.PrimitiveSV extends laya.webgl.shader.d2.value.Value2D
-var PrimitiveSV=(function(_super){
-	function PrimitiveSV(args){
-		PrimitiveSV.__super.call(this,0x04,0);
-		this._attribLocation=['position',0,'attribColor',1];
+/**
+*与MeshQuadTexture基本相同。不过index不是固定的
+*/
+//class laya.webgl.utils.MeshTexture extends laya.webgl.utils.Mesh2D
+var MeshTexture=(function(_super){
+	function MeshTexture(){
+		MeshTexture.__super.call(this,laya.webgl.utils.MeshTexture.const_stride,4,4);
+		this.canReuse=true;
+		this.setAttributes(laya.webgl.utils.MeshTexture._fixattriInfo);
 	}
 
-	__class(PrimitiveSV,'laya.webgl.shader.d2.value.PrimitiveSV',_super);
-	return PrimitiveSV;
-})(Value2D)
+	__class(MeshTexture,'laya.webgl.utils.MeshTexture',_super);
+	var __proto=MeshTexture.prototype;
+	__proto.addData=function(vertices,uvs,idx,matrix,rgba,ctx){
+		var vertsz=vertices.length / 2;
+		var startpos=this._vb.needSize(vertsz *MeshTexture.const_stride);
+		var f32pos=startpos >> 2;
+		var vbdata=this._vb._floatArray32 || this._vb.getFloat32Array();
+		var vbu32Arr=this._vb._uint32Array;
+		var ci=0;
+		for (var i=0;i < vertsz;i++){
+			var x=vertices[ci],y=vertices[ci+1];
+			var x1=x *matrix.a+y *matrix.c+matrix.tx;
+			var y1=x *matrix.b+y *matrix.d+matrix.ty;
+			vbdata[f32pos++]=x1;vbdata[f32pos++]=y1;
+			vbdata[f32pos++]=uvs[ci];vbdata[f32pos++]=uvs[ci+1];
+			ci+=2;
+			vbu32Arr[f32pos++]=rgba;
+			vbu32Arr[f32pos++]=0xff;
+		}
+		this._vb.setNeedUpload();
+		var vertN=this.vertNum;
+		if (vertN > 0){
+			var sz=idx.length;
+			if (sz > MeshTexture.tmpIdx.length)MeshTexture.tmpIdx=new Uint16Array(sz);
+			for (var ii=0;ii < sz;ii++){
+				MeshTexture.tmpIdx[ii]=idx[ii]+vertN;
+			}
+			this._ib.appendU16Array(MeshTexture.tmpIdx,idx.length);
+			}else {
+			this._ib.append(idx);
+		}
+		this._ib.setNeedUpload();
+		this.vertNum+=vertsz;
+		this.indexNum+=idx.length;
+	}
+
+	/**
+	*把本对象放到回收池中，以便getMesh能用。
+	*/
+	__proto.releaseMesh=function(){
+		this._vb.setByteLength(0);
+		this._ib.setByteLength(0);
+		this.vertNum=0;
+		this.indexNum=0;
+		laya.webgl.utils.MeshTexture._POOL.push(this);
+	}
+
+	__proto.destroy=function(){
+		this._ib.destroy();
+		this._vb.destroy();
+		this._ib.disposeResource();
+		this._vb.deleteBuffer();
+	}
+
+	MeshTexture.getAMesh=function(){
+		if (laya.webgl.utils.MeshTexture._POOL.length){
+			return laya.webgl.utils.MeshTexture._POOL.pop();
+		}
+		return new MeshTexture();
+	}
+
+	MeshTexture.const_stride=24;
+	MeshTexture._POOL=[];
+	__static(MeshTexture,
+	['_fixattriInfo',function(){return this._fixattriInfo=[
+		0x1406,4,0,
+		0x1401,4,16,
+		0x1401,4,20];},'tmpIdx',function(){return this.tmpIdx=new Uint16Array(4);}
+	]);
+	return MeshTexture;
+})(Mesh2D)
 
 
 /**
@@ -48418,6 +48367,18 @@ var HttpRequest=(function(_super){
 
 	return HttpRequest;
 })(EventDispatcher)
+
+
+//class laya.webgl.shader.d2.value.PrimitiveSV extends laya.webgl.shader.d2.value.Value2D
+var PrimitiveSV=(function(_super){
+	function PrimitiveSV(args){
+		PrimitiveSV.__super.call(this,0x04,0);
+		this._attribLocation=['position',0,'attribColor',1];
+	}
+
+	__class(PrimitiveSV,'laya.webgl.shader.d2.value.PrimitiveSV',_super);
+	return PrimitiveSV;
+})(Value2D)
 
 
 /**
@@ -48913,6 +48874,50 @@ var IndexBuffer3D=(function(_super){
 
 
 /**
+*<code>Sound</code> 类是用来播放控制声音的类。
+*引擎默认有两套声音方案，优先使用WebAudio播放声音，如果WebAudio不可用，则用H5Audio播放，H5Audio在部分机器上有兼容问题（比如不能混音，播放有延迟等）。
+*/
+//class laya.media.Sound extends laya.events.EventDispatcher
+var Sound=(function(_super){
+	function Sound(){
+		Sound.__super.call(this);;
+	}
+
+	__class(Sound,'laya.media.Sound',_super);
+	var __proto=Sound.prototype;
+	/**
+	*加载声音。
+	*@param url 地址。
+	*/
+	__proto.load=function(url){}
+	/**
+	*播放声音。
+	*@param startTime 开始时间,单位秒
+	*@param loops 循环次数,0表示一直循环
+	*@return 声道 SoundChannel 对象。
+	*/
+	__proto.play=function(startTime,loops){
+		(startTime===void 0)&& (startTime=0);
+		(loops===void 0)&& (loops=0);
+		return null;
+	}
+
+	/**
+	*释放声音资源。
+	*/
+	__proto.dispose=function(){}
+	/**
+	*获取总时间。
+	*/
+	__getset(0,__proto,'duration',function(){
+		return 0;
+	});
+
+	return Sound;
+})(EventDispatcher)
+
+
+/**
 *<code>SphereShape</code> 类用于创建球形粒子形状。
 */
 //class laya.d3.core.particleShuriKen.module.shape.SphereShape extends laya.d3.core.particleShuriKen.module.shape.BaseShape
@@ -49175,50 +49180,6 @@ var BufferState=(function(_super){
 
 	return BufferState;
 })(BufferStateBase)
-
-
-/**
-*<code>Sound</code> 类是用来播放控制声音的类。
-*引擎默认有两套声音方案，优先使用WebAudio播放声音，如果WebAudio不可用，则用H5Audio播放，H5Audio在部分机器上有兼容问题（比如不能混音，播放有延迟等）。
-*/
-//class laya.media.Sound extends laya.events.EventDispatcher
-var Sound=(function(_super){
-	function Sound(){
-		Sound.__super.call(this);;
-	}
-
-	__class(Sound,'laya.media.Sound',_super);
-	var __proto=Sound.prototype;
-	/**
-	*加载声音。
-	*@param url 地址。
-	*/
-	__proto.load=function(url){}
-	/**
-	*播放声音。
-	*@param startTime 开始时间,单位秒
-	*@param loops 循环次数,0表示一直循环
-	*@return 声道 SoundChannel 对象。
-	*/
-	__proto.play=function(startTime,loops){
-		(startTime===void 0)&& (startTime=0);
-		(loops===void 0)&& (loops=0);
-		return null;
-	}
-
-	/**
-	*释放声音资源。
-	*/
-	__proto.dispose=function(){}
-	/**
-	*获取总时间。
-	*/
-	__getset(0,__proto,'duration',function(){
-		return 0;
-	});
-
-	return Sound;
-})(EventDispatcher)
 
 
 /**
@@ -55322,6 +55283,79 @@ var Sprite=(function(_super){
 })(Node)
 
 
+//class enemyScript.BossFoot extends laya.components.Script
+var BossFoot=(function(_super){
+	function BossFoot(){
+		this.footHP=50;
+		this.thisSp=null;
+		this.footAni=null;
+		// 发射器精灵
+		this.top01=null;
+		this.top02=null;
+		BossFoot.__super.call(this);
+	}
+
+	__class(BossFoot,'enemyScript.BossFoot',_super);
+	var __proto=BossFoot.prototype;
+	__proto.onEnable=function(){
+		this.thisSp=this.owner;
+		this.footAni=this.owner.parent ["foot_ani"];
+		this.footAni.play();
+		this.top01=this.thisSp.parent.getChildByName("top01");
+		this.top02=this.thisSp.parent.getChildByName("top02");
+	}
+
+	__proto.onTriggerEnter=function(other,self,contact){
+		if (other.label==="bullet" && self.label==="boss_foot" && this.top01.destroyed && this.top02.destroyed){
+			this.footHP--;
+			if (this.footHP <=0){
+				console.log("foot销毁");
+				this.thisSp.destroy(true);
+			}
+		}
+	}
+
+	__proto.onDisable=function(){}
+	return BossFoot;
+})(Script)
+
+
+//class enemyScript.EnemyBullet extends laya.components.Script
+var EnemyBullet=(function(_super){
+	function EnemyBullet(){
+		this.thisSp=null;
+		EnemyBullet.__super.call(this);
+	}
+
+	__class(EnemyBullet,'enemyScript.EnemyBullet',_super);
+	var __proto=EnemyBullet.prototype;
+	__proto.onEnable=function(){
+		this.thisSp=this.owner;
+	}
+
+	__proto.onTriggerEnter=function(other,self,contact){
+		if (other.label==="body"){
+			this.thisSp.removeSelf();
+			Pool.recover("enemyBullet",this.thisSp);
+		}
+	}
+
+	__proto.onUpdate=function(){
+		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
+		if (this.thisSp.x > (scrollRect.x+scrollRect.width)||
+			this.thisSp.y > (scrollRect.y+scrollRect.height)||
+		this.thisSp.x < scrollRect.x ||
+		this.thisSp.y < scrollRect.y){
+			this.thisSp.removeSelf();
+			Pool.recover("enemyBullet",this.thisSp);
+		}
+	}
+
+	__proto.onDisable=function(){}
+	return EnemyBullet;
+})(Script)
+
+
 //class script.Bullet extends laya.components.Script
 var Bullet=(function(_super){
 	function Bullet(){
@@ -55352,12 +55386,36 @@ var Bullet=(function(_super){
 	}
 
 	__proto.onAniLoaded=function(){
+		this.ani.visible=true;
 		this.thisSp.visible=false;
 		this.thisSp.addChild(this.ani);
 	}
 
 	__proto.onUpdate=function(){
 		this.ani.pos(this.thisSp.x,this.thisSp.y);
+		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
+		if ((scrollRect.width !=0)&& this.thisSp.x > (scrollRect.x+scrollRect.width)||
+			this.thisSp.y > (scrollRect.y+scrollRect.height)||
+		this.thisSp.x < scrollRect.x ||
+		this.thisSp.y < scrollRect.y){
+			this.thisSp.removeSelf();
+			Pool.recover("myBullet",this.thisSp);
+		}
+	}
+
+	__proto.onTriggerEnter=function(other,self,contact){
+		if (other.label==="enemy_one" ||
+			other.label==="enemy_tow" ||
+		other.label==="enemy_three" ||
+		other.label==="enemy_four" ||
+		other.label==="enemy_five" ||
+		other.label==="can_shoot" ||
+		other.lanel==="boss_top01" ||
+		other.label==="boss_top02" ||
+		other.label==="boss_foot"){
+			this.thisSp.removeSelf();
+			Pool.recover("myBullet",this.thisSp);
+		}
 	}
 
 	__proto.onDisable=function(){
@@ -55369,17 +55427,348 @@ var Bullet=(function(_super){
 })(Script)
 
 
+//class propScript.PropFrame extends laya.components.Script
+var PropFrame=(function(_super){
+	function PropFrame(){
+		/**@prop {name:propM,tips:"M类道具",type:prefab}*/
+		this.propM=null;
+		/**@prop {name:propB,tips:"B类道具",type:prefab}*/
+		this.propB=null;
+		/**@prop {name:propF,tips:"F类道具",type:prefab}*/
+		this.propF=null;
+		/**@prop {name:propS,tips:"S类道具",type:prefab}*/
+		this.propS=null;
+		/**@prop {name:propL,tips:"L类道具",type:prefab}*/
+		this.propL=null;
+		/**@prop {name:propR,tips:"R类道具",type:prefab}*/
+		this.propR=null;
+		this.canShootSp=null;
+		this.noShootSp=null;
+		this.canShootAni=null;
+		this.rigid=null;
+		this.box=null;
+		PropFrame.__super.call(this);
+	}
+
+	__class(PropFrame,'propScript.PropFrame',_super);
+	var __proto=PropFrame.prototype;
+	__proto.onEnable=function(){
+		this.box=this.owner;
+		this.canShootSp=this.box.getChildByName("can_shoot");
+		this.canShootSp.visible=false;
+		this.noShootSp=this.box.getChildByName("no_shoot");
+		this.noShootSp.visible=false;
+		this.rigid=this.box.getComponent(RigidBody);
+		this.canShootAni=this.owner ["can_shoot_ani"];
+		this.playNoShoot();
+	}
+
+	/**
+	*不启动刚体，显示关闭状态的图片，
+	*时间维持一秒，期间子弹不可击打该道具
+	*/
+	__proto.playNoShoot=function(){
+		this.rigid.enabled=false;
+		this.noShootSp.visible=true;
+		this.canShootSp.visible=false;
+		Laya.timer.once(1000,this,this.playCanShoot);
+	}
+
+	/**
+	*启动刚体，播放打开状态的动画，
+	*时间维持一秒，期间子弹可以击打该道具
+	*/
+	__proto.playCanShoot=function(){
+		this.rigid.enabled=true;
+		this.noShootSp.visible=false;
+		this.canShootSp.visible=true;
+		this.canShootAni.play(0,false,"can_shoot_ani");
+		Laya.timer.once(1000,this,this.playNoShoot);
+	}
+
+	__proto.onTriggerEnter=function(other,self,contact){
+		if (other.label==="bullet"){
+			var aniBoom=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
+			aniBoom.play(0,false);
+			aniBoom.pos(this.box.x,this.box.y);
+			this.box.parent.addChild(aniBoom);
+			var prop=this.createProp();
+			prop.pos(this.box.x,this.box.y);
+			this.box.parent.addChild(prop);
+			this.box.removeSelf();
+			Pool.recover("enemyProp",this.box);
+		}
+	}
+
+	/**
+	*随机创建道具
+	*/
+	__proto.createProp=function(){
+		var type=Math.random();
+		var prop;
+		if (type >=0 && type < 0.15){
+			prop=Pool.getItemByCreateFun("prop_m",this.propM.create,this.propM);
+			}else if (type >=0.15 && type < 0.3){
+			prop=Pool.getItemByCreateFun("prop_b",this.propB.create,this.propB);
+			}else if (type >=0.3 && type < 0.45){
+			prop=Pool.getItemByCreateFun("prop_f",this.propF.create,this.propF);
+			}else if (type >=0.45 && type < 0.6){
+			prop=Pool.getItemByCreateFun("prop_s",this.propS.create,this.propS);
+			}else if (type >=0.6 && type < 0.75){
+			prop=Pool.getItemByCreateFun("prop_l",this.propL.create,this.propL);
+			}else if (type >=0.75 && type < 0.9){
+			prop=Pool.getItemByCreateFun("prop_r",this.propR.create,this.propR);
+		}
+		return prop;
+	}
+
+	// 创建爆炸动画
+	__proto.createEnemyObjBoomAni=function(){
+		var ani=new Animation();
+		ani.loadAnimation("GameScene/EnemyObjBoom.ani",null,"res/atlas/boom.atlas");
+		ani.on("complete",null,function(){
+			ani.removeSelf();
+			Pool.recover("enemyObjBoom",ani);
+		});
+		return ani;
+	}
+
+	__proto.onUpdate=function(){
+		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
+		if ((scrollRect.width !=0)&& this.box.x < scrollRect.x){
+			this.box.removeSelf();
+			Pool.recover("enemyProp",this.box);
+		}
+	}
+
+	__proto.onDisable=function(){
+		Laya.timer.clearAll(this);
+	}
+
+	return PropFrame;
+})(Script)
+
+
+//class enemyScript.EnemyFive extends laya.components.Script
+var EnemyFive=(function(_super){
+	function EnemyFive(){
+		/**@prop {name:enemyBullet,tips:"敌人子弹",type:prefab}*/
+		this.enemyBullet=null;
+		// 本对象
+		this.box=null;
+		// 人物对象
+		this.role=null;
+		// 目前显现的图片
+		this.curShowSp=null;
+		// 目前显示的动画
+		this.curShowAni=null;
+		// 血值
+		this.PH=NaN;
+		// 所有图片
+		this.enemyFiveSp01=null;
+		this.enemyFiveSp02=null;
+		this.enemyFiveSp03=null;
+		this.enemyFiveSp04=null;
+		// 所有动画
+		this.enemyFiveAni01=null;
+		this.enemyFiveAni02=null;
+		this.enemyFiveAni03=null;
+		this.enemyFiveAni04=null;
+		// 子弹的参数
+		this.bulletX=0;
+		this.bulletY=0;
+		this.bulletvelocityX=-1;
+		this.bulletvelocityY=0;
+		EnemyFive.__super.call(this);
+	}
+
+	__class(EnemyFive,'enemyScript.EnemyFive',_super);
+	var __proto=EnemyFive.prototype;
+	__proto.onEnable=function(){
+		var _$this=this;
+		this.box=this.owner;
+		this.box.visible=true;
+		this.PH=10;
+		this.role=Role.ROLE.owner;
+		this.enemyFiveSp01=this.box.getChildByName("enemy_five01");
+		this.enemyFiveSp02=this.box.getChildByName("enemy_five02");
+		this.enemyFiveSp03=this.box.getChildByName("enemy_five03");
+		this.enemyFiveSp04=this.box.getChildByName("enemy_five04");
+		this.enemyFiveAni01=this.owner ["enemy_five01_ani"];
+		this.enemyFiveAni02=this.owner ["enemy_five02_ani"];
+		this.enemyFiveAni03=this.owner ["enemy_five03_ani"];
+		this.enemyFiveAni04=this.owner ["enemy_five04_ani"];
+		this.curShowSp=this.enemyFiveSp01;
+		this.curShowAni=this.enemyFiveAni01;
+		this.enemyFiveAni01.play(0,false);
+		this.enemyFiveAni01.on("complete",this,start=function(){
+			_$this.calculateAngle();
+			Laya.timer.loop(1000,_$this,_$this.calculateAngle);
+			Laya.timer.once(0,_$this,_$this.shootTimeOne);
+		});
+	}
+
+	/**
+	*以第四类敌人中心点为中心，
+	*向下为 y 轴正方，
+	*向右为 x 轴正方。
+	*以x轴正方为起始线，
+	*计算人物与第四类敌人（中心点）所形成的的角度。
+	*/
+	__proto.calculateAngle=function(){
+		var xx=Math.pow(Math.abs(this.role.x-this.box.x),2);
+		var yy=Math.pow(Math.abs(this.role.y-this.box.y),2);
+		var radius=Math.sqrt(xx+yy);
+		var rad=this.getRad(this.role.x-this.box.x,this.role.y-this.box.y,radius);
+		var angle=180 / Math.PI *rad;
+		if (angle >=145 && angle < 360){
+			this.changeShow(this.enemyFiveSp02,this.enemyFiveAni02);
+			this.bulletX=this.box.x-25;
+			this.bulletY=this.box.y-1;
+			this.bulletvelocityX=-1;
+			this.bulletvelocityY=0;
+			}else if (angle >=112.5 && angle < 145){
+			this.changeShow(this.enemyFiveSp03,this.enemyFiveAni03);
+			this.bulletX=this.box.x-25;
+			this.bulletY=this.box.y-15;
+			this.bulletvelocityX=-1;
+			this.bulletvelocityY=-0.5;
+			}else if (angle >=0 && angle < 112.5){
+			this.changeShow(this.enemyFiveSp04,this.enemyFiveAni04);
+			this.bulletX=this.box.x-15;
+			this.bulletY=this.box.y-25;
+			this.bulletvelocityX=-0.5;
+			this.bulletvelocityY=-1;
+		}
+	}
+
+	/**
+	*改变显示的图片及动画
+	*@param Sp 将要显示的图片
+	*@param ani 将要播放的动画
+	*/
+	__proto.changeShow=function(Sp,ani){
+		this.curShowAni.stop();
+		this.curShowSp.visible=false;
+		this.curShowSp=Sp;
+		this.curShowAni=ani;
+		this.curShowSp.visible=true;
+		this.curShowAni.play();
+	}
+
+	/**
+	*发射子弹
+	*@param x 子弹要发射的 x 坐标
+	*@param y 子弹摇发射的 y 坐标
+	*@param velocityX 子弹 x 线性速度
+	*@param velocityY 子弹 y 线性速度
+	*/
+	__proto.shoot=function(x,y,velocityX,velocityY){
+		var bulletSp=Pool.getItemByCreateFun("enemyBullet",this.enemyBullet.create,this.enemyBullet);
+		bulletSp.pos(x,y);
+		var bulletRigid=bulletSp.getComponent(RigidBody);
+		bulletRigid.setVelocity({x:velocityX,y:velocityY});
+		this.box.parent.addChild(bulletSp);
+	}
+
+	/**
+	*第一颗子弹
+	*停顿600毫秒后发射第二颗
+	*/
+	__proto.shootTimeOne=function(){
+		this.shoot(this.bulletX,this.bulletY,this.bulletvelocityX,this.bulletvelocityY);
+		Laya.timer.once(600,this,this.shootTimeTow);
+	}
+
+	/**
+	*第二颗子弹
+	*停顿600毫秒后发射第三颗
+	*/
+	__proto.shootTimeTow=function(){
+		this.shoot(this.bulletX,this.bulletY,this.bulletvelocityX,this.bulletvelocityY);
+		Laya.timer.once(600,this,this.shootTimeThree);
+	}
+
+	/**
+	*第三颗子弹
+	*停顿2.5秒后重复发射一二三颗子弹
+	*/
+	__proto.shootTimeThree=function(){
+		this.shoot(this.bulletX,this.bulletY,this.bulletvelocityX,this.bulletvelocityY);
+		Laya.timer.once(2500,this,this.shootTimeOne);
+	}
+
+	/**
+	*获取以第四类敌人为为中心，人物位置与第四类敌人，
+	*以x轴正方为起始线的弧度值
+	*
+	*/
+	__proto.getRad=function(xx,yy,moveRadius){
+		var rad=yy >=0 ? (Math.PI *2-Math.acos(xx / moveRadius)):(Math.acos(xx / moveRadius));
+		return rad;
+	}
+
+	__proto.onTriggerEnter=function(other,self,contact){
+		if (other.label==="bullet"){
+			this.PH--;
+			if (this.PH <=0){
+				var aniBoom=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
+				aniBoom.width=50;
+				aniBoom.height=50;
+				aniBoom.pos(this.box.x-25,this.box.y-25);
+				this.box.parent.addChild(aniBoom);
+				aniBoom.play(0,false);
+				SoundManager.playSound("sound/enemy_four_five_boom.wav");
+				this.box.removeSelf();
+				Pool.recover("enemyFive",this.box);
+			}
+		}
+	}
+
+	// 创建爆炸动画
+	__proto.createEnemyObjBoomAni=function(){
+		var ani=new Animation();
+		ani.loadAnimation("GameScene/EnemyObjBoom.ani",null,"res/atlas/boom.atlas");
+		ani.on("complete",null,function(){
+			ani.removeSelf();
+			Pool.recover("enemyObjBoom",ani);
+		});
+		return ani;
+	}
+
+	__proto.onUpdate=function(){
+		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
+		if ((scrollRect.width !=0)&& this.box.x < scrollRect.x){
+			this.box.removeSelf();
+			Pool.recover("enemyFive",this.box);
+		}
+	}
+
+	__proto.onDisable=function(){
+		Laya.timer.clearAll(this);
+	}
+
+	return EnemyFive;
+})(Script)
+
+
 //class script.Role extends laya.components.Script
 var Role=(function(_super){
 	function Role(){
-		/**@prop {name:intType,tips:"整数类型示例",type:Int,default:1000}*/
-		this.intType=1000;
-		/**@prop {name:numType,tips:"数字类型示例",type:Number,default:1000}*/
-		this.numType=1000;
-		/**@prop {name:strType,tips:"字符串类型示例",type:String,default:"hello laya"}*/
-		this.strType="hello laya";
-		/**@prop {name:boolType,tips:"布尔类型示例",type:Bool,default:true}*/
-		this.boolType=true;
+		/**@prop {name:enemyOne,tips:"第一类敌人",type:prefab}*/
+		this.enemyOne=null;
+		/**@prop {name:enemyTow,tips:"第二类敌人",type:prefab}*/
+		this.enemyTow=null;
+		/**@prop {name:enemyThree,tips:"第三类敌人",type:prefab}*/
+		this.enemyThree=null;
+		/**@prop {name:enemyFour,tips:"第四类敌人",type:prefab}*/
+		this.enemyFour=null;
+		/**@prop {name:enemyFive,tips:"第五类敌人",type:prefab}*/
+		this.enemyFive=null;
+		/**@prop {name:enemyBossOne,tips:"第一关Boss",type:prefab}*/
+		this.enemyBossOne=null;
+		/**@prop {name:propFrame,tips:"道具框架",type:prefab}*/
+		this.propFrame=null;
 		/**@prop {name:bullet,tips:"触碰即销毁的地图块",type:prefab}*/
 		this.bullet=null;
 		//人物动画
@@ -55404,11 +55793,13 @@ var Role=(function(_super){
 		this.curWhere="inland";
 		// 人物子弹类型
 		this.bulletType=1;
+		// 摇杆最后一次移动的角度
+		this.lastAngle=-1;
 		// 人物是否可以跳跃、否正在跳跃，并且初始化
 		this.canJump=true;
 		this.isJumping=true;
-		// 存储子弹的数组
-		this.bullets=null;
+		// 人物是否存活
+		this.isAlive=true;
 		// blue_r_nobl_run_inwater
 		this.bulletOffsetForRoleX=NaN;
 		this.bulletOffsetForRoleY=NaN;
@@ -55422,6 +55813,7 @@ var Role=(function(_super){
 	var __proto=Role.prototype;
 	__proto.onEnable=function(){
 		this.roleSp=this.owner;
+		this.roleSp.pos(66,0);
 		this.roleParentSp=this.roleSp.parent;
 		this.rigid=this.roleSp.getComponent(RigidBody);
 		var boxs=this.roleSp.getComponents(BoxCollider);
@@ -55429,20 +55821,6 @@ var Role=(function(_super){
 		this.footBox=boxs[0];
 		this.ani=new Animation();
 		this.ani.loadAnimation("GameScene/Role.ani",Handler.create(this,this.onAniLoaded),"res/atlas/role_blue.atlas");
-		this.bullets=[];
-		this.roleSp.pos(900,0);
-	}
-
-	__proto.getDir=function(){
-		return this.curDirection;
-	}
-
-	__proto.getRigidBound=function(){
-		return this.bodyBox.x+","+this.bodyBox.y+","+this.bodyBox.width+","+this.bodyBox.height;
-	}
-
-	__proto.getIsPlay=function(){
-		return this.ani.isPlaying;
 	}
 
 	/**
@@ -55451,26 +55829,79 @@ var Role=(function(_super){
 	__proto.onTriggerEnter=function(other,self,contact){
 		if ((other.label==="pass_n" || other.label==="pass_y")&& this.rigid.linearVelocity.y > 0 && self.label==="foot"){
 			this.rigid.type="kinematic";
-			this.rigid.setVelocity({x:this.rigid.linearVelocity.x,y:0});
-			this.canJump=true;
-			this.isJumping=false;
-			this.changeAni(this.curDirection,this.curOblique,"fire","inland","run");
+			if (this.isAlive){
+				this.rigid.setVelocity({x:this.rigid.linearVelocity.x,y:0});
+				this.canJump=true;
+				this.isJumping=false;
+				this.changeAni(this.curDirection,this.curOblique,"fire","inland","run");
+				}else {
+				this.rigid.setVelocity({x:0,y:0});
+				this.ani.gotoAndStop(4);
+				this.rigid.enabled=false;
+			}
+			if (this.lastAngle==-1){
+				this.move(this.lastAngle);
+			}
 		}
 		if (other.label==="water" && this.rigid.linearVelocity.y > 0 && self.label==="foot"){
-			this.isJumping=false;
-			this.canJump=false;
-			this.changeAni(this.curDirection,"nobl","run","inwater","water");
 			this.rigid.type="kinematic";
-			this.rigid.setVelocity({x:this.rigid.linearVelocity.x,y:0});
+			if (this.isAlive){
+				this.isJumping=false;
+				this.canJump=false;
+				this.changeAni(this.curDirection,"nobl","run","inwater","run");
+				this.rigid.setVelocity({x:this.rigid.linearVelocity.x,y:0});
+				}else {
+				this.rigid.setVelocity({x:0,y:0});
+				this.ani.gotoAndStop(4);
+				this.rigid.enabled=false;
+			}
+			if (this.lastAngle==-1){
+				this.move(this.lastAngle);
+			}
 		}
 		if (other.label==="wall" && !this.isJumping){
 			this.changeAni(this.curDirection,this.curOblique,"fire","inland","run");
 			this.canJump=true;
 			this.rigid.setVelocity({x:this.rigid.linearVelocity.x,y:-1});
 		}
-		if (other.label==="touchDestroy"){
+		if (other.label==="touchDestroy" && self.label==="body"){
 			this.canJump=true;
 		}
+		if ((other.label==="enemy_bullet" ||
+			other.label==="bossOneBullet" ||
+		other.label==="enemy_one" ||
+		other.label==="enemy_tow" ||
+		other.label==="enemy_three")&&
+		self.label==="body" &&
+		this.isAlive){
+			this.isAlive=false;
+			this.ani.play(0,false,"blue_"+this.curDirection+"_nobl_die_any");
+			this.rigid.type="dynamic";
+			this.rigid.setVelocity({x:-this.rigid.linearVelocity.x,y:-5});
+			Laya.stage.timer.clearAll(Controller);
+		}
+	}
+
+	/**
+	*重新设置人物状态，相当于复活
+	*/
+	__proto.reStart=function(){
+		this.curDirection="r";
+		this.curOblique="nobl";
+		this.curBehavior="jump";
+		this.curWhere="inland";
+		this.bulletType=1;
+		this.lastAngle=-1;
+		this.canJump=false;
+		this.isJumping=true;
+		this.isAlive=true;
+		this.ani.play(0,true,"blue_r_nobl_jump_inland");
+		this.rigid.enabled=true;
+		this.rigid.type="dynamic";
+	}
+
+	__proto.pause=function(){
+		SoundManager.stopAll();
 	}
 
 	/**
@@ -55484,9 +55915,10 @@ var Role=(function(_super){
 	}
 
 	/**
-	*跳跃
+	*向上跳跃
 	*/
-	__proto.jump=function(){
+	__proto.jumpUp=function(){
+		if (!this.isAlive)return;
 		if (!this.canJump)return;
 		this.rigid.type="dynamic";
 		this.rigid.gravityScale=1;
@@ -55497,25 +55929,30 @@ var Role=(function(_super){
 	}
 
 	/**
+	*向下跳跃
+	*/
+	__proto.jimpDown=function(){
+		if (this.curBehavior==="lie"){
+			console.log("下去");
+			this.rigid.type="dynamic";
+			this.rigid.applyForceToCenter({x:0,y:-50});
+			this.changeAni(this.curDirection,"nobl","jump","inland","jump");
+		}
+	}
+
+	/**
 	*开火
 	*/
 	__proto.onFire=function(){
+		if (!this.isAlive)return;
+		SoundManager.playSound("sound/hitsnd1.wav");
 		switch(this.bulletType){
 			case 1:{
-					console.log("发送");
-					console.log(this.bulletOffsetForRoleX);
-					console.log(this.bulletOffsetForRoleY);
-					console.log(this.bulletVelocityX);
-					console.log(this.bulletVelocityY);
-					console.log(Laya.stage.scrollRect);
-					console.log(this.roleSp.x);
-					console.log(this.roleSp.y);
 					var bulletSp=Pool.getItemByCreateFun("myBullet",this.bullet.create,this.bullet);
 					bulletSp.pos(this.roleSp.x+this.bulletOffsetForRoleX,this.roleSp.y+this.bulletOffsetForRoleY);
 					var bulletRigid=bulletSp.getComponent(RigidBody);
 					bulletRigid.setVelocity({x:this.bulletVelocityX,y:this.bulletVelocityY});
 					this.roleParentSp.addChild(bulletSp);
-					this.bullets.push(bulletSp);
 					break ;
 				}
 			default :{
@@ -55531,44 +55968,85 @@ var Role=(function(_super){
 	*@param angle:摇杆角度
 	*/
 	__proto.move=function(angle){
+		if (!this.isAlive)return;
+		this.lastAngle=angle;
 		if (angle >=67.5 && angle < 112.5){
 			this.rigid.linearVelocity={x:0,y:this.rigid.linearVelocity.y};
 			this.changeAni(this.curDirection,"nobl","upfire",this.curWhere,"run");
-			this.setBulletInLand(10,25,-13,0,-2);
+			if (this.curWhere==="inland"){
+				this.setBulletInLand(3,24,-20,0,-3);
+				}else if (this.curWhere==="inwater"){
+				this.setBulletInWater(3,24,20,0,-3);
+			}
 			}else if (angle >=247.5 && angle < 292.5){
-			if (this.rigid.linearVelocity.y !=0)return;
-			this.changeAni(this.curDirection,"nobl","lie",this.curWhere,"lie");
-			this.rigid.setVelocity({x:0,y:0});
-			this.setBulletInLand(-10,40,34,2,0);
+			if (this.rigid.linearVelocity.y==0){
+				this.changeAni(this.curDirection,"nobl","lie",this.curWhere,"lie");
+				this.rigid.setVelocity({x:0,y:0});
+				if (this.curWhere==="inland"){
+					this.setBulletInLand(-10,40,45,3,0);
+					}else if (this.curWhere==="inwater"){
+					this.setBulletInWater(-15,45,51,3,0);
+				}
+				}else {
+				this.setBulletInLand(10,10,30,0,3);
+			}
 			}else if (angle >=157.5 && angle < 202.5){
-			this.rigid.linearVelocity={x:-1,y:this.rigid.linearVelocity.y};
+			this.rigid.linearVelocity={x:-1.5,y:this.rigid.linearVelocity.y};
 			this.changeAni("l","nobl","fire",this.curWhere,"run");
-			this.setBulletInLand(-5,35,18,2,0);
+			if (this.curWhere==="inland"){
+				this.setBulletInLand(-15,45,19,3,0);
+				}else if (this.curWhere==="inwater"){
+				this.setBulletInWater(-15,45,51,3,0);
+			}
 			}else if ((angle >=0 && angle < 22.5)||(angle >=337.5 && angle < 360)){
-			this.rigid.setVelocity({x:1,y:this.rigid.linearVelocity.y});
+			this.rigid.setVelocity({x:1.5,y:this.rigid.linearVelocity.y});
 			this.changeAni("r","nobl","fire",this.curWhere,"run");
-			this.setBulletInLand(-5,35,18,2,0);
+			if (this.curWhere==="inland"){
+				this.setBulletInLand(-15,45,19,3,0);
+				}else if (this.curWhere==="inwater"){
+				this.setBulletInWater(-15,45,51,3,0);
+			}
 			}else if (angle >=112.5 && angle < 157.5){
-			this.rigid.setVelocity({x:-1,y:this.rigid.linearVelocity.y});
+			this.rigid.setVelocity({x:-1.5,y:this.rigid.linearVelocity.y});
 			this.changeAni("l","uobl","fire",this.curWhere,"run");
-			this.setBulletInLand(0,30,0,2,-1.5);
+			if (this.curWhere==="inland"){
+				this.setBulletInLand(-10,35,0,3,-2);
+				}else if (this.curWhere==="inwater"){
+				this.setBulletInWater(-10,35,32,3,-2);
+			}
 			}else if (angle >=202.5 && angle < 247.5){
-			this.rigid.setVelocity({x:-1,y:this.rigid.linearVelocity.y});
+			this.rigid.setVelocity({x:-1.5,y:this.rigid.linearVelocity.y});
 			this.changeAni("l","dobl","fire",this.curWhere,"run");
-			this.setBulletInLand(0,30,25,2,1.5);
+			if (this.curWhere==="inland"){
+				this.setBulletInLand(-10,35,35,3,2);
+				}else if (this.curWhere==="inwater"){
+				this.setBulletInWater(-15,45,51,3,0);
+			}
 			}else if (angle >=22.5 && angle < 67.5){
-			this.rigid.setVelocity({x:1,y:this.rigid.linearVelocity.y});
+			this.rigid.setVelocity({x:1.5,y:this.rigid.linearVelocity.y});
 			this.changeAni("r","uobl","fire",this.curWhere,"run");
-			this.setBulletInLand(0,30,0,2,-1.5);
+			if (this.curWhere==="inland"){
+				this.setBulletInLand(10,35,0,3,-2);
+				}else if (this.curWhere==="inwater"){
+				this.setBulletInWater(-10,35,32,3,-2);
+			}
 			}else if (angle >=292.5 && angle < 337.5){
-			this.rigid.setVelocity({x:1,y:this.rigid.linearVelocity.y});
+			this.rigid.setVelocity({x:1.5,y:this.rigid.linearVelocity.y});
 			this.changeAni("r","dobl","fire",this.curWhere,"run");
-			this.setBulletInLand(0,30,25,2,1.5);
+			if (this.curWhere==="inland"){
+				this.setBulletInLand(-10,35,35,3,2);
+				}else if (this.curWhere==="inwater"){
+				this.setBulletInWater(-15,45,51,3,0);
+			}
 			}else {
 			this.rigid.linearVelocity={x:0,y:this.rigid.linearVelocity.y};
 			if (!this.isJumping){
 				this.changeAni(this.curDirection,"nobl","stand",this.curWhere,"run");
-				this.setBulletInLand(10,30,18,2,0);
+				if (this.curWhere==="inland"){
+					this.setBulletInLand(-15,45,19,3,0);
+					}else if (this.curWhere==="inwater"){
+					this.setBulletInWater(-15,45,51,3,0);
+				}
 			}
 		}
 	}
@@ -55629,19 +56107,22 @@ var Role=(function(_super){
 	__proto.changeCollider=function(state){
 		switch(state){
 			case "jump":{
-					this.setCollider(0,0,23,28);
+					if (this.curWhere==="inwater")return;
+					this.setCollider(0,0,26,30);
 					break ;
 				}
 			case "run":{
-					this.setCollider(4,0,23,45);
+					if (this.curBehavior==="jump")return;
+					if (this.curWhere==="inland"){
+						this.setCollider(0,0,25,55);
+						}else {
+						this.setCollider(0,34,25,25);
+					}
 					break ;
 				}
 			case "lie":{
-					this.setCollider(-10,20,50,30);
-					break ;
-				}
-			case "water":{
-					this.setCollider(0,18,30,25);
+					if (this.curBehavior==="jump" || this.curWhere==="inwater")return;
+					this.setCollider(-12,34,55,28);
 					break ;
 				}
 			default :{
@@ -55663,7 +56144,7 @@ var Role=(function(_super){
 	*/
 	__proto.onAniLoaded=function(){
 		this.roleSp.visible=false;
-		this.changeAni(this.curDirection,this.curOblique,this.curBehavior,this.curWhere,"jump");
+		this.ani.play(0,true,"blue_r_nobl_jump_inland");
 		this.roleParentSp.addChild(this.ani);
 	}
 
@@ -55674,18 +56155,6 @@ var Role=(function(_super){
 	__proto.onUpdate=function(){
 		this.ani.x=this.roleSp.x;
 		this.ani.y=this.roleSp.y;
-		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
-		for (var i=0;i < this.bullets.length;i++){
-			if (this.bullets[i].x > (scrollRect.x+scrollRect.width)||
-				this.bullets[i].y > (scrollRect.y+scrollRect.height)||
-			this.bullets[i].x < scrollRect.x ||
-			this.bullets[i].y < scrollRect.y){
-				this.bullets[i].removeSelf();
-				Pool.recover("myBullet",this.bullets[i]);
-				this.bullets.splice(i,1);
-				console.log("长度 = "+this.bullets.length);
-			}
-		}
 	}
 
 	__proto.onDisable=function(){}
@@ -55694,21 +56163,849 @@ var Role=(function(_super){
 })(Script)
 
 
+//class propScript.TouchDestroy extends laya.components.Script
+var TouchDestroy=(function(_super){
+	function TouchDestroy(){
+		this.thisSp=null;
+		TouchDestroy.__super.call(this);
+	}
+
+	__class(TouchDestroy,'propScript.TouchDestroy',_super);
+	var __proto=TouchDestroy.prototype;
+	__proto.onEnable=function(){
+		this.thisSp=this.owner;
+	}
+
+	__proto.createEnemyObjBoomAni=function(){
+		var ani=new Animation();
+		ani.loadAnimation("GameScene/EnemyObjBoom.ani",null,"res/atlas/boom.atlas");
+		ani.on("complete",null,function(){
+			ani.removeSelf();
+			Pool.recover("enemyObjBoom",ani);
+		});
+		return ani;
+	}
+
+	__proto.onTriggerEnter=function(other,self,contact){
+		if (other.label==="body"){
+			var aniBoom=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
+			aniBoom.pos(this.thisSp.x,this.thisSp.y);
+			this.thisSp.parent.addChild(aniBoom);
+			aniBoom.play(0,false);
+			SoundManager.playSound("sound/stone_boom.wav");
+			var thisCollider=this.owner.getComponent(BoxCollider);
+			thisCollider.destroy();
+			this.thisSp.removeSelf();
+		}
+	}
+
+	__proto.onDisable=function(){
+		Pool.recover("touchDestroy",this.thisSp);
+	}
+
+	return TouchDestroy;
+})(Script)
+
+
+//class propScript.PropS extends laya.components.Script
+var PropS=(function(_super){
+	function PropS(){
+		// 本对象精灵
+		this.thisSp=null;
+		// 本对象刚体
+		this.rigid=null;
+		PropS.__super.call(this);
+	}
+
+	__class(PropS,'propScript.PropS',_super);
+	var __proto=PropS.prototype;
+	__proto.onEnable=function(){
+		this.thisSp=this.owner;
+		this.rigid=this.thisSp.getComponent(RigidBody);
+		this.rigid.setVelocity({x:2 ,y:-6});
+	}
+
+	__proto.onTriggerEnter=function(other,self,contact){
+		if (this.rigid.linearVelocity.y > 0 && (other.label==="pass_y" || other.label==="pass_n" || other.label==="water")){
+			this.rigid.type="kinematic";
+			this.rigid.setVelocity({x:0 ,y:0});
+		}
+		if (other.label==="body"){
+			SoundManager.playSound("sound/get_prop.wav");
+			this.thisSp.removeSelf();
+			Pool.recover("prop_s",this.thisSp);
+		}
+	}
+
+	__proto.onUpdate=function(){
+		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
+		if ((scrollRect.width !=0)&& (this.thisSp.x < scrollRect.x || this.thisSp.y > (scrollRect.y+scrollRect.height))){
+			this.thisSp.removeSelf();
+			Pool.recover("prop_s",this.thisSp);
+		}
+	}
+
+	__proto.onDisable=function(){}
+	return PropS;
+})(Script)
+
+
+//class propScript.PropR extends laya.components.Script
+var PropR=(function(_super){
+	function PropR(){
+		// 本对象精灵
+		this.thisSp=null;
+		// 本对象刚体
+		this.rigid=null;
+		PropR.__super.call(this);
+	}
+
+	__class(PropR,'propScript.PropR',_super);
+	var __proto=PropR.prototype;
+	__proto.onEnable=function(){
+		this.thisSp=this.owner;
+		this.rigid=this.thisSp.getComponent(RigidBody);
+		this.rigid.setVelocity({x:2 ,y:-6});
+	}
+
+	__proto.onTriggerEnter=function(other,self,contact){
+		if (this.rigid.linearVelocity.y > 0 && (other.label==="pass_y" || other.label==="pass_n" || other.label==="water")){
+			this.rigid.type="kinematic";
+			this.rigid.setVelocity({x:0 ,y:0});
+		}
+		if (other.label==="body"){
+			SoundManager.playSound("sound/get_prop.wav");
+			this.thisSp.removeSelf();
+			Pool.recover("prop_r",this.thisSp);
+		}
+	}
+
+	__proto.onUpdate=function(){
+		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
+		if ((scrollRect.width !=0)&& (this.thisSp.x < scrollRect.x || this.thisSp.y > (scrollRect.y+scrollRect.height))){
+			this.thisSp.removeSelf();
+			Pool.recover("prop_r",this.thisSp);
+		}
+	}
+
+	__proto.onDisable=function(){}
+	return PropR;
+})(Script)
+
+
+//class propScript.PropM extends laya.components.Script
+var PropM=(function(_super){
+	function PropM(){
+		// 本对象精灵
+		this.thisSp=null;
+		// 本对象刚体
+		this.rigid=null;
+		PropM.__super.call(this);
+	}
+
+	__class(PropM,'propScript.PropM',_super);
+	var __proto=PropM.prototype;
+	__proto.onEnable=function(){
+		this.thisSp=this.owner;
+		this.rigid=this.thisSp.getComponent(RigidBody);
+		this.rigid.setVelocity({x:2 ,y:-6});
+	}
+
+	__proto.onTriggerEnter=function(other,self,contact){
+		if (this.rigid.linearVelocity.y > 0 && (other.label==="pass_y" || other.label==="pass_n" || other.label==="water")){
+			this.rigid.type="kinematic";
+			this.rigid.setVelocity({x:0 ,y:0});
+		}
+		if (other.label==="body"){
+			SoundManager.playSound("sound/get_prop.wav");
+			this.thisSp.removeSelf();
+			Pool.recover("prop_m",this.thisSp);
+		}
+	}
+
+	__proto.onUpdate=function(){
+		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
+		if ((scrollRect.width !=0)&& (this.thisSp.x < scrollRect.x || this.thisSp.y > (scrollRect.y+scrollRect.height))){
+			this.thisSp.removeSelf();
+			Pool.recover("prop_m",this.thisSp);
+		}
+	}
+
+	__proto.onDisable=function(){}
+	return PropM;
+})(Script)
+
+
+//class propScript.PropL extends laya.components.Script
+var PropL=(function(_super){
+	function PropL(){
+		// 本对象精灵
+		this.thisSp=null;
+		// 本对象刚体
+		this.rigid=null;
+		PropL.__super.call(this);
+	}
+
+	__class(PropL,'propScript.PropL',_super);
+	var __proto=PropL.prototype;
+	__proto.onEnable=function(){
+		this.thisSp=this.owner;
+		this.rigid=this.thisSp.getComponent(RigidBody);
+		this.rigid.setVelocity({x:2 ,y:-6});
+	}
+
+	__proto.onTriggerEnter=function(other,self,contact){
+		if (this.rigid.linearVelocity.y > 0 && (other.label==="pass_y" || other.label==="pass_n" || other.label==="water")){
+			this.rigid.type="kinematic";
+			this.rigid.setVelocity({x:0 ,y:0});
+		}
+		if (other.label==="body"){
+			SoundManager.playSound("sound/get_prop.wav");
+			this.thisSp.removeSelf();
+			Pool.recover("prop_l",this.thisSp);
+		}
+	}
+
+	__proto.onUpdate=function(){
+		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
+		if ((scrollRect.width !=0)&& (this.thisSp.x < scrollRect.x || this.thisSp.y > (scrollRect.y+scrollRect.height))){
+			this.thisSp.removeSelf();
+			Pool.recover("prop_l",this.thisSp);
+		}
+	}
+
+	__proto.onDisable=function(){}
+	return PropL;
+})(Script)
+
+
+//class propScript.PropF extends laya.components.Script
+var PropF=(function(_super){
+	function PropF(){
+		// 本对象精灵
+		this.thisSp=null;
+		// 本对象刚体
+		this.rigid=null;
+		PropF.__super.call(this);
+	}
+
+	__class(PropF,'propScript.PropF',_super);
+	var __proto=PropF.prototype;
+	__proto.onEnable=function(){
+		this.thisSp=this.owner;
+		this.rigid=this.thisSp.getComponent(RigidBody);
+		this.rigid.setVelocity({x:2 ,y:-6});
+	}
+
+	__proto.onTriggerEnter=function(other,self,contact){
+		if (this.rigid.linearVelocity.y > 0 && (other.label==="pass_y" || other.label==="pass_n" || other.label==="water")){
+			this.rigid.type="kinematic";
+			this.rigid.setVelocity({x:0 ,y:0});
+		}
+		if (other.label==="body"){
+			SoundManager.playSound("sound/get_prop.wav");
+			this.thisSp.removeSelf();
+			Pool.recover("prop_f",this.thisSp);
+		}
+	}
+
+	__proto.onUpdate=function(){
+		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
+		if ((scrollRect.width !=0)&& (this.thisSp.x < scrollRect.x || this.thisSp.y > (scrollRect.y+scrollRect.height))){
+			this.thisSp.removeSelf();
+			Pool.recover("prop_f",this.thisSp);
+		}
+	}
+
+	__proto.onDisable=function(){}
+	return PropF;
+})(Script)
+
+
+//class propScript.PropB extends laya.components.Script
+var PropB=(function(_super){
+	function PropB(){
+		// 本对象精灵
+		this.thisSp=null;
+		// 本对象刚体
+		this.rigid=null;
+		PropB.__super.call(this);
+	}
+
+	__class(PropB,'propScript.PropB',_super);
+	var __proto=PropB.prototype;
+	__proto.onEnable=function(){
+		this.thisSp=this.owner;
+		this.rigid=this.thisSp.getComponent(RigidBody);
+		this.rigid.setVelocity({x:2 ,y:-6});
+	}
+
+	__proto.onTriggerEnter=function(other,self,contact){
+		if (this.rigid.linearVelocity.y > 0 && (other.label==="pass_y" || other.label==="pass_n" || other.label==="water")){
+			this.rigid.type="kinematic";
+			this.rigid.setVelocity({x:0 ,y:0});
+		}
+		if (other.label==="body"){
+			SoundManager.playSound("sound/get_prop.wav");
+			this.thisSp.removeSelf();
+			Pool.recover("prop_b",this.thisSp);
+		}
+	}
+
+	__proto.onUpdate=function(){
+		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
+		if ((scrollRect.width !=0)&& (this.thisSp.x < scrollRect.x || this.thisSp.y > (scrollRect.y+scrollRect.height))){
+			this.thisSp.removeSelf();
+			Pool.recover("prop_b",this.thisSp);
+		}
+	}
+
+	__proto.onDisable=function(){}
+	return PropB;
+})(Script)
+
+
+//class enemyScript.EnemyThree extends laya.components.Script
+var EnemyThree=(function(_super){
+	function EnemyThree(){
+		/**@prop {name:enemyBullet,tips:"敌人子弹",type:prefab}*/
+		this.enemyBullet=null;
+		// 本对象
+		this.thisSp=null;
+		// 背景遮罩
+		this.shadeSp=null;
+		// 本对象刚体
+		this.rigid=null;
+		EnemyThree.__super.call(this);
+	}
+
+	__class(EnemyThree,'enemyScript.EnemyThree',_super);
+	var __proto=EnemyThree.prototype;
+	__proto.onEnable=function(){
+		this.thisSp=this.owner;
+		this.rigid=this.thisSp.getComponent(RigidBody);
+		this.rigid.enabled=false;
+		Laya.loader.load("res/atlas/enemy_three.atlas",Handler.create(this,this.loaded));
+	}
+
+	/**
+	*设置遮罩
+	*/
+	__proto.loaded=function(){
+		this.shadeSp=new Sprite();
+		this.shadeSp.loadImage("enemy_three/shade.png");
+		this.shadeSp.width=30;
+		this.shadeSp.height=25;
+		this.shadeSp.pos(this.thisSp.x,this.thisSp.y+4);
+		this.thisSp.parent.addChild(this.shadeSp);
+		this.turnUp();
+	}
+
+	/**
+	*人物上升
+	*/
+	__proto.turnUp=function(){
+		this.rigid.enabled=true;
+		Tween.to(this.thisSp,{y:this.thisSp.y-14},1000,Ease.backInOut,Handler.create(this,this.shoot));
+	}
+
+	/**
+	*射击
+	*/
+	__proto.shoot=function(){
+		var bulletSp=Pool.getItemByCreateFun("enemyBullet",this.enemyBullet.create,this.enemyBullet);
+		bulletSp.pos(this.thisSp.x,this.thisSp.y+7);
+		var rigid=bulletSp.getComponent(RigidBody);
+		rigid.setVelocity({x:-2,y:0});
+		if (this.thisSp.parent){
+			this.thisSp.parent.addChild(bulletSp);
+		}
+		Laya.stage.timer.once(1000,this,this.turnDown);
+	}
+
+	/**
+	*人物下降
+	*/
+	__proto.turnDown=function(){
+		Tween.to(this.thisSp,{y:this.thisSp.y+14},1000,Ease.backIn,Handler.create(this,this.squat));
+	}
+
+	/**
+	*人物蹲下停顿
+	*/
+	__proto.squat=function(){
+		this.rigid.enabled=false;
+		Laya.stage.timer.once(1500,this,this.turnUp);
+	}
+
+	__proto.onTriggerEnter=function(other,self,contact){
+		if (other.label==="bullet" && self.label==="enemy_three"){
+			this.thisSp.visible=false;
+			var boomAni=Pool.getItemByCreateFun("enemyRoleBoom",this.createEnemyRoleBoomAni,this);
+			boomAni.play(0,false,"enemyRoleBoom");
+			boomAni.pos(this.thisSp.x,this.thisSp.y);
+			this.thisSp.parent.addChild(boomAni);
+			Laya.stage.timer.clearAll(this);
+			this.thisSp.removeSelf();
+			Pool.recover("enemyThree",this.thisSp);
+		}
+	}
+
+	/**
+	*当对象池中没有爆炸动画时，
+	*则调用此函数创建动画
+	*/
+	__proto.createEnemyRoleBoomAni=function(){
+		var ani=new Animation();
+		ani.loadAnimation("GameScene/EnemyRoleBoom.ani",null,"res/atlas/boom.atlas");
+		ani.on("complete",null,function(){
+			ani.removeSelf();
+			Pool.recover("enemyRoleBoom",ani);
+		});
+		return ani;
+	}
+
+	__proto.onUpdate=function(){
+		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
+		if ((scrollRect.width !=0)&& this.thisSp.x < scrollRect.x){
+			Tween.clearTween(this.thisSp);
+			this.thisSp.removeSelf();
+			Pool.recover("enemyThree",this.thisSp);
+			this.shadeSp.removeSelf();
+		}
+	}
+
+	__proto.onDisable=function(){}
+	return EnemyThree;
+})(Script)
+
+
+//class enemyScript.EnemyFour extends laya.components.Script
+var EnemyFour=(function(_super){
+	function EnemyFour(){
+		/**@prop {name:enemyBullet,tips:"敌人子弹",type:prefab}*/
+		this.enemyBullet=null;
+		// 主角
+		this.role=null;
+		// 本对象盒子
+		this.box=null;
+		// 目前显现的图片
+		this.curShowSp=null;
+		// 目前显示的动画
+		this.curShowAni=null;
+		// 人物接近第五类敌人的标志
+		this.isAccepted=false;
+		// 血值
+		this.PH=NaN;
+		// 所有的动画
+		this.enemyFour01=null;
+		this.enemyFour03=null;
+		this.enemyFour04=null;
+		this.enemyFour05=null;
+		this.enemyFour06=null;
+		this.enemyFour07=null;
+		this.enemyFour08=null;
+		this.enemyFour09=null;
+		this.enemyFour10=null;
+		this.enemyFour11=null;
+		this.enemyFour12=null;
+		this.enemyFour13=null;
+		this.enemyFour14=null;
+		// 所有动画的精灵
+		this.enemyFour01Sp=null;
+		this.enemyFour03Sp=null;
+		this.enemyFour04Sp=null;
+		this.enemyFour05Sp=null;
+		this.enemyFour06Sp=null;
+		this.enemyFour07Sp=null;
+		this.enemyFour08Sp=null;
+		this.enemyFour09Sp=null;
+		this.enemyFour10Sp=null;
+		this.enemyFour11Sp=null;
+		this.enemyFour12Sp=null;
+		this.enemyFour13Sp=null;
+		this.enemyFour14Sp=null;
+		// 子弹的参数
+		this.bulletX=0;
+		this.bulletY=0;
+		this.bulletvelocityX=-1;
+		this.bulletvelocityY=0;
+		EnemyFour.__super.call(this);
+	}
+
+	__class(EnemyFour,'enemyScript.EnemyFour',_super);
+	var __proto=EnemyFour.prototype;
+	__proto.onEnable=function(){
+		this.role=Role.ROLE.owner;
+		this.box=this.owner;
+		this.PH=10;
+		this.isAccepted=false;
+		this.enemyFour01Sp=this.box.getChildByName("enemy_four01");
+		this.enemyFour03Sp=this.box.getChildByName("enemy_four03");
+		this.enemyFour04Sp=this.box.getChildByName("enemy_four04");
+		this.enemyFour05Sp=this.box.getChildByName("enemy_four05");
+		this.enemyFour06Sp=this.box.getChildByName("enemy_four06");
+		this.enemyFour07Sp=this.box.getChildByName("enemy_four07");
+		this.enemyFour08Sp=this.box.getChildByName("enemy_four08");
+		this.enemyFour09Sp=this.box.getChildByName("enemy_four09");
+		this.enemyFour10Sp=this.box.getChildByName("enemy_four10");
+		this.enemyFour11Sp=this.box.getChildByName("enemy_four11");
+		this.enemyFour12Sp=this.box.getChildByName("enemy_four12");
+		this.enemyFour13Sp=this.box.getChildByName("enemy_four13");
+		this.enemyFour14Sp=this.box.getChildByName("enemy_four14");
+		this.enemyFour01=this.owner ["enemy_four01_ani"];
+		this.enemyFour03=this.owner ["enemy_four03_ani"];
+		this.enemyFour04=this.owner ["enemy_four04_ani"];
+		this.enemyFour05=this.owner ["enemy_four05_ani"];
+		this.enemyFour06=this.owner ["enemy_four06_ani"];
+		this.enemyFour07=this.owner ["enemy_four07_ani"];
+		this.enemyFour08=this.owner ["enemy_four08_ani"];
+		this.enemyFour09=this.owner ["enemy_four09_ani"];
+		this.enemyFour10=this.owner ["enemy_four10_ani"];
+		this.enemyFour11=this.owner ["enemy_four11_ani"];
+		this.enemyFour12=this.owner ["enemy_four12_ani"];
+		this.enemyFour13=this.owner ["enemy_four13_ani"];
+		this.enemyFour14=this.owner ["enemy_four14_ani"];
+		this.curShowSp=this.enemyFour01Sp;
+		this.curShowAni=this.enemyFour01;
+		this.curShowSp.visible=true;
+	}
+
+	/**
+	*以第四类敌人中心点为中心，
+	*向下为 y 轴正方，
+	*向右为 x 轴正方。
+	*以x轴正方为起始线，
+	*计算人物与第四类敌人（中心点）所形成的的角度。
+	*/
+	__proto.calculateAngle=function(){
+		var xx=Math.pow(Math.abs(this.role.x-this.box.x),2);
+		var yy=Math.pow(Math.abs(this.role.y-this.box.y),2);
+		var radius=Math.sqrt(xx+yy);
+		var rad=this.getRad(this.role.x-this.box.x,this.role.y-this.box.y,radius);
+		var angle=180 / Math.PI *rad;
+		if (angle >=75 && angle < 105){
+			this.changeShow(this.enemyFour03Sp,this.enemyFour03);
+			this.bulletX=this.box.x-1;
+			this.bulletY=this.box.y-25;
+			this.bulletvelocityX=0;
+			this.bulletvelocityY=-1;
+			}else if (angle >=45 && angle < 75){
+			this.changeShow(this.enemyFour04Sp,this.enemyFour04);
+			this.bulletX=this.box.x+10;
+			this.bulletY=this.box.y-25;
+			this.bulletvelocityX=0.5;
+			this.bulletvelocityY=-1;
+			}else if (angle >=15 && angle < 45){
+			this.changeShow(this.enemyFour05Sp,this.enemyFour05);
+			this.bulletX=this.box.x+25;
+			this.bulletY=this.box.y-15;
+			this.bulletvelocityX=1;
+			this.bulletvelocityY=-0.5;
+			}else if (angle >=345 && angle < 15){
+			this.changeShow(this.enemyFour06Sp,this.enemyFour06);
+			this.bulletX=this.box.x+25;
+			this.bulletY=this.box.y-1;
+			this.bulletvelocityX=1;
+			this.bulletvelocityY=0;
+			}else if (angle >=315 && angle < 345){
+			this.changeShow(this.enemyFour07Sp,this.enemyFour07);
+			this.bulletX=this.box.x+25;
+			this.bulletY=this.box.y+7;
+			this.bulletvelocityX=1;
+			this.bulletvelocityY=0.5;
+			}else if (angle >=285 && angle < 315){
+			this.changeShow(this.enemyFour08Sp,this.enemyFour08);
+			this.bulletX=this.box.x+13;
+			this.bulletY=this.box.y+25;
+			this.bulletvelocityX=0.5;
+			this.bulletvelocityY=1;
+			}else if (angle >=255 && angle < 285){
+			this.changeShow(this.enemyFour09Sp,this.enemyFour09);
+			this.bulletX=this.box.x;
+			this.bulletY=this.box.y+25;
+			this.bulletvelocityX=0;
+			this.bulletvelocityY=1;
+			}else if (angle >=225 && angle < 255){
+			this.changeShow(this.enemyFour10Sp,this.enemyFour10);
+			this.bulletX=this.box.x-13;
+			this.bulletY=this.box.y+25;
+			this.bulletvelocityX=-0.5;
+			this.bulletvelocityY=1;
+			}else if (angle >=195 && angle < 225){
+			this.changeShow(this.enemyFour11Sp,this.enemyFour11);
+			this.bulletX=this.box.x-25;
+			this.bulletY=this.box.y+10;
+			this.bulletvelocityX=-1;
+			this.bulletvelocityY=0.5;
+			}else if (angle >=165 && angle < 195){
+			this.changeShow(this.enemyFour12Sp,this.enemyFour12);
+			this.bulletX=this.box.x-25;
+			this.bulletY=this.box.y-1;
+			this.bulletvelocityX=-1;
+			this.bulletvelocityY=0;
+			}else if (angle >=135 && angle < 165){
+			this.changeShow(this.enemyFour13Sp,this.enemyFour13);
+			this.bulletX=this.box.x-25;
+			this.bulletY=this.box.y-13;
+			this.bulletvelocityX=-1;
+			this.bulletvelocityY=-0.5;
+			}else if (angle >=105 && angle < 135){
+			this.changeShow(this.enemyFour14Sp,this.enemyFour14);
+			this.bulletX=this.box.x-13;
+			this.bulletY=this.box.y-25;
+			this.bulletvelocityX=-0.5;
+			this.bulletvelocityY=-1;
+		}
+	}
+
+	/**
+	*改变显示的图片及动画
+	*@param Sp 将要显示的图片
+	*@param ani 将要播放的动画
+	*/
+	__proto.changeShow=function(Sp,ani){
+		this.curShowAni.stop();
+		this.curShowSp.visible=false;
+		this.curShowSp=Sp;
+		this.curShowAni=ani;
+		this.curShowSp.visible=true;
+		this.curShowAni.play();
+	}
+
+	/**
+	*发射子弹
+	*@param x 子弹要发射的 x 坐标
+	*@param y 子弹摇发射的 y 坐标
+	*@param velocityX 子弹 x 线性速度
+	*@param velocityY 子弹 y 线性速度
+	*/
+	__proto.shoot=function(x,y,velocityX,velocityY){
+		var bulletSp=Pool.getItemByCreateFun("enemyBullet",this.enemyBullet.create,this.enemyBullet);
+		bulletSp.pos(x,y);
+		var bulletRigid=bulletSp.getComponent(RigidBody);
+		bulletRigid.setVelocity({x:velocityX,y:velocityY});
+		this.box.parent.addChild(bulletSp);
+	}
+
+	/**
+	*第一颗子弹
+	*停顿600毫秒后发射第二颗
+	*/
+	__proto.shootTimeOne=function(){
+		this.shoot(this.bulletX,this.bulletY,this.bulletvelocityX,this.bulletvelocityY);
+		Laya.timer.once(600,this,this.shootTimeTow);
+	}
+
+	/**
+	*第二颗子弹
+	*停顿600毫秒后发射第三颗
+	*/
+	__proto.shootTimeTow=function(){
+		this.shoot(this.bulletX,this.bulletY,this.bulletvelocityX,this.bulletvelocityY);
+		Laya.timer.once(600,this,this.shootTimeThree);
+	}
+
+	/**
+	*第三颗子弹
+	*停顿2.5秒后重复发射一二三颗子弹
+	*/
+	__proto.shootTimeThree=function(){
+		this.shoot(this.bulletX,this.bulletY,this.bulletvelocityX,this.bulletvelocityY);
+		Laya.timer.once(2500,this,this.shootTimeOne);
+	}
+
+	/**
+	*获取以第四类敌人为为中心，人物位置与第四类敌人，
+	*以x轴正方为起始线的弧度值
+	*
+	*/
+	__proto.getRad=function(xx,yy,moveRadius){
+		var rad=yy >=0 ? (Math.PI *2-Math.acos(xx / moveRadius)):(Math.acos(xx / moveRadius));
+		return rad;
+	}
+
+	__proto.onTriggerEnter=function(other,self,contact){
+		if (other.label==="bullet"){
+			this.PH--;
+			if (this.PH <=0){
+				var aniBoom=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
+				aniBoom.width=50;
+				aniBoom.height=50;
+				aniBoom.pos(this.box.x-15,this.box.y-15);
+				this.box.parent.addChild(aniBoom);
+				aniBoom.play(0,false);
+				SoundManager.playSound("sound/enemy_four_five_boom.wav");
+				this.box.removeSelf();
+				Pool.recover("enemyFour",this.box);
+			}
+		}
+	}
+
+	// 创建爆炸动画
+	__proto.createEnemyObjBoomAni=function(){
+		var ani=new Animation();
+		ani.loadAnimation("GameScene/EnemyObjBoom.ani",null,"res/atlas/boom.atlas");
+		ani.on("complete",null,function(){
+			ani.removeSelf();
+			Pool.recover("enemyObjBoom",ani);
+		});
+		return ani;
+	}
+
+	__proto.onUpdate=function(){
+		if (!this.isAccepted && this.box.x-this.role.x < 230){
+			this.curShowAni.play();
+			this.isAccepted=true;
+			Laya.timer.once(0,this,this.shootTimeOne);
+			Laya.timer.loop(1000,this,this.calculateAngle);
+			return;
+		};
+		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
+		if ((scrollRect.width !=0)&& this.box.x < scrollRect.x){
+			this.box.removeSelf();
+			Pool.recover("enemyFour",this.box);
+		}
+	}
+
+	__proto.onDisable=function(){
+		Laya.timer.clearAll(this);
+	}
+
+	return EnemyFour;
+})(Script)
+
+
+//class propScript.FlyProp extends laya.components.Script
+var FlyProp=(function(_super){
+	function FlyProp(){
+		/**@prop {name:propM,tips:"M类道具",type:prefab}*/
+		this.propM=null;
+		/**@prop {name:propB,tips:"B类道具",type:prefab}*/
+		this.propB=null;
+		/**@prop {name:propF,tips:"F类道具",type:prefab}*/
+		this.propF=null;
+		/**@prop {name:propS,tips:"S类道具",type:prefab}*/
+		this.propS=null;
+		/**@prop {name:propL,tips:"L类道具",type:prefab}*/
+		this.propL=null;
+		/**@prop {name:propR,tips:"R类道具",type:prefab}*/
+		this.propR=null;
+		this.thisSp=null;
+		this.thisCollider=null;
+		this.thisRigid=null;
+		FlyProp.__super.call(this);
+	}
+
+	__class(FlyProp,'propScript.FlyProp',_super);
+	var __proto=FlyProp.prototype;
+	__proto.onEnable=function(){
+		this.thisSp=this.owner;
+		this.thisRigid=this.thisSp.getComponent(RigidBody);
+		this.thisRigid.setVelocity({x:2,y:this.thisRigid.linearVelocity.y});
+		this.flyDown();
+	}
+
+	/**
+	*向上飞行
+	*/
+	__proto.flyUp=function(){
+		Tween.to(this.thisSp,{y:this.thisSp.y-60},900,Ease.backOut,Handler.create(this,this.flyDown));
+	}
+
+	/**
+	*向下飞行
+	*/
+	__proto.flyDown=function(){
+		Tween.to(this.thisSp,{y:this.thisSp.y+60},900,Ease.backOut,Handler.create(this,this.flyUp));
+	}
+
+	__proto.onTriggerEnter=function(other,self,contact){
+		if (other.label==="bullet" && self.label==="fly_prop"){
+			var aniBoom=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
+			aniBoom.play(0,false);
+			aniBoom.pos(this.thisSp.x,this.thisSp.y);
+			this.thisSp.parent.addChild(aniBoom);
+			var prop=this.createProp();
+			prop.pos(this.thisSp.x,this.thisSp.y);
+			this.thisSp.parent.addChild(prop);
+			this.thisSp.removeSelf();
+			Pool.recover("flyProp",this.thisSp);
+		}
+	}
+
+	/**
+	*随机创建道具
+	*/
+	__proto.createProp=function(){
+		var type=Math.random();
+		var prop;
+		if (type >=0 && type < 0.15){
+			prop=Pool.getItemByCreateFun("prop_m",this.propM.create,this.propM);
+			}else if (type >=0.15 && type < 0.3){
+			prop=Pool.getItemByCreateFun("prop_b",this.propB.create,this.propB);
+			}else if (type >=0.3 && type < 0.45){
+			prop=Pool.getItemByCreateFun("prop_f",this.propF.create,this.propF);
+			}else if (type >=0.45 && type < 0.6){
+			prop=Pool.getItemByCreateFun("prop_s",this.propS.create,this.propS);
+			}else if (type >=0.6 && type < 0.75){
+			prop=Pool.getItemByCreateFun("prop_l",this.propL.create,this.propL);
+			}else if (type >=0.75 && type < 0.9){
+			prop=Pool.getItemByCreateFun("prop_r",this.propR.create,this.propR);
+		}
+		return prop;
+	}
+
+	// 创建爆炸动画
+	__proto.createEnemyObjBoomAni=function(){
+		var ani=new Animation();
+		ani.loadAnimation("GameScene/EnemyObjBoom.ani",null,"res/atlas/boom.atlas");
+		ani.on("complete",null,function(){
+			ani.removeSelf();
+			Pool.recover("enemyObjBoom",ani);
+		});
+		return ani;
+	}
+
+	__proto.onUpdate=function(){
+		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
+		if ((scrollRect.width !=0)&& this.thisSp.x > (scrollRect.x+scrollRect.width)){
+			this.thisSp.removeSelf();
+			Pool.recover("flyProp",this.thisSp);
+		}
+	}
+
+	__proto.onDisable=function(){
+		Tween.clearAll(this.thisSp);
+	}
+
+	return FlyProp;
+})(Script)
+
+
 //class script.Controller extends laya.components.Script
 var Controller=(function(_super){
 	function Controller(){
-		/**@prop {name:intType,tips:"整数类型示例",type:Int,default:1000}*/
-		this.intType=1000;
-		/**@prop {name:numType,tips:"数字类型示例",type:Number,default:1000}*/
-		this.numType=1000;
-		/**@prop {name:strType,tips:"字符串类型示例",type:String,default:"hello laya"}*/
-		this.strType="hello laya";
-		/**@prop {name:boolType,tips:"布尔类型示例",type:Bool,default:true}*/
-		this.boolType=true;
 		/**@prop {name:role,tips:"Role脚本",type:prefab}*/
 		this.role=null;
 		/**@prop {name:touchDestroy,tips:"触碰即销毁的地图块",type:prefab}*/
 		this.touchDestroy=null;
+		/**@prop {name:enemyOne,tips:"第一类敌人",type:prefab}*/
+		this.enemyOne=null;
+		/**@prop {name:enemyTow,tips:"第二类敌人",type:prefab}*/
+		this.enemyTow=null;
+		/**@prop {name:enemyThree,tips:"第三类敌人",type:prefab}*/
+		this.enemyThree=null;
+		/**@prop {name:enemyFour,tips:"第四类敌人",type:prefab}*/
+		this.enemyFour=null;
+		/**@prop {name:enemyFive,tips:"第五类敌人",type:prefab}*/
+		this.enemyFive=null;
+		/**@prop {name:enemyBossOne,tips:"第一关Boss",type:prefab}*/
+		this.enemyBossOne=null;
+		/**@prop {name:propFrame,tips:"道具框架",type:prefab}*/
+		this.propFrame=null;
+		/**@prop {name:flyProp,tips:"飞行物",type:prefab}*/
+		this.flyProp=null;
 		// 触碰即销毁的地图
 		this.touchDestroySp=null;
 		// 三张个合一
@@ -55754,12 +57051,14 @@ var Controller=(function(_super){
 		this.scrollRectYMax=NaN;
 		this.scrollRectXMin=NaN;
 		this.scrollRectXMax=NaN;
+		// 产生敌人的碰撞体数组
+		this.circleColliderArr=null;
+		this.soundChannel=null;
 		Controller.__super.call(this);
 	}
 
 	__class(Controller,'script.Controller',_super);
 	var __proto=Controller.prototype;
-	/*结束 */
 	__proto.onEnable=function(){
 		this.map=this.owner.getChildByName("background");
 		Laya.timer.once(500,this,this.laterExec);
@@ -55774,16 +57073,42 @@ var Controller=(function(_super){
 		var tempTouchDestroySp;
 		for (var i=0;i < 4;i++){
 			tempTouchDestroySp=Pool.getItemByCreateFun("touchDestroy",this.touchDestroy.create,this.touchDestroy);
-			tempTouchDestroySp.pos(1025+(45 *i),175);
+			tempTouchDestroySp.pos(1236+(54 *i),175);
 			this.map.addChild(tempTouchDestroySp);
 		}
 		for (var i=0;i < 4;i++){
 			tempTouchDestroySp=Pool.getItemByCreateFun("touchDestroy",this.touchDestroy.create,this.touchDestroy);
-			tempTouchDestroySp.pos(1428+(45 *i),175);
+			tempTouchDestroySp.pos(1717+(54 *i),175);
 			this.map.addChild(tempTouchDestroySp);
 		}
+		this.circleColliderArr=this.owner.getComponents(CircleCollider);
+		var enemyTowSp;
+		enemyTowSp=Pool.getItemByCreateFun("enemyTow",this.enemyTow.create,this.enemyTow);
+		enemyTowSp.pos(520,130);
+		var r=enemyTowSp.getComponent(RigidBody);
+		r.setVelocity({x:-1,y:0});
+		this.map.addChild(enemyTowSp);
+		var enemyOneSp;
+		enemyOneSp=Pool.getItemByCreateFun("enemyOne",this.enemyOne.create,this.enemyOne);
+		enemyOneSp.pos(512,290);
+		this.map.addChild(enemyOneSp);
 		this.roleClass=Role.ROLE;
-		var boxChollider=this.roleSp.getComponent(BoxCollider);
+		var propFrameSp;
+		propFrameSp=Pool.getItemByCreateFun("enemyProp",this.propFrame.create,this.propFrame);
+		propFrameSp.pos(512,232);
+		this.map.addChild(propFrameSp);
+		Laya.loader.load("sound/background.mp3",Handler.create(this,this.play),null,"sound");
+		SoundManager.soundVolume=0.7;
+	}
+
+	/**
+	*加载完音效后自动播放，
+	*需要用户点击舞台（使焦点处于舞台）才会播放
+	*/
+	__proto.play=function(){
+		this.soundChannel=SoundManager.playMusic("sound/background.mp3");
+		SoundManager.soundVolume=0.7;
+		this.soundChannel.play();
 	}
 
 	/**
@@ -55794,13 +57119,13 @@ var Controller=(function(_super){
 	__proto.laterExec=function(){
 		var displayHeight=Laya.stage.height;
 		var displayWidth=Laya.stage.width;
-		this.rockerX=80;
-		this.rockerY=displayHeight-80;
-		this.fireBtnX=displayWidth-100;
-		this.fireBtnY=displayHeight-100;
+		this.rockerX=130;
+		this.rockerY=displayHeight-90;
+		this.fireBtnX=displayWidth-110;
+		this.fireBtnY=displayHeight-110;
 		this.jumpUpBtnX=displayWidth-90;
-		this.jumpUpBtnY=displayHeight-160;
-		this.jumpDownBtnX=displayWidth-160;
+		this.jumpUpBtnY=displayHeight-180;
+		this.jumpDownBtnX=displayWidth-180;
 		this.jumpDownBtnY=displayHeight-90;
 		Laya.loader.load("res/atlas/icon.atlas",Handler.create(this,this.onIconAtlasLoaded));
 		this.viewCenterY=Laya.stage.displayHeight / 2;
@@ -55811,14 +57136,228 @@ var Controller=(function(_super){
 		this.scrollRectXMin=0;
 		var rec=new Rectangle(0,0,Laya.stage.displayWidth,Laya.stage.displayHeight);
 		Laya.stage.scrollRect=rec;
-		Laya.timer.loop(10,this,this.onLoop);
+		Laya.stage.timer.loop(10,this,this.onLoop);
 	}
 
 	/**
 	*游戏循环
 	*/
 	__proto.onLoop=function(){
+		var _$this=this;
 		this.moveMap();
+		if (!this.roleClass.isAlive){
+			Laya.stage.clearTimer(this,this.onLoop);
+			Laya.stage.clearTimer(this,this.produceEnemyTow);
+			var text=new Text();
+			text.visible=true;
+			text.pivot(30,30);
+			text.text="点击屏幕复活";
+			text.color="#ffffff";
+			text.fontSize=30;
+			text.pos(Laya.stage.scrollRect.x+(Laya.stage.scrollRect.width / 2),Laya.stage.scrollRect.y+(Laya.stage.height / 2));
+			this.map.addChild(text);
+			var resume=function (){
+				_$this.roleSp.pos(Laya.stage.scrollRect.x+50,0);
+				_$this.roleClass.reStart();
+				Laya.stage.timer.loop(10,_$this,_$this.onLoop);
+				Laya.stage.on("mouseup",_$this,up=function(){
+					text.visible=false;
+					Laya.stage.off("mousedown",_$this,resume);
+					Laya.stage.off("mouseup",_$this,up);
+				});
+			}
+			Laya.stage.on("mousedown",this,resume);
+		}
+	}
+
+	/**
+	*碰撞检查函数
+	*当人物触碰到碰撞体(在场景中放置特定位置的碰撞体)时，
+	*将产生各类敌人
+	*/
+	__proto.onTriggerEnter=function(other,self,contact){
+		if (other.label==="produce" && self.label==="produceOne"){
+			Laya.stage.timer.loop(1500,this,this.produceEnemyTow,[900,128,{x:-1,y:0}]);
+			this.circleColliderArr[0].destroy();
+		}
+		if (other.label==="produce" && self.label==="cancelProduceOne"){
+			Laya.stage.clearTimer(this,this.produceEnemyTow);
+			Laya.stage.timer.once(0,this,this.produceEnemyOne,([1000,290]));
+			Laya.stage.timer.once(0,this,this.produceFlyProp,[50]);
+			this.circleColliderArr[1].destroy();
+		}
+		if (other.label==="produce" && self.label==="produceTow"){
+			Laya.stage.timer.loop(1500,this,this.produceEnemyTow,[483,290,{x:2,y:0}]);
+			this.circleColliderArr[2].destroy();
+		}
+		if (other.label==="produce" && self.label==="cancelProduceTow"){
+			Laya.stage.clearTimer(this,this.produceEnemyTow);
+			Laya.stage.timer.loop(1500,this,this.produceEnemyTow,[1670,130,{x:-1,y:0}]);
+			this.circleColliderArr[3].destroy();
+		}
+		if (other.label==="produce" && self.label==="cancelProduceThree"){
+			Laya.stage.clearTimer(this,this.produceEnemyTow);
+			this.circleColliderArr[4].destroy();
+		}
+		if (other.label==="produce" && self.label==="produceFour"){
+			Laya.stage.timer.loop(2000,this,this.produceEnemyTow,[1940,130,{x:-1,y:0}]);
+			Laya.stage.timer.once(0,this,this.produceEnemyOne,([2000,128]));
+			Laya.stage.timer.once(0,this,this.produceEnemyThree,([2200,154]));
+			Laya.stage.timer.once(0,this,this.produceEnemyFour,([2040,265]));
+			this.circleColliderArr[5].destroy();
+		}
+		if (other.label==="produce" && self.label==="cancelProduceFour"){
+			Laya.stage.clearTimer(this,this.produceEnemyTow);
+			Laya.stage.timer.loop(2000,this,this.produceEnemyTow,[2960,182,{x:-1,y:0}]);
+			this.circleColliderArr[6].destroy();
+		}
+		if (other.label==="produce" && self.label==="cancelProduceFive"){
+			Laya.stage.clearTimer(this,this.produceEnemyTow);
+			Laya.stage.timer.loop(2000,this,this.produceEnemyTow,[3060,76,{x:-1,y:0}]);
+			Laya.stage.timer.once(0,this,this.produceEnemyThree,([2500,100]));
+			Laya.stage.timer.once(0,this,this.producePropFrame,([2574,230]));
+			this.circleColliderArr[7].destroy();
+		}
+		if (other.label==="produce" && self.label==="cancelProduceSix"){
+			Laya.stage.clearTimer(this,this.produceEnemyTow);
+			Laya.stage.timer.once(0,this,this.produceEnemyFour,([2680,211]));
+			this.circleColliderArr[8].destroy();
+		}
+		if (other.label==="produce" && self.label==="produceSeven"){
+			Laya.stage.timer.once(0,this,this.produceEnemyFour,([3026,207]));
+			Laya.stage.timer.loop(2000,this,this.produceEnemyTow,[3130,290,{x:-1,y:0}]);
+			this.circleColliderArr[9].destroy();
+		}
+		if (other.label==="produce" && self.label==="cancelProduceSeven"){
+			Laya.stage.timer.clear(this,this.produceEnemyTow);
+			Laya.stage.timer.once(0,this,this.produceEnemyTow,[3400,130,{x:-1,y:0}]);
+			this.circleColliderArr[10].destroy();
+		}
+		if (other.label==="produce" && self.label==="produceEight"){
+			Laya.stage.timer.once(0,this,this.produceEnemyFive,([3380,256]));
+			this.circleColliderArr[11].destroy();
+		}
+		if (other.label==="produce" && self.label==="cancelProduceEight"){
+			Laya.stage.timer.once(0,this,this.produceEnemyFive,([3593,100]));
+			Laya.stage.timer.once(0,this,this.producePropFrame,([3755,283]));
+			this.circleColliderArr[12].destroy();
+		}
+		if (other.label==="produce" && self.label==="produceNine"){
+			Laya.stage.timer.once(0,this,this.produceEnemyOne,([3893,182]));
+			Laya.stage.timer.once(0,this,this.produceEnemyTow,[4046,238,{x:-1,y:0}]);
+			this.circleColliderArr[13].destroy();
+		}
+		if (other.label==="produce" && self.label==="cancelProduceNine"){
+			Laya.stage.timer.once(0,this,this.produceFlyProp,[50]);
+			Laya.stage.timer.once(0,this,this.produceFlyProp,[150]);
+			Laya.stage.timer.once(0,this,this.produceFlyProp,[250]);
+			Laya.stage.timer.once(0,this,this.produceEnemyTow,[4582,183,{x:-1,y:0}]);
+			this.circleColliderArr[14].destroy();
+		}
+		if (other.label==="produce" && self.label==="produceTen"){
+			Laya.stage.timer.once(0,this,this.produceEnemyFive,([4585,207]));
+			Laya.stage.timer.once(0,this,this.produceEnemyTow,[4632,290,{x:-1,y:0}]);
+			this.circleColliderArr[15].destroy();
+		}
+		if (other.label==="produce" && self.label==="cancelProduceTen"){
+			Laya.stage.timer.once(0,this,this.produceEnemyFour,([4956,315]));
+			Laya.stage.timer.once(0,this,this.produceEnemyFour,([5198,313]));
+			this.circleColliderArr[16].destroy();
+		}
+		if (other.label==="produce" && self.label==="produceEleven"){
+			Laya.stage.timer.once(0,this,this.produceBoss01,([5382,67]));
+			this.circleColliderArr[17].destroy();
+		}
+	}
+
+	/**
+	*产生第一类敌人
+	*/
+	__proto.produceEnemyOne=function(__args){
+		var args=arguments;
+		var enemyOneSp;
+		enemyOneSp=Pool.getItemByCreateFun("enemyOne",this.enemyOne.create,this.enemyOne);
+		enemyOneSp.pos(args[0],args[1]);
+		this.map.addChild(enemyOneSp);
+	}
+
+	/**
+	*产生第二类敌人
+	*/
+	__proto.produceEnemyTow=function(__args){
+		var args=arguments;
+		var enemyTowSp;
+		enemyTowSp=Pool.getItemByCreateFun("enemyTow",this.enemyTow.create,this.enemyTow);
+		enemyTowSp.pos(args[0],args[1]);
+		var r=enemyTowSp.getComponent(RigidBody);
+		r.setVelocity(args[2]);
+		this.map.addChild(enemyTowSp);
+	}
+
+	/**
+	*产生第三类敌人
+	*/
+	__proto.produceEnemyThree=function(__args){
+		var args=arguments;
+		var enemyThreeSp;
+		enemyThreeSp=Pool.getItemByCreateFun("enemyThree",this.enemyThree.create,this.enemyThree);
+		enemyThreeSp.pos(args[0],args[1]);
+		this.map.addChild(enemyThreeSp);
+	}
+
+	/**
+	*产生第四类敌人
+	*/
+	__proto.produceEnemyFour=function(__args){
+		var args=arguments;
+		var enemyFourSp;
+		enemyFourSp=Pool.getItemByCreateFun("enemyFour",this.enemyFour.create,this.enemyFour);
+		enemyFourSp.pos(args[0],args[1]);
+		this.map.addChild(enemyFourSp);
+	}
+
+	/**
+	*生产第五类敌人
+	*/
+	__proto.produceEnemyFive=function(__args){
+		var args=arguments;
+		var enemyFiveSp;
+		enemyFiveSp=Pool.getItemByCreateFun("enemyFive",this.enemyFive.create,this.enemyFive);
+		enemyFiveSp.pos(args[0],args[1]);
+		this.map.addChild(enemyFiveSp);
+	}
+
+	/**
+	*生产第一关BOSS
+	*/
+	__proto.produceBoss01=function(__args){
+		var args=arguments;
+		var enemyBoss01Sp;
+		enemyBoss01Sp=Pool.getItemByCreateFun("enemyBoss01",this.enemyBossOne.create,this.enemyBossOne);
+		enemyBoss01Sp.pos(args[0],args[1]);
+		this.map.addChild(enemyBoss01Sp);
+	}
+
+	/**
+	*生产道具框架
+	*/
+	__proto.producePropFrame=function(__args){
+		var args=arguments;
+		var propFrameSp;
+		propFrameSp=Pool.getItemByCreateFun("enemyProp",this.propFrame.create,this.propFrame);
+		propFrameSp.pos(args[0],args[1]);
+		this.map.addChild(propFrameSp);
+	}
+
+	/**
+	*生产飞行物
+	*/
+	__proto.produceFlyProp=function(__args){
+		var args=arguments;
+		var flyPropSp;
+		flyPropSp=Pool.getItemByCreateFun("flyProp",this.flyProp.create,this.flyProp);
+		flyPropSp.pos(Laya.stage.scrollRect.x,args[0]);
+		this.map.addChild(flyPropSp);
 	}
 
 	/**
@@ -55829,8 +57368,8 @@ var Controller=(function(_super){
 		this.rockerBig.loadImage("icon/rocker.png",Handler.create(this,this.onBigLoaded));
 		this.rockerSmall.loadImage("icon/rocker_center.png",Handler.create(this,this.onSmallLoaded));
 		this.rocker.pos(this.rockerX,this.rockerY);
-		this.rocker.pivot(60,60);
-		this.rocker.size(120,120);
+		this.rocker.pivot(75,75);
+		this.rocker.size(150,150);
 		this.rocker.addChild(this.rockerSmall);
 		this.rocker.addChild(this.rockerBig);
 		Laya.stage.addChild(this.rocker);
@@ -55845,14 +57384,22 @@ var Controller=(function(_super){
 	*用于设置按钮大小、位置等参数
 	*/
 	__proto.onJumpDownBtnLoaded=function(){
-		this.jumpDownBtn.size(50,50);
+		this.jumpDownBtn.size(60,60);
 		this.jumpDownBtn.pos(this.jumpDownBtnX,this.jumpDownBtnY);
 		this.jumpDownBtn.alpha=0.6;
 		this.jumpDownBtn.on("mousedown",this,this.onMouseClickJumpDownDown);
+		this.jumpDownBtn.on("mouseup",this,this.onMouseClickJumpDownUp);
 	}
 
+	__proto.onMouseClickJumpDownUp=function(e){
+		e.stopPropagation();
+	}
+
+	/**
+	*下跃按钮
+	*/
 	__proto.onMouseClickJumpDownDown=function(){
-		console.log(this.roleClass.getDir());
+		this.roleClass.jimpDown();
 	}
 
 	/**
@@ -55860,7 +57407,7 @@ var Controller=(function(_super){
 	*用于设置按钮大小、位置等参数
 	*/
 	__proto.onJumpUpBtnLoaded=function(){
-		this.jumpUpBtn.size(50,50);
+		this.jumpUpBtn.size(60,60);
 		this.jumpUpBtn.pos(this.jumpUpBtnX,this.jumpUpBtnY);
 		this.jumpUpBtn.alpha=0.6;
 		this.jumpUpBtn.on("mousedown",this,this.onMousClickJumpUpDown);
@@ -55875,8 +57422,7 @@ var Controller=(function(_super){
 	*上跳按钮侦听事件
 	*/
 	__proto.onMousClickJumpUpDown=function(e){
-		e.stopPropagation();
-		this.roleClass.jump();
+		this.roleClass.jumpUp();
 	}
 
 	/**
@@ -55884,7 +57430,7 @@ var Controller=(function(_super){
 	*用于设置按钮大小、位置等参数
 	*/
 	__proto.onFireBtnLoaded=function(){
-		this.fireBtn.size(80,80);
+		this.fireBtn.size(90,90);
 		this.fireBtn.pos(this.fireBtnX,this.fireBtnY);
 		this.fireBtn.alpha=0.6;
 		this.fireBtn.on("mousedown",this,this.onMouseClickFireDown);
@@ -55912,9 +57458,10 @@ var Controller=(function(_super){
 	*/
 	__proto.onBigLoaded=function(){
 		this.rockerBig.pos(this.rockerSBX,this.rockerSBY);
-		this.rockerBig.size(120,120);
+		this.rockerBig.size(150,150);
 		this.rockerBig.alpha=0.6;
-		this.rockerBig.pivot(60,60);
+		this.rockerBig.pivot(75,75);
+		this.rockerBig.on("mousedown",this,this.onMouseClickRockerSmallDown);
 	}
 
 	/**
@@ -55923,10 +57470,9 @@ var Controller=(function(_super){
 	*/
 	__proto.onSmallLoaded=function(){
 		this.rockerSmall.pos(this.rockerSBX,this.rockerSBY);
-		this.rockerSmall.size(40,40);
+		this.rockerSmall.size(50,50);
 		this.rockerSmall.alpha=0.6;
-		this.rockerSmall.pivot(20,20);
-		this.rockerSmall.on("mousedown",this,this.onMouseClickRockerSmallDown);
+		this.rockerSmall.pivot(25,25);
 	}
 
 	/**
@@ -55982,67 +57528,18 @@ var Controller=(function(_super){
 
 	__proto.onKeyDown=function(e){
 		switch(e.keyCode){
-			case 100:{
-					break ;
-				}
-			case 102:{
-					break ;
-				}
-			case 98:{
-				}
-			case 104:{
-					break ;
-				}
-			case 103:{
-					break ;
-				}
-			case 97:{
-					break ;
-				}
-			case 105:{
-					break ;
-				}
-			case 99:{
-					break ;
-				}
 			case 32:{
-					this.roleClass.jump();
+					this.roleClass.jumpUp();
 					break ;
 				}
-			case 86:
-				{this.roleClass.onFire();
+			case 86:{
+					this.roleClass.onFire();
 					break ;
 				}
-			default :{
-					break ;
-				}
-			}
-	}
-
-	__proto.onKeyUp=function(e){
-		switch(e.keyCode){
-			case 100:{
-					break ;
-				}
-			case 102:{
-					break ;
-				}
-			case 98:{
-					break ;
-				}
-			case 104:{
-					break ;
-				}
-			case 103:{
-					break ;
-				}
-			case 97:{
-					break ;
-				}
-			case 105:{
-					break ;
-				}
-			case 99:{
+			case 82:{
+					this.roleSp.pos(Laya.stage.scrollRect.x+50,0);
+					this.roleClass.reStart();
+					Laya.stage.timer.loop(10,this,this.onLoop);
 					break ;
 				}
 			default :{
@@ -56064,28 +57561,30 @@ var Controller=(function(_super){
 	*移动 Laya.stage.scrollRect（滚动区域）实现移动屏幕效果
 	*/
 	__proto.moveMap=function(){
-		var moveX=this.roleSp.x-this.viewCenterX;
-		if (moveX > this.scrollRectXMax || moveX < this.scrollRectXMin){
-			moveX=Laya.stage.scrollRect.x;
-		}
-		Laya.stage.scrollRect.x=moveX;
-		this.rockerX=moveX+80;
-		this.rocker.pos(this.rockerX,this.rockerY);
-		this.fireBtnX=moveX+Laya.stage.displayWidth-100;
-		this.jumpUpBtnX=moveX+Laya.stage.displayWidth-90;
-		this.jumpDownBtnX=moveX+Laya.stage.displayWidth-160;
-		this.fireBtn.pos(this.fireBtnX,this.fireBtnY);
-		this.jumpUpBtn.pos(this.jumpUpBtnX,this.jumpUpBtnY);
-		this.jumpDownBtn.pos(this.jumpDownBtnX,this.jumpDownBtnY);
+		if (this.roleSp.x-Laya.stage.scrollRect.x >=this.viewCenterX){
+			var moveX=this.roleSp.x-this.viewCenterX;
+			if (moveX > this.scrollRectXMax || moveX < this.scrollRectXMin){
+				moveX=Laya.stage.scrollRect.x;
+			}
+			Laya.stage.scrollRect.x=moveX;
+			this.rockerX=moveX+130;
+			this.rocker.pos(this.rockerX,this.rockerY);
+			this.fireBtnX=moveX+Laya.stage.displayWidth-110;
+			this.jumpUpBtnX=moveX+Laya.stage.displayWidth-90;
+			this.jumpDownBtnX=moveX+Laya.stage.displayWidth-180;
+			this.fireBtn.pos(this.fireBtnX,this.fireBtnY);
+			this.jumpUpBtn.pos(this.jumpUpBtnX,this.jumpUpBtnY);
+			this.jumpDownBtn.pos(this.jumpDownBtnX,this.jumpDownBtnY);
+		};
 		var moveY=this.roleSp.y-this.viewCenterY;
 		if (moveY > this.scrollRectYMax || moveY <this.scrollRectYMin){
 			moveY=Laya.stage.scrollRect.y;
 		}
 		Laya.stage.scrollRect.y=moveY;
-		this.rockerY=moveY+Laya.stage.displayHeight-80;
+		this.rockerY=moveY+Laya.stage.displayHeight-90;
 		this.rocker.pos(this.rockerX,this.rockerY);
-		this.fireBtnY=moveY+Laya.stage.displayHeight-100;
-		this.jumpUpBtnY=moveY+Laya.stage.displayHeight-160;
+		this.fireBtnY=moveY+Laya.stage.displayHeight-110;
+		this.jumpUpBtnY=moveY+Laya.stage.displayHeight-180;
 		this.jumpDownBtnY=moveY+Laya.stage.displayHeight-90;
 		this.fireBtn.pos(this.fireBtnX,this.fireBtnY);
 		this.jumpUpBtn.pos(this.jumpUpBtnX,this.jumpUpBtnY);
@@ -56098,26 +57597,419 @@ var Controller=(function(_super){
 })(Script)
 
 
-//class script.TouchDestroy extends laya.components.Script
-var TouchDestroy=(function(_super){
-	function TouchDestroy(){
-		/**@prop {name:intType,tips:"整数类型示例",type:Int,default:1000}*/
-		this.intType=1000;
-		/**@prop {name:numType,tips:"数字类型示例",type:Number,default:1000}*/
-		this.numType=1000;
-		/**@prop {name:strType,tips:"字符串类型示例",type:String,default:"hello laya"}*/
-		this.strType="hello laya";
-		/**@prop {name:boolType,tips:"布尔类型示例",type:Bool,default:true}*/
-		this.boolType=true;
-		// 更多参数说明请访问:https://ldc2.layabox.com/doc/?nav=zh-as-2-4-0
+//class enemyScript.EnemyOne extends laya.components.Script
+var EnemyOne=(function(_super){
+	function EnemyOne(){
+		/**@prop {name:enemyBullet,tips:"敌人子弹",type:prefab}*/
+		this.enemyBullet=null;
+		// 第一类敌人
 		this.thisSp=null;
-		TouchDestroy.__super.call(this);
+		// 主角色
+		this.role=null;
+		// 是否需要改变图片
+		this.isNeedChange=false;
+		// 射击的方向
+		this.dir={x:-1,y:-1};
+		EnemyOne.__super.call(this);
 	}
 
-	__class(TouchDestroy,'script.TouchDestroy',_super);
-	var __proto=TouchDestroy.prototype;
+	__class(EnemyOne,'enemyScript.EnemyOne',_super);
+	var __proto=EnemyOne.prototype;
 	__proto.onEnable=function(){
 		this.thisSp=this.owner;
+		this.role=Role.ROLE.owner;
+		Laya.loader.load("res/atlas/enemy_one.atlas");
+		Laya.timer.once(0,this,this.shootTimeOne);
+	}
+
+	/**
+	*发射子弹
+	*/
+	__proto.onFire=function(){
+		var bulletSp=Pool.getItemByCreateFun("enemyBullet",this.enemyBullet.create,this.enemyBullet);
+		bulletSp.pos(this.thisSp.x+15,this.thisSp.y+8);
+		var bulletRigid=bulletSp.getComponent(RigidBody);
+		bulletRigid.setVelocity(this.dir);
+		this.thisSp.parent.addChild(bulletSp);
+	}
+
+	/**
+	*第一颗子弹
+	*停顿600毫秒后发射第二颗
+	*/
+	__proto.shootTimeOne=function(){
+		this.onFire();
+		Laya.timer.once(600,this,this.shootTimeTow);
+	}
+
+	/**
+	*第二颗子弹
+	*停顿600毫秒后发射第三颗
+	*/
+	__proto.shootTimeTow=function(){
+		this.onFire();
+		Laya.timer.once(600,this,this.shootTimeThree);
+	}
+
+	/**
+	*第三颗子弹
+	*停顿2.5秒后重复发射一二三颗子弹
+	*/
+	__proto.shootTimeThree=function(){
+		this.onFire();
+		Laya.timer.once(2500,this,this.shootTimeOne);
+	}
+
+	__proto.onTriggerEnter=function(other,self,contact){
+		if (other.label==="bullet" && self.label==="enemy_one"){
+			var boomAni=Pool.getItemByCreateFun("enemyRoleBoom",this.createEnemyRoleBoomAni,this);
+			boomAni.play(0,false,"enemyRoleBoom");
+			boomAni.pos(this.thisSp.x,this.thisSp.y);
+			this.thisSp.parent.addChild(boomAni);
+			this.thisSp.removeSelf();
+			Pool.recover("enemyThree",this.thisSp);
+		}
+	}
+
+	/**
+	*当对象池中没有爆炸动画时，
+	*则调用此函数创建动画
+	*/
+	__proto.createEnemyRoleBoomAni=function(){
+		var ani=new Animation();
+		ani.loadAnimation("GameScene/EnemyRoleBoom.ani",null,"res/atlas/boom.atlas");
+		ani.on("complete",null,function(){
+			ani.removeSelf();
+			Pool.recover("enemyRoleBoom",ani);
+		});
+		return ani;
+	}
+
+	__proto.onUpdate=function(){
+		var imgPath;
+		if (this.role.x < this.thisSp.x){
+			if (this.role.y < this.thisSp.y-50){
+				imgPath="enemy_one/enemy_one_left03.png";
+				this.dir={x:-1,y:-1};
+				this.isNeedChange=true;
+				}else if (this.role.y > this.thisSp.y+50){
+				imgPath="enemy_one/enemy_one_left01.png";
+				this.isNeedChange=true;
+				this.dir={x:-1,y:1};
+				}else {
+				imgPath="enemy_one/enemy_one_left02.png";
+				this.isNeedChange=true;
+				this.dir={x:-1,y:0};
+			}
+			}else {
+			if (this.role.y < this.thisSp.y-50){
+				imgPath="enemy_one/enemy_one_right03.png";
+				this.isNeedChange=true;
+				this.dir={x:1,y:-1};
+				}else if (this.role.y > this.thisSp.y+50){
+				imgPath="enemy_one/enemy_one_right01.png";
+				this.isNeedChange=true;
+				this.dir={x:1,y:1};
+				}else {
+				imgPath="enemy_one/enemy_one_right02.png";
+				this.isNeedChange=true;
+				this.dir={x:1,y:0};
+			}
+		}
+		if (this.isNeedChange){
+			this.thisSp.loadImage(imgPath);
+		};
+		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
+		if ((scrollRect.width !=0)&& this.thisSp.x < scrollRect.x){
+			this.thisSp.removeSelf();
+			Pool.recover("enemyOne",this.thisSp);
+		}
+	}
+
+	__proto.onDisable=function(){
+		Pool.recover("enemyOne",this.thisSp);
+		Laya.timer.clearAll(this);
+	}
+
+	return EnemyOne;
+})(Script)
+
+
+//class enemyScript.EnemyTow extends laya.components.Script
+var EnemyTow=(function(_super){
+	function EnemyTow(){
+		this.thisSp=null;
+		this.enemyTowAni=null;
+		this.rigid=null;
+		this.type=NaN;
+		EnemyTow.__super.call(this);
+	}
+
+	__class(EnemyTow,'enemyScript.EnemyTow',_super);
+	var __proto=EnemyTow.prototype;
+	// 类型：2表示走到陆地边缘就往回走；0表示走到陆地边缘就跳出来
+	__proto.onEnable=function(){
+		this.thisSp=this.owner;
+		this.thisSp.visible=false;
+		this.enemyTowAni=Pool.getItemByCreateFun("enemyTowAni",this.createEnemyTowAni,this.enemyTowAni);
+		this.thisSp.parent.addChild(this.enemyTowAni);
+		this.rigid=this.thisSp.getComponent(RigidBody);
+		var aniName;
+		if (this.rigid.linearVelocity.x < 0){
+			aniName="enemy_tow_left";
+			}else if (this.rigid.linearVelocity.x > 0){
+			aniName="enemy_tow_right";
+		}
+		this.enemyTowAni.play(0,true,aniName);
+		this.type=Math.random()> 0.5 ? 2 :0;
+	}
+
+	/**
+	*当对象池中没有第二类敌人的动画时 ，
+	*调用此函数创建动画
+	*/
+	__proto.createEnemyTowAni=function(){
+		var ani=new Animation();
+		ani.loadAnimation("GameScene/EnemyTow.ani",null,"res/atlas/enemy_tow.atlas");
+		return ani;
+	}
+
+	__proto.onTriggerExit=function(other,self,contact){
+		if ((other.label==="pass_y" || other.label==="pass_n")&& self.label==="enemy_tow_foot"){
+			if (this.type==0){
+				this.rigid.type="dynamic";
+				this.rigid.setVelocity({x:this.rigid.linearVelocity.x,y:-5});
+				}else {
+				this.rigid.setVelocity({x:-this.rigid.linearVelocity.x,y:0});
+				this.enemyTowAni.stop();
+				var aniName;
+				if (this.rigid.linearVelocity.x < 0){
+					aniName="enemy_tow_left";
+					}else if (this.rigid.linearVelocity.x > 0){
+					aniName="enemy_tow_right";
+				}
+				this.enemyTowAni.play(0,true,aniName);
+				this.type--;
+			}
+		}
+	}
+
+	__proto.onTriggerEnter=function(other,self,contact){
+		if (other.label==="bullet" && self.label==="enemy_tow"){
+			this.enemyTowAni.stop();
+			this.enemyTowAni.removeSelf();
+			Pool.recover("enemyTowAni",this.enemyTowAni);
+			var boomAni=Pool.getItemByCreateFun("enemyRoleBoom",this.createEnemyRoleBoomAni,this);
+			boomAni.play(0,false,"enemyRoleBoom");
+			boomAni.pos(this.thisSp.x,this.thisSp.y);
+			this.thisSp.parent.addChild(boomAni);
+			this.thisSp.removeSelf();
+		}
+		if (this.rigid.linearVelocity.y > 0 && (other.label==="pass_y" || other.label==="pass_n")&& self.label==="enemy_tow_foot"){
+			this.rigid.type="kinematic";
+			this.rigid.setVelocity({x:this.rigid.linearVelocity.x,y:0});
+		}
+	}
+
+	/**
+	*当对象池中没有爆炸动画时，
+	*则调用此函数创建动画
+	*/
+	__proto.createEnemyRoleBoomAni=function(){
+		var ani=new Animation();
+		ani.loadAnimation("GameScene/EnemyRoleBoom.ani",null,"res/atlas/boom.atlas");
+		ani.on("complete",null,function(){
+			ani.removeSelf();
+			Pool.recover("enemyRoleBoom",ani);
+		});
+		return ani;
+	}
+
+	__proto.onUpdate=function(){
+		this.enemyTowAni.pos(this.thisSp.x,this.thisSp.y);
+		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
+		if ((scrollRect.width !=0)&& (this.thisSp.x < scrollRect.x || this.thisSp.y > (scrollRect.y+scrollRect.height))){
+			console.log(this.thisSp.x,scrollRect.x,scrollRect.width);
+			this.enemyTowAni.removeSelf();
+			Pool.recover("enemyTowAni",this.enemyTowAni);
+			this.thisSp.removeSelf();
+			Pool.recover("enemyTow",this.thisSp);
+		}
+	}
+
+	/**
+	*回收本对象
+	*/
+	__proto.onDisable=function(){
+		Pool.recover("enemyTow",this.thisSp);
+	}
+
+	return EnemyTow;
+})(Script)
+
+
+//class enemyScript.BossTopOne extends laya.components.Script
+var BossTopOne=(function(_super){
+	function BossTopOne(){
+		/**@prop {name:bullet,tips:"子弹",type:prefab}*/
+		this.bullet=null;
+		// 枪炮01血量
+		this.top01HP=30;
+		// 本对象
+		this.thisSp=null;
+		this.thisParentSp=null;
+		this.thisRigid=null;
+		this.top01Ani=null;
+		BossTopOne.__super.call(this);
+	}
+
+	__class(BossTopOne,'enemyScript.BossTopOne',_super);
+	var __proto=BossTopOne.prototype;
+	__proto.onEnable=function(){
+		this.thisSp=this.owner;
+		this.thisParentSp=this.thisSp.parent;
+		this.thisRigid=this.thisSp.getComponent(RigidBody);
+		this.top01Ani=this.owner.parent ["top01_ani"];
+		this.top01Ani.play();
+		Laya.timer.loop(500,this,this.shoot);
+	}
+
+	__proto.shoot=function(){
+		var posX=NaN;
+		var posY=NaN;
+		var velocityX=(Math.random()+0.1)*3;
+		var velocityY=(Math.random()+0.1);
+		posX=this.thisParentSp.x;
+		posY=this.thisParentSp.y+140;
+		var bulletSp=Pool.getItemByCreateFun("bossOneBullet",this.bullet.create,this.bullet);
+		var bulletRigid=bulletSp.getComponent(RigidBody);
+		bulletSp.pos(posX,posY);
+		bulletRigid.setVelocity({x:-velocityX,y:velocityY});
+		this.thisParentSp.parent.addChild(bulletSp);
+	}
+
+	__proto.onTriggerEnter=function(other,self,contact){
+		if (other.label==="bullet" && self.label==="boss_top01"){
+			this.top01HP--;
+			if (this.top01HP <=0){
+				Laya.timer.clear(this,this.shoot);
+				console.log("top01销毁");
+				var aniBoom=Pool.getItem("enemyObjBoom");
+				if (aniBoom){
+					aniBoom.pos(this.thisSp.x,this.thisSp.y);
+					aniBoom.play(0,false);
+					this.thisSp.parent.addChild(aniBoom);
+					var shade=new Image();
+					shade.skin="boss/boss_one_top01_boomed.png";
+					shade.x=14;
+					shade.y=135;
+					this.thisSp.destroy(true);
+				}
+			}
+		}
+	}
+
+	__proto.onDisable=function(){}
+	return BossTopOne;
+})(Script)
+
+
+//class enemyScript.BossTopTow extends laya.components.Script
+var BossTopTow=(function(_super){
+	function BossTopTow(){
+		/**@prop {name:bullet,tips:"子弹",type:prefab}*/
+		this.bullet=null;
+		// 枪炮02血量
+		this.top02HP=30;
+		// 本对象
+		this.thisSp=null;
+		this.thisParentSp=null;
+		this.thisRigid=null;
+		this.top02Ani=null;
+		BossTopTow.__super.call(this);
+	}
+
+	__class(BossTopTow,'enemyScript.BossTopTow',_super);
+	var __proto=BossTopTow.prototype;
+	__proto.onEnable=function(){
+		this.thisSp=this.owner;
+		this.thisParentSp=this.thisSp.parent;
+		this.thisRigid=this.thisSp.getComponent(RigidBody);
+		this.top02Ani=this.owner.parent ["top02_ani"];
+		this.top02Ani.play();
+		Laya.timer.loop(500,this,this.shoot);
+	}
+
+	__proto.shoot=function(){
+		var posX=NaN;
+		var posY=NaN;
+		var velocityX=(Math.random()+0.1)*3;
+		var velocityY=(Math.random()+0.1);
+		posX=this.thisParentSp.x+32;
+		posY=this.thisParentSp.y+140;
+		var bulletSp=Pool.getItemByCreateFun("bossOneBullet",this.bullet.create,this.bullet);
+		var bulletRigid=bulletSp.getComponent(RigidBody);
+		bulletSp.pos(posX,posY);
+		bulletRigid.setVelocity({x:-velocityX,y:velocityY});
+		this.thisParentSp.parent.addChild(bulletSp);
+	}
+
+	__proto.onTriggerEnter=function(other,self,contact){
+		if (other.label==="bullet" && self.label==="boss_top02"){
+			this.top02HP--;
+			if (this.top02HP <=0){
+				console.log("top02销毁");
+				var aniBoom=Pool.getItem("enemyObjBoom");
+				if (aniBoom){
+					aniBoom.pos(this.thisSp.x,this.thisSp.y);
+					aniBoom.play(0,false);
+					this.thisSp.parent.addChild(aniBoom);
+					var shade=new Image();
+					shade.skin="boss/boss_one_top02_boomed.png";
+					shade.x=56;
+					shade.y=133;
+					this.thisParentSp.addChild(shade);
+					this.thisSp.destroy(true);
+				}
+			}
+		}
+	}
+
+	__proto.onDisable=function(){}
+	return BossTopTow;
+})(Script)
+
+
+//class enemyScript.BossOneBullet extends laya.components.Script
+var BossOneBullet=(function(_super){
+	function BossOneBullet(){
+		/**@prop {name:intType,tips:"整数类型示例",type:Int,default:1000}*/
+		this.intType=1000;
+		// 本对象盒子
+		this.thisSp=null;
+		// 子弹动画
+		this.bulletAni=null;
+		//
+		this.bulletSp=null;
+		BossOneBullet.__super.call(this);
+	}
+
+	__class(BossOneBullet,'enemyScript.BossOneBullet',_super);
+	var __proto=BossOneBullet.prototype;
+	__proto.onEnable=function(){
+		this.thisSp=this.owner;
+		this.bulletAni=this.owner ["bossOneBullet_ani"];
+		this.bulletAni.play(0,false);
+	}
+
+	__proto.onTriggerEnter=function(other,self,contact){
+		if (other.label==="pass_n" || other.label==="pass_y"){
+			var aniBoom=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
+			aniBoom.pos(this.thisSp.x,this.thisSp.y);
+			aniBoom.play(0,false);
+			this.thisSp.parent.addChild(aniBoom);
+			this.thisSp.removeSelf();
+		}
 	}
 
 	__proto.createEnemyObjBoomAni=function(){
@@ -56130,24 +58022,99 @@ var TouchDestroy=(function(_super){
 		return ani;
 	}
 
-	__proto.onTriggerEnter=function(other,self,contact){
-		if (other.label==="foot"){
-			console.log(this.thisSp.x,this.thisSp.y);
-			var aniBoom=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
-			aniBoom.pos(this.thisSp.x,this.thisSp.y);
-			this.thisSp.parent.addChild(aniBoom);
-			aniBoom.play(0,false);
-			var thisCollider=this.owner.getComponent(BoxCollider);
-			thisCollider.destroy();
-			this.thisSp.removeSelf();
+	__proto.onDisable=function(){
+		Pool.recover("bossOneBullet",this.thisSp);
+	}
+
+	return BossOneBullet;
+})(Script)
+
+
+//class enemyScript.BossOne extends laya.components.Script
+var BossOne=(function(_super){
+	function BossOne(){
+		/**@prop {name:bullet,tips:"子弹",type:prefab}*/
+		this.bullet=null;
+		// 本对象盒子
+		this.box=null;
+		// 所有精灵
+		this.top01=null;
+		this.top02=null;
+		this.foot=null;
+		this.isAllDestoryed=false;
+		BossOne.__super.call(this);
+	}
+
+	__class(BossOne,'enemyScript.BossOne',_super);
+	var __proto=BossOne.prototype;
+	__proto.onEnable=function(){
+		this.box=this.owner;
+		this.top01=this.box.getChildByName("top01");
+		this.top02=this.box.getChildByName("top02");
+		this.foot=this.box.getChildByName("foot");
+	}
+
+	__proto.onUpdate=function(){
+		if (!this.isAllDestoryed && this.top01.destroyed && this.top02.destroyed && this.foot.destroyed){
+			this.bossOneBoom();
+			this.isAllDestoryed=true;
 		}
 	}
 
-	__proto.onDisable=function(){
-		Pool.recover("touchDestroy",this.thisSp);
+	/**
+	*boss机爆炸
+	*/
+	__proto.bossOneBoom=function(){
+		var _$this=this;
+		this.box.visible=false;
+		Laya.timer.once(0,this,this.boom);
+		Laya.timer.once(500,this,this.boom);
+		Laya.timer.once(1000,this,function(){
+			_$this.box.destroy(true);
+		});
 	}
 
-	return TouchDestroy;
+	__proto.boom=function(){
+		var aniBoom01=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
+		var aniBoom02=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
+		var aniBoom03=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
+		var aniBoom04=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
+		var aniBoom05=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
+		var aniBoom06=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
+		aniBoom01.pos(this.box.x+Math.random()*190,this.box.y+160+Math.random()*90);
+		aniBoom02.pos(this.box.x+Math.random()*190,this.box.y+160+Math.random()*90);
+		aniBoom03.pos(this.box.x+Math.random()*190,this.box.y+160+Math.random()*90);
+		aniBoom04.pos(this.box.x+Math.random()*190,this.box.y+160+Math.random()*90);
+		aniBoom05.pos(this.box.x+Math.random()*190,this.box.y+160+Math.random()*90);
+		aniBoom06.pos(this.box.x+Math.random()*190,this.box.y+160+Math.random()*90);
+		this.box.parent.addChildren(aniBoom01,aniBoom02,aniBoom03,aniBoom04,aniBoom05,aniBoom06);
+		SoundManager.stopMusic();
+		SoundManager.playSound("sound/boss01_boom.wav",1,Handler.create(this,this.onComplete));
+		aniBoom01.play(0,false);
+		aniBoom02.play(0,false);
+		aniBoom03.play(0,false);
+		aniBoom04.play(0,false);
+		aniBoom05.play(0,false);
+		aniBoom06.play(0,false);
+	}
+
+	__proto.onComplete=function(){
+		SoundManager.playSound("sound/gameover.wav");
+	}
+
+	// 创建爆炸动画
+	__proto.createEnemyObjBoomAni=function(){
+		var ani=new Animation();
+		ani.loadAnimation("GameScene/EnemyObjBoom.ani",null,"res/atlas/boom.atlas");
+		ani.on("complete",null,function(){
+			ani.removeSelf();
+			Pool.recover("enemyObjBoom",ani);
+		});
+		return ani;
+	}
+
+	__proto.onDisable=function(){}
+	return BossOne;
 })(Script)
 
 
@@ -57482,64 +59449,6 @@ var VertexBuffer2D=(function(_super){
 })(Buffer2D)
 
 
-//class laya.webgl.utils.IndexBuffer2D extends laya.webgl.utils.Buffer2D
-var IndexBuffer2D=(function(_super){
-	function IndexBuffer2D(bufferUsage){
-		this._uint16Array=null;
-		(bufferUsage===void 0)&& (bufferUsage=0x88e4);
-		IndexBuffer2D.__super.call(this);
-		this._bufferUsage=bufferUsage;
-		this._bufferType=0x8893;
-		this._buffer=new ArrayBuffer(8);
-	}
-
-	__class(IndexBuffer2D,'laya.webgl.utils.IndexBuffer2D',_super);
-	var __proto=IndexBuffer2D.prototype;
-	__proto._checkArrayUse=function(){
-		this._uint16Array && (this._uint16Array=new Uint16Array(this._buffer));
-	}
-
-	__proto.getUint16Array=function(){
-		return this._uint16Array || (this._uint16Array=new Uint16Array(this._buffer));
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto._bindForVAO=function(){
-		LayaGL.instance.bindBuffer(0x8893,this._glBuffer);
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto.bind=function(){
-		if (Buffer._bindedIndexBuffer!==this._glBuffer){
-			LayaGL.instance.bindBuffer(0x8893,this._glBuffer);
-			Buffer._bindedIndexBuffer=this._glBuffer;
-			return true;
-		}
-		return false;
-	}
-
-	__proto.destory=function(){
-		this._uint16Array=null;
-		this._buffer=null;
-	}
-
-	__proto.disposeResource=function(){
-		this._disposeResource();
-	}
-
-	IndexBuffer2D.create=function(bufferUsage){
-		(bufferUsage===void 0)&& (bufferUsage=0x88e4);
-		return new IndexBuffer2D(bufferUsage);
-	}
-
-	return IndexBuffer2D;
-})(Buffer2D)
-
-
 /**
 *距离关节：两个物体上面各自有一点，两点之间的距离固定不变
 */
@@ -57613,6 +59522,64 @@ var DistanceJoint=(function(_super){
 	DistanceJoint._temp=null;
 	return DistanceJoint;
 })(JointBase)
+
+
+//class laya.webgl.utils.IndexBuffer2D extends laya.webgl.utils.Buffer2D
+var IndexBuffer2D=(function(_super){
+	function IndexBuffer2D(bufferUsage){
+		this._uint16Array=null;
+		(bufferUsage===void 0)&& (bufferUsage=0x88e4);
+		IndexBuffer2D.__super.call(this);
+		this._bufferUsage=bufferUsage;
+		this._bufferType=0x8893;
+		this._buffer=new ArrayBuffer(8);
+	}
+
+	__class(IndexBuffer2D,'laya.webgl.utils.IndexBuffer2D',_super);
+	var __proto=IndexBuffer2D.prototype;
+	__proto._checkArrayUse=function(){
+		this._uint16Array && (this._uint16Array=new Uint16Array(this._buffer));
+	}
+
+	__proto.getUint16Array=function(){
+		return this._uint16Array || (this._uint16Array=new Uint16Array(this._buffer));
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto._bindForVAO=function(){
+		LayaGL.instance.bindBuffer(0x8893,this._glBuffer);
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto.bind=function(){
+		if (Buffer._bindedIndexBuffer!==this._glBuffer){
+			LayaGL.instance.bindBuffer(0x8893,this._glBuffer);
+			Buffer._bindedIndexBuffer=this._glBuffer;
+			return true;
+		}
+		return false;
+	}
+
+	__proto.destory=function(){
+		this._uint16Array=null;
+		this._buffer=null;
+	}
+
+	__proto.disposeResource=function(){
+		this._disposeResource();
+	}
+
+	IndexBuffer2D.create=function(bufferUsage){
+		(bufferUsage===void 0)&& (bufferUsage=0x88e4);
+		return new IndexBuffer2D(bufferUsage);
+	}
+
+	return IndexBuffer2D;
+})(Buffer2D)
 
 
 /**
@@ -63141,270 +65108,6 @@ var AnimationBase=(function(_super){
 
 
 /**
-*...
-*@author
-*/
-//class laya.d3.core.material.WaterPrimaryMaterial extends laya.d3.core.material.BaseMaterial
-var WaterPrimaryMaterial=(function(_super){
-	function WaterPrimaryMaterial(){
-		WaterPrimaryMaterial.__super.call(this);
-		this.setShaderName("WaterPrimary");
-		this._shaderValues.setVector(WaterPrimaryMaterial.HORIZONCOLOR,new Vector4(0.172 ,0.463 ,0.435 ,0));
-		this._shaderValues.setNumber(WaterPrimaryMaterial.WAVESCALE,0.15);
-		this._shaderValues.setVector(WaterPrimaryMaterial.WAVESPEED,new Vector4(19,9,-16,-7));
-	}
-
-	__class(WaterPrimaryMaterial,'laya.d3.core.material.WaterPrimaryMaterial',_super);
-	var __proto=WaterPrimaryMaterial.prototype;
-	/**
-	*设置波动速率。
-	*@param value 波动速率。
-	*/
-	/**
-	*获取波动速率。
-	*@return 波动速率。
-	*/
-	__getset(0,__proto,'waveSpeed',function(){
-		return this._shaderValues.getVector(WaterPrimaryMaterial.WAVESPEED);
-		},function(value){
-		this._shaderValues.setVector(WaterPrimaryMaterial.WAVESPEED,value);
-	});
-
-	/**
-	*设置地平线颜色。
-	*@param value 地平线颜色。
-	*/
-	/**
-	*获取地平线颜色。
-	*@return 地平线颜色。
-	*/
-	__getset(0,__proto,'horizonColor',function(){
-		return this._shaderValues.getVector(WaterPrimaryMaterial.HORIZONCOLOR);
-		},function(value){
-		this._shaderValues.setVector(WaterPrimaryMaterial.HORIZONCOLOR,value);
-	});
-
-	/**
-	*设置主贴图。
-	*@param value 主贴图。
-	*/
-	/**
-	*获取主贴图。
-	*@return 主贴图。
-	*/
-	__getset(0,__proto,'mainTexture',function(){
-		return this._shaderValues.getTexture(WaterPrimaryMaterial.MAINTEXTURE);
-		},function(value){
-		if (value)
-			this._defineDatas.add(laya.d3.core.material.WaterPrimaryMaterial.SHADERDEFINE_MAINTEXTURE);
-		else
-		this._defineDatas.remove(laya.d3.core.material.WaterPrimaryMaterial.SHADERDEFINE_MAINTEXTURE);
-		this._shaderValues.setTexture(WaterPrimaryMaterial.MAINTEXTURE,value);
-	});
-
-	/**
-	*设置法线贴图。
-	*@param value 法线贴图。
-	*/
-	/**
-	*获取法线贴图。
-	*@return 法线贴图。
-	*/
-	__getset(0,__proto,'normalTexture',function(){
-		return this._shaderValues.getTexture(WaterPrimaryMaterial.NORMALTEXTURE);
-		},function(value){
-		if (value)
-			this._defineDatas.add(laya.d3.core.material.WaterPrimaryMaterial.SHADERDEFINE_NORMALTEXTURE);
-		else
-		this._defineDatas.remove(laya.d3.core.material.WaterPrimaryMaterial.SHADERDEFINE_NORMALTEXTURE);
-		this._shaderValues.setTexture(WaterPrimaryMaterial.NORMALTEXTURE,value);
-	});
-
-	/**
-	*设置波动缩放系数。
-	*@param value 波动缩放系数。
-	*/
-	/**
-	*获取波动缩放系数。
-	*@return 波动缩放系数。
-	*/
-	__getset(0,__proto,'waveScale',function(){
-		return this._shaderValues.getNumber(WaterPrimaryMaterial.WAVESCALE);
-		},function(value){
-		this._shaderValues.setNumber(WaterPrimaryMaterial.WAVESCALE,value);
-	});
-
-	WaterPrimaryMaterial.__init__=function(){
-		WaterPrimaryMaterial.SHADERDEFINE_MAINTEXTURE=WaterPrimaryMaterial.shaderDefines.registerDefine("MAINTEXTURE");
-		WaterPrimaryMaterial.SHADERDEFINE_NORMALTEXTURE=WaterPrimaryMaterial.shaderDefines.registerDefine("NORMALTEXTURE");
-	}
-
-	WaterPrimaryMaterial.SHADERDEFINE_MAINTEXTURE=0;
-	WaterPrimaryMaterial.SHADERDEFINE_NORMALTEXTURE=0;
-	__static(WaterPrimaryMaterial,
-	['HORIZONCOLOR',function(){return this.HORIZONCOLOR=Shader3D.propertyNameToID("u_HorizonColor");},'MAINTEXTURE',function(){return this.MAINTEXTURE=Shader3D.propertyNameToID("u_MainTexture");},'NORMALTEXTURE',function(){return this.NORMALTEXTURE=Shader3D.propertyNameToID("u_NormalTexture");},'WAVESCALE',function(){return this.WAVESCALE=Shader3D.propertyNameToID("u_WaveScale");},'WAVESPEED',function(){return this.WAVESPEED=Shader3D.propertyNameToID("u_WaveSpeed");},'defaultMaterial',function(){return this.defaultMaterial=new WaterPrimaryMaterial();},'shaderDefines',function(){return this.shaderDefines=new ShaderDefines(BaseMaterial.shaderDefines);}
-	]);
-	return WaterPrimaryMaterial;
-})(BaseMaterial)
-
-
-/**
-*<code>SkyProceduralMaterial</code> 类用于实现SkyProceduralMaterial材质。
-*/
-//class laya.d3.core.material.SkyProceduralMaterial extends laya.d3.core.material.BaseMaterial
-var SkyProceduralMaterial=(function(_super){
-	function SkyProceduralMaterial(){
-		/**@private */
-		this._sunDisk=0;
-		SkyProceduralMaterial.__super.call(this);
-		this.setShaderName("SkyBoxProcedural");
-		this.sunDisk=1;
-		this.sunSize=0.04;
-		this.sunSizeConvergence=5;
-		this.atmosphereThickness=1.0;
-		this.skyTint=new Vector4(0.5,0.5,0.5,1.0);
-		this.groundTint=new Vector4(0.369,0.349,0.341,1.0);
-		this.exposure=1.3;
-	}
-
-	__class(SkyProceduralMaterial,'laya.d3.core.material.SkyProceduralMaterial',_super);
-	var __proto=SkyProceduralMaterial.prototype;
-	/**
-	*设置曝光强度,范围是0到8。
-	*@param value 曝光强度。
-	*/
-	/**
-	*获取曝光强度,范围是0到8。
-	*@return 曝光强度。
-	*/
-	__getset(0,__proto,'exposure',function(){
-		return this._shaderValues.getNumber(SkyProceduralMaterial.EXPOSURE);
-		},function(value){
-		value=Math.min(Math.max(0.0,value),8.0);
-		this._shaderValues.setNumber(SkyProceduralMaterial.EXPOSURE,value);
-	});
-
-	/**
-	*设置太阳尺寸,范围是0到1。
-	*@param value 太阳尺寸。
-	*/
-	/**
-	*获取太阳尺寸,范围是0到1。
-	*@return 太阳尺寸。
-	*/
-	__getset(0,__proto,'sunSize',function(){
-		return this._shaderValues.getNumber(SkyProceduralMaterial.SUNSIZE);
-		},function(value){
-		value=Math.min(Math.max(0.0,value),1.0);
-		this._shaderValues.setNumber(SkyProceduralMaterial.SUNSIZE,value);
-	});
-
-	/**
-	*设置太阳状态。
-	*@param value 太阳状态。
-	*/
-	/**
-	*获取太阳状态。
-	*@return 太阳状态。
-	*/
-	__getset(0,__proto,'sunDisk',function(){
-		return this._sunDisk;
-		},function(value){
-		switch (value){
-			case 1:
-				this._defineDatas.remove(SkyProceduralMaterial.SHADERDEFINE_SUN_SIMPLE);
-				this._defineDatas.add(SkyProceduralMaterial.SHADERDEFINE_SUN_HIGH_QUALITY);
-				break ;
-			case 2:
-				this._defineDatas.remove(SkyProceduralMaterial.SHADERDEFINE_SUN_HIGH_QUALITY);
-				this._defineDatas.add(SkyProceduralMaterial.SHADERDEFINE_SUN_SIMPLE);
-				break ;
-			case 0:
-				this._defineDatas.remove(SkyProceduralMaterial.SHADERDEFINE_SUN_HIGH_QUALITY);
-				this._defineDatas.remove(SkyProceduralMaterial.SHADERDEFINE_SUN_SIMPLE);
-				break ;
-			default :
-				throw "SkyBoxProceduralMaterial: unknown sun value.";
-			}
-		this._sunDisk=value;
-	});
-
-	/**
-	*设置太阳尺寸收缩,范围是0到20。
-	*@param value 太阳尺寸收缩。
-	*/
-	/**
-	*获取太阳尺寸收缩,范围是0到20。
-	*@return 太阳尺寸收缩。
-	*/
-	__getset(0,__proto,'sunSizeConvergence',function(){
-		return this._shaderValues.getNumber(SkyProceduralMaterial.SUNSIZECONVERGENCE);
-		},function(value){
-		value=Math.min(Math.max(0.0,value),20.0);
-		this._shaderValues.setNumber(SkyProceduralMaterial.SUNSIZECONVERGENCE,value);
-	});
-
-	/**
-	*设置大气厚度,范围是0到5。
-	*@param value 大气厚度。
-	*/
-	/**
-	*获取大气厚度,范围是0到5。
-	*@return 大气厚度。
-	*/
-	__getset(0,__proto,'atmosphereThickness',function(){
-		return this._shaderValues.getNumber(SkyProceduralMaterial.ATMOSPHERETHICKNESS);
-		},function(value){
-		value=Math.min(Math.max(0.0,value),5.0);
-		this._shaderValues.setNumber(SkyProceduralMaterial.ATMOSPHERETHICKNESS,value);
-	});
-
-	/**
-	*设置地面颜色。
-	*@param value 地面颜色。
-	*/
-	/**
-	*获取地面颜色。
-	*@return 地面颜色。
-	*/
-	__getset(0,__proto,'groundTint',function(){
-		return this._shaderValues.getVector(SkyProceduralMaterial.GROUNDTINT);
-		},function(value){
-		this._shaderValues.setVector(SkyProceduralMaterial.GROUNDTINT,value);
-	});
-
-	/**
-	*设置天空颜色。
-	*@param value 天空颜色。
-	*/
-	/**
-	*获取天空颜色。
-	*@return 天空颜色。
-	*/
-	__getset(0,__proto,'skyTint',function(){
-		return this._shaderValues.getVector(SkyProceduralMaterial.SKYTINT);
-		},function(value){
-		this._shaderValues.setVector(SkyProceduralMaterial.SKYTINT,value);
-	});
-
-	SkyProceduralMaterial.__init__=function(){
-		SkyProceduralMaterial.SHADERDEFINE_SUN_HIGH_QUALITY=SkyProceduralMaterial.shaderDefines.registerDefine("SUN_HIGH_QUALITY");
-		SkyProceduralMaterial.SHADERDEFINE_SUN_SIMPLE=SkyProceduralMaterial.shaderDefines.registerDefine("SUN_SIMPLE");
-	}
-
-	SkyProceduralMaterial.SUN_NODE=0;
-	SkyProceduralMaterial.SUN_HIGH_QUALITY=1;
-	SkyProceduralMaterial.SUN_SIMPLE=2;
-	SkyProceduralMaterial.SHADERDEFINE_SUN_HIGH_QUALITY=0;
-	SkyProceduralMaterial.SHADERDEFINE_SUN_SIMPLE=0;
-	__static(SkyProceduralMaterial,
-	['SUNSIZE',function(){return this.SUNSIZE=Shader3D.propertyNameToID("u_SunSize");},'SUNSIZECONVERGENCE',function(){return this.SUNSIZECONVERGENCE=Shader3D.propertyNameToID("u_SunSizeConvergence");},'ATMOSPHERETHICKNESS',function(){return this.ATMOSPHERETHICKNESS=Shader3D.propertyNameToID("u_AtmosphereThickness");},'SKYTINT',function(){return this.SKYTINT=Shader3D.propertyNameToID("u_SkyTint");},'GROUNDTINT',function(){return this.GROUNDTINT=Shader3D.propertyNameToID("u_GroundTint");},'EXPOSURE',function(){return this.EXPOSURE=Shader3D.propertyNameToID("u_Exposure");},'defaultMaterial',function(){return this.defaultMaterial=new SkyProceduralMaterial();},'shaderDefines',function(){return this.shaderDefines=new ShaderDefines(BaseMaterial.shaderDefines);}
-	]);
-	return SkyProceduralMaterial;
-})(BaseMaterial)
-
-
-/**
 *<code>DialogManager</code> 对话框管理容器，所有的对话框都在该容器内，并且受管理器管理。
 *任意对话框打开和关闭，都会出发管理类的open和close事件
 *可以通过UIConfig设置弹出框背景透明度，模式窗口点击边缘是否关闭，点击窗口是否切换层次等
@@ -64432,6 +66135,270 @@ var Scene3D=(function(_super){
 
 
 /**
+*...
+*@author
+*/
+//class laya.d3.core.material.WaterPrimaryMaterial extends laya.d3.core.material.BaseMaterial
+var WaterPrimaryMaterial=(function(_super){
+	function WaterPrimaryMaterial(){
+		WaterPrimaryMaterial.__super.call(this);
+		this.setShaderName("WaterPrimary");
+		this._shaderValues.setVector(WaterPrimaryMaterial.HORIZONCOLOR,new Vector4(0.172 ,0.463 ,0.435 ,0));
+		this._shaderValues.setNumber(WaterPrimaryMaterial.WAVESCALE,0.15);
+		this._shaderValues.setVector(WaterPrimaryMaterial.WAVESPEED,new Vector4(19,9,-16,-7));
+	}
+
+	__class(WaterPrimaryMaterial,'laya.d3.core.material.WaterPrimaryMaterial',_super);
+	var __proto=WaterPrimaryMaterial.prototype;
+	/**
+	*设置波动速率。
+	*@param value 波动速率。
+	*/
+	/**
+	*获取波动速率。
+	*@return 波动速率。
+	*/
+	__getset(0,__proto,'waveSpeed',function(){
+		return this._shaderValues.getVector(WaterPrimaryMaterial.WAVESPEED);
+		},function(value){
+		this._shaderValues.setVector(WaterPrimaryMaterial.WAVESPEED,value);
+	});
+
+	/**
+	*设置地平线颜色。
+	*@param value 地平线颜色。
+	*/
+	/**
+	*获取地平线颜色。
+	*@return 地平线颜色。
+	*/
+	__getset(0,__proto,'horizonColor',function(){
+		return this._shaderValues.getVector(WaterPrimaryMaterial.HORIZONCOLOR);
+		},function(value){
+		this._shaderValues.setVector(WaterPrimaryMaterial.HORIZONCOLOR,value);
+	});
+
+	/**
+	*设置主贴图。
+	*@param value 主贴图。
+	*/
+	/**
+	*获取主贴图。
+	*@return 主贴图。
+	*/
+	__getset(0,__proto,'mainTexture',function(){
+		return this._shaderValues.getTexture(WaterPrimaryMaterial.MAINTEXTURE);
+		},function(value){
+		if (value)
+			this._defineDatas.add(laya.d3.core.material.WaterPrimaryMaterial.SHADERDEFINE_MAINTEXTURE);
+		else
+		this._defineDatas.remove(laya.d3.core.material.WaterPrimaryMaterial.SHADERDEFINE_MAINTEXTURE);
+		this._shaderValues.setTexture(WaterPrimaryMaterial.MAINTEXTURE,value);
+	});
+
+	/**
+	*设置法线贴图。
+	*@param value 法线贴图。
+	*/
+	/**
+	*获取法线贴图。
+	*@return 法线贴图。
+	*/
+	__getset(0,__proto,'normalTexture',function(){
+		return this._shaderValues.getTexture(WaterPrimaryMaterial.NORMALTEXTURE);
+		},function(value){
+		if (value)
+			this._defineDatas.add(laya.d3.core.material.WaterPrimaryMaterial.SHADERDEFINE_NORMALTEXTURE);
+		else
+		this._defineDatas.remove(laya.d3.core.material.WaterPrimaryMaterial.SHADERDEFINE_NORMALTEXTURE);
+		this._shaderValues.setTexture(WaterPrimaryMaterial.NORMALTEXTURE,value);
+	});
+
+	/**
+	*设置波动缩放系数。
+	*@param value 波动缩放系数。
+	*/
+	/**
+	*获取波动缩放系数。
+	*@return 波动缩放系数。
+	*/
+	__getset(0,__proto,'waveScale',function(){
+		return this._shaderValues.getNumber(WaterPrimaryMaterial.WAVESCALE);
+		},function(value){
+		this._shaderValues.setNumber(WaterPrimaryMaterial.WAVESCALE,value);
+	});
+
+	WaterPrimaryMaterial.__init__=function(){
+		WaterPrimaryMaterial.SHADERDEFINE_MAINTEXTURE=WaterPrimaryMaterial.shaderDefines.registerDefine("MAINTEXTURE");
+		WaterPrimaryMaterial.SHADERDEFINE_NORMALTEXTURE=WaterPrimaryMaterial.shaderDefines.registerDefine("NORMALTEXTURE");
+	}
+
+	WaterPrimaryMaterial.SHADERDEFINE_MAINTEXTURE=0;
+	WaterPrimaryMaterial.SHADERDEFINE_NORMALTEXTURE=0;
+	__static(WaterPrimaryMaterial,
+	['HORIZONCOLOR',function(){return this.HORIZONCOLOR=Shader3D.propertyNameToID("u_HorizonColor");},'MAINTEXTURE',function(){return this.MAINTEXTURE=Shader3D.propertyNameToID("u_MainTexture");},'NORMALTEXTURE',function(){return this.NORMALTEXTURE=Shader3D.propertyNameToID("u_NormalTexture");},'WAVESCALE',function(){return this.WAVESCALE=Shader3D.propertyNameToID("u_WaveScale");},'WAVESPEED',function(){return this.WAVESPEED=Shader3D.propertyNameToID("u_WaveSpeed");},'defaultMaterial',function(){return this.defaultMaterial=new WaterPrimaryMaterial();},'shaderDefines',function(){return this.shaderDefines=new ShaderDefines(BaseMaterial.shaderDefines);}
+	]);
+	return WaterPrimaryMaterial;
+})(BaseMaterial)
+
+
+/**
+*<code>SkyProceduralMaterial</code> 类用于实现SkyProceduralMaterial材质。
+*/
+//class laya.d3.core.material.SkyProceduralMaterial extends laya.d3.core.material.BaseMaterial
+var SkyProceduralMaterial=(function(_super){
+	function SkyProceduralMaterial(){
+		/**@private */
+		this._sunDisk=0;
+		SkyProceduralMaterial.__super.call(this);
+		this.setShaderName("SkyBoxProcedural");
+		this.sunDisk=1;
+		this.sunSize=0.04;
+		this.sunSizeConvergence=5;
+		this.atmosphereThickness=1.0;
+		this.skyTint=new Vector4(0.5,0.5,0.5,1.0);
+		this.groundTint=new Vector4(0.369,0.349,0.341,1.0);
+		this.exposure=1.3;
+	}
+
+	__class(SkyProceduralMaterial,'laya.d3.core.material.SkyProceduralMaterial',_super);
+	var __proto=SkyProceduralMaterial.prototype;
+	/**
+	*设置曝光强度,范围是0到8。
+	*@param value 曝光强度。
+	*/
+	/**
+	*获取曝光强度,范围是0到8。
+	*@return 曝光强度。
+	*/
+	__getset(0,__proto,'exposure',function(){
+		return this._shaderValues.getNumber(SkyProceduralMaterial.EXPOSURE);
+		},function(value){
+		value=Math.min(Math.max(0.0,value),8.0);
+		this._shaderValues.setNumber(SkyProceduralMaterial.EXPOSURE,value);
+	});
+
+	/**
+	*设置太阳尺寸,范围是0到1。
+	*@param value 太阳尺寸。
+	*/
+	/**
+	*获取太阳尺寸,范围是0到1。
+	*@return 太阳尺寸。
+	*/
+	__getset(0,__proto,'sunSize',function(){
+		return this._shaderValues.getNumber(SkyProceduralMaterial.SUNSIZE);
+		},function(value){
+		value=Math.min(Math.max(0.0,value),1.0);
+		this._shaderValues.setNumber(SkyProceduralMaterial.SUNSIZE,value);
+	});
+
+	/**
+	*设置太阳状态。
+	*@param value 太阳状态。
+	*/
+	/**
+	*获取太阳状态。
+	*@return 太阳状态。
+	*/
+	__getset(0,__proto,'sunDisk',function(){
+		return this._sunDisk;
+		},function(value){
+		switch (value){
+			case 1:
+				this._defineDatas.remove(SkyProceduralMaterial.SHADERDEFINE_SUN_SIMPLE);
+				this._defineDatas.add(SkyProceduralMaterial.SHADERDEFINE_SUN_HIGH_QUALITY);
+				break ;
+			case 2:
+				this._defineDatas.remove(SkyProceduralMaterial.SHADERDEFINE_SUN_HIGH_QUALITY);
+				this._defineDatas.add(SkyProceduralMaterial.SHADERDEFINE_SUN_SIMPLE);
+				break ;
+			case 0:
+				this._defineDatas.remove(SkyProceduralMaterial.SHADERDEFINE_SUN_HIGH_QUALITY);
+				this._defineDatas.remove(SkyProceduralMaterial.SHADERDEFINE_SUN_SIMPLE);
+				break ;
+			default :
+				throw "SkyBoxProceduralMaterial: unknown sun value.";
+			}
+		this._sunDisk=value;
+	});
+
+	/**
+	*设置太阳尺寸收缩,范围是0到20。
+	*@param value 太阳尺寸收缩。
+	*/
+	/**
+	*获取太阳尺寸收缩,范围是0到20。
+	*@return 太阳尺寸收缩。
+	*/
+	__getset(0,__proto,'sunSizeConvergence',function(){
+		return this._shaderValues.getNumber(SkyProceduralMaterial.SUNSIZECONVERGENCE);
+		},function(value){
+		value=Math.min(Math.max(0.0,value),20.0);
+		this._shaderValues.setNumber(SkyProceduralMaterial.SUNSIZECONVERGENCE,value);
+	});
+
+	/**
+	*设置大气厚度,范围是0到5。
+	*@param value 大气厚度。
+	*/
+	/**
+	*获取大气厚度,范围是0到5。
+	*@return 大气厚度。
+	*/
+	__getset(0,__proto,'atmosphereThickness',function(){
+		return this._shaderValues.getNumber(SkyProceduralMaterial.ATMOSPHERETHICKNESS);
+		},function(value){
+		value=Math.min(Math.max(0.0,value),5.0);
+		this._shaderValues.setNumber(SkyProceduralMaterial.ATMOSPHERETHICKNESS,value);
+	});
+
+	/**
+	*设置地面颜色。
+	*@param value 地面颜色。
+	*/
+	/**
+	*获取地面颜色。
+	*@return 地面颜色。
+	*/
+	__getset(0,__proto,'groundTint',function(){
+		return this._shaderValues.getVector(SkyProceduralMaterial.GROUNDTINT);
+		},function(value){
+		this._shaderValues.setVector(SkyProceduralMaterial.GROUNDTINT,value);
+	});
+
+	/**
+	*设置天空颜色。
+	*@param value 天空颜色。
+	*/
+	/**
+	*获取天空颜色。
+	*@return 天空颜色。
+	*/
+	__getset(0,__proto,'skyTint',function(){
+		return this._shaderValues.getVector(SkyProceduralMaterial.SKYTINT);
+		},function(value){
+		this._shaderValues.setVector(SkyProceduralMaterial.SKYTINT,value);
+	});
+
+	SkyProceduralMaterial.__init__=function(){
+		SkyProceduralMaterial.SHADERDEFINE_SUN_HIGH_QUALITY=SkyProceduralMaterial.shaderDefines.registerDefine("SUN_HIGH_QUALITY");
+		SkyProceduralMaterial.SHADERDEFINE_SUN_SIMPLE=SkyProceduralMaterial.shaderDefines.registerDefine("SUN_SIMPLE");
+	}
+
+	SkyProceduralMaterial.SUN_NODE=0;
+	SkyProceduralMaterial.SUN_HIGH_QUALITY=1;
+	SkyProceduralMaterial.SUN_SIMPLE=2;
+	SkyProceduralMaterial.SHADERDEFINE_SUN_HIGH_QUALITY=0;
+	SkyProceduralMaterial.SHADERDEFINE_SUN_SIMPLE=0;
+	__static(SkyProceduralMaterial,
+	['SUNSIZE',function(){return this.SUNSIZE=Shader3D.propertyNameToID("u_SunSize");},'SUNSIZECONVERGENCE',function(){return this.SUNSIZECONVERGENCE=Shader3D.propertyNameToID("u_SunSizeConvergence");},'ATMOSPHERETHICKNESS',function(){return this.ATMOSPHERETHICKNESS=Shader3D.propertyNameToID("u_AtmosphereThickness");},'SKYTINT',function(){return this.SKYTINT=Shader3D.propertyNameToID("u_SkyTint");},'GROUNDTINT',function(){return this.GROUNDTINT=Shader3D.propertyNameToID("u_GroundTint");},'EXPOSURE',function(){return this.EXPOSURE=Shader3D.propertyNameToID("u_Exposure");},'defaultMaterial',function(){return this.defaultMaterial=new SkyProceduralMaterial();},'shaderDefines',function(){return this.shaderDefines=new ShaderDefines(BaseMaterial.shaderDefines);}
+	]);
+	return SkyProceduralMaterial;
+})(BaseMaterial)
+
+
+/**
 *<code>PBRSpecularMaterial</code> 类用于实现PBR(Specular)材质。
 */
 //class laya.d3.core.material.PBRSpecularMaterial extends laya.d3.core.material.BaseMaterial
@@ -65326,6 +67293,224 @@ var PBRSpecularMaterial=(function(_super){
 
 
 /**
+*物理辅助线，调用PhysicsDebugDraw.enable()开启，或者通过IDE设置打开
+*/
+//class laya.physics.PhysicsDebugDraw extends laya.display.Sprite
+var PhysicsDebugDraw=(function(_super){
+	function PhysicsDebugDraw(){
+		/**@private */
+		this.m_drawFlags=99;
+		/**@private */
+		this.world=null;
+		/**@private */
+		this._camera=null;
+		/**@private */
+		this._mG=null;
+		/**@private */
+		this._textSp=null;
+		/**@private */
+		this._textG=null;
+		/**@private */
+		this.lineWidth=NaN;
+		PhysicsDebugDraw.__super.call(this);
+		if (!PhysicsDebugDraw._inited){
+			PhysicsDebugDraw._inited=true;
+			PhysicsDebugDraw.init();
+		}
+		this._camera={};
+		this._camera.m_center=new PhysicsDebugDraw.box2d.b2Vec2(0,0);
+		this._camera.m_extent=25;
+		this._camera.m_zoom=1;
+		this._camera.m_width=1280;
+		this._camera.m_height=800;
+		this._mG=new Graphics();
+		this.graphics=this._mG;
+		this._textSp=new Sprite();
+		this._textG=this._textSp.graphics;
+		this.addChild(this._textSp);
+	}
+
+	__class(PhysicsDebugDraw,'laya.physics.PhysicsDebugDraw',_super);
+	var __proto=PhysicsDebugDraw.prototype;
+	/**@private */
+	__proto.render=function(ctx,x,y){
+		this._renderToGraphic();
+		_super.prototype.render.call(this,ctx,x,y);
+	}
+
+	/**@private */
+	__proto._renderToGraphic=function(){
+		if (this.world){
+			this._textG.clear();
+			this._mG.clear();
+			this._mG.save();
+			this._mG.scale(Physics.PIXEL_RATIO,Physics.PIXEL_RATIO);
+			this.lineWidth=1 / Physics.PIXEL_RATIO;
+			this.world.DrawDebugData();
+			this._mG.restore();
+		}
+	}
+
+	/**@private */
+	__proto.SetFlags=function(flags){
+		this.m_drawFlags=flags;
+	}
+
+	/**@private */
+	__proto.GetFlags=function(){
+		return this.m_drawFlags;
+	}
+
+	/**@private */
+	__proto.AppendFlags=function(flags){
+		this.m_drawFlags |=flags;
+	}
+
+	/**@private */
+	__proto.ClearFlags=function(flags){
+		this.m_drawFlags &=~flags;
+	}
+
+	/**@private */
+	__proto.PushTransform=function(xf){
+		this._mG.save();
+		this._mG.translate(xf.p.x,xf.p.y);
+		this._mG.rotate(xf.q.GetAngle());
+	}
+
+	/**@private */
+	__proto.PopTransform=function(xf){
+		this._mG.restore();
+	}
+
+	/**@private */
+	__proto.DrawPolygon=function(vertices,vertexCount,color){
+		var i=0,len=0;
+		len=vertices.length;
+		var points;
+		points=[];
+		for (i=0;i < vertexCount;i++){
+			points.push(vertices[i].x,vertices[i].y);
+		}
+		this._mG.drawPoly(0,0,points,null,color.MakeStyleString(1),this.lineWidth);
+	}
+
+	/**@private */
+	__proto.DrawSolidPolygon=function(vertices,vertexCount,color){
+		var i=0,len=0;
+		len=vertices.length;
+		var points;
+		points=[];
+		for (i=0;i < vertexCount;i++){
+			points.push(vertices[i].x,vertices[i].y);
+		}
+		this._mG.drawPoly(0,0,points,color.MakeStyleString(0.5),color.MakeStyleString(1),this.lineWidth);
+	}
+
+	/**@private */
+	__proto.DrawCircle=function(center,radius,color){
+		this._mG.drawCircle(center.x,center.y,radius,null,color.MakeStyleString(1),this.lineWidth);
+	}
+
+	/**@private */
+	__proto.DrawSolidCircle=function(center,radius,axis,color){
+		var cx=center.x;
+		var cy=center.y;
+		this._mG.drawCircle(cx,cy,radius,color.MakeStyleString(0.5),color.MakeStyleString(1),this.lineWidth);
+		this._mG.drawLine(cx,cy,(cx+axis.x *radius),(cy+axis.y *radius),color.MakeStyleString(1),this.lineWidth);
+	}
+
+	/**@private */
+	__proto.DrawParticles=function(centers,radius,colors,count){
+		if (colors!==null){
+			for (var i=0;i < count;++i){
+				var center=centers[i];
+				var color=colors[i];
+				this._mG.drawCircle(center.x,center.y,radius,color.MakeStyleString(),null,this.lineWidth);
+			}
+			}else {
+			for (i=0;i < count;++i){
+				center=centers[i];
+				this._mG.drawCircle(center.x,center.y,radius,"#ffff00",null,this.lineWidth);
+			}
+		}
+	}
+
+	/**@private */
+	__proto.DrawSegment=function(p1,p2,color){
+		this._mG.drawLine(p1.x,p1.y,p2.x,p2.y,color.MakeStyleString(1),this.lineWidth);
+	}
+
+	/**@private */
+	__proto.DrawTransform=function(xf){
+		this.PushTransform(xf);
+		this._mG.drawLine(0,0,1,0,PhysicsDebugDraw.box2d.b2Color.RED.MakeStyleString(1),this.lineWidth);
+		this._mG.drawLine(0,0,0,1,PhysicsDebugDraw.box2d.b2Color.GREEN.MakeStyleString(1),this.lineWidth);
+		this.PopTransform(xf);
+	}
+
+	/**@private */
+	__proto.DrawPoint=function(p,size,color){
+		size *=this._camera.m_zoom;
+		size /=this._camera.m_extent;
+		var hsize=size / 2;
+		this._mG.drawRect(p.x-hsize,p.y-hsize,size,size,color.MakeStyleString(),null);
+	}
+
+	/**@private */
+	__proto.DrawString=function(x,y,message){
+		this._textG.fillText(message,x,y,"15px DroidSans",PhysicsDebugDraw.DrawString_s_color.MakeStyleString(),"left");
+	}
+
+	/**@private */
+	__proto.DrawStringWorld=function(x,y,message){
+		this.DrawString(x,y,message);
+	}
+
+	/**@private */
+	__proto.DrawAABB=function(aabb,color){
+		var x=aabb.lowerBound.x;
+		var y=aabb.lowerBound.y;
+		var w=aabb.upperBound.x-aabb.lowerBound.x;
+		var h=aabb.upperBound.y-aabb.lowerBound.y;
+		this._mG.drawRect(x,y,w,h,null,color.MakeStyleString(),this.lineWidth);
+	}
+
+	PhysicsDebugDraw.init=function(){
+		PhysicsDebugDraw.box2d=Browser.window.box2d;
+		PhysicsDebugDraw.DrawString_s_color=new PhysicsDebugDraw.box2d.b2Color(0.9,0.6,0.6);
+		PhysicsDebugDraw.DrawStringWorld_s_p=new PhysicsDebugDraw.box2d.b2Vec2();
+		PhysicsDebugDraw.DrawStringWorld_s_cc=new PhysicsDebugDraw.box2d.b2Vec2();
+		PhysicsDebugDraw.DrawStringWorld_s_color=new PhysicsDebugDraw.box2d.b2Color(0.5,0.9,0.5);
+	}
+
+	PhysicsDebugDraw.enable=function(flags){
+		(flags===void 0)&& (flags=99);
+		if (!PhysicsDebugDraw.I){
+			var debug=new PhysicsDebugDraw();
+			debug.world=Physics.I.world;
+			debug.world.SetDebugDraw(debug);
+			debug.zOrder=1000;
+			debug.m_drawFlags=flags;
+			Laya.stage.addChild(debug);
+			PhysicsDebugDraw.I=debug;
+		}
+		return debug;
+	}
+
+	PhysicsDebugDraw.box2d=null;
+	PhysicsDebugDraw.DrawString_s_color=null;
+	PhysicsDebugDraw.DrawStringWorld_s_p=null;
+	PhysicsDebugDraw.DrawStringWorld_s_cc=null;
+	PhysicsDebugDraw.DrawStringWorld_s_color=null;
+	PhysicsDebugDraw._canvas=null;
+	PhysicsDebugDraw._inited=false;
+	PhysicsDebugDraw.I=null;
+	return PhysicsDebugDraw;
+})(Sprite)
+
+
+/**
 *<code>TrailMaterial</code> 类用于实现拖尾材质。
 */
 //class laya.d3.core.trail.TrailMaterial extends laya.d3.core.material.BaseMaterial
@@ -65813,224 +67998,6 @@ var HTMLCanvas=(function(_super){
 
 	return HTMLCanvas;
 })(Bitmap)
-
-
-/**
-*物理辅助线，调用PhysicsDebugDraw.enable()开启，或者通过IDE设置打开
-*/
-//class laya.physics.PhysicsDebugDraw extends laya.display.Sprite
-var PhysicsDebugDraw=(function(_super){
-	function PhysicsDebugDraw(){
-		/**@private */
-		this.m_drawFlags=99;
-		/**@private */
-		this.world=null;
-		/**@private */
-		this._camera=null;
-		/**@private */
-		this._mG=null;
-		/**@private */
-		this._textSp=null;
-		/**@private */
-		this._textG=null;
-		/**@private */
-		this.lineWidth=NaN;
-		PhysicsDebugDraw.__super.call(this);
-		if (!PhysicsDebugDraw._inited){
-			PhysicsDebugDraw._inited=true;
-			PhysicsDebugDraw.init();
-		}
-		this._camera={};
-		this._camera.m_center=new PhysicsDebugDraw.box2d.b2Vec2(0,0);
-		this._camera.m_extent=25;
-		this._camera.m_zoom=1;
-		this._camera.m_width=1280;
-		this._camera.m_height=800;
-		this._mG=new Graphics();
-		this.graphics=this._mG;
-		this._textSp=new Sprite();
-		this._textG=this._textSp.graphics;
-		this.addChild(this._textSp);
-	}
-
-	__class(PhysicsDebugDraw,'laya.physics.PhysicsDebugDraw',_super);
-	var __proto=PhysicsDebugDraw.prototype;
-	/**@private */
-	__proto.render=function(ctx,x,y){
-		this._renderToGraphic();
-		_super.prototype.render.call(this,ctx,x,y);
-	}
-
-	/**@private */
-	__proto._renderToGraphic=function(){
-		if (this.world){
-			this._textG.clear();
-			this._mG.clear();
-			this._mG.save();
-			this._mG.scale(Physics.PIXEL_RATIO,Physics.PIXEL_RATIO);
-			this.lineWidth=1 / Physics.PIXEL_RATIO;
-			this.world.DrawDebugData();
-			this._mG.restore();
-		}
-	}
-
-	/**@private */
-	__proto.SetFlags=function(flags){
-		this.m_drawFlags=flags;
-	}
-
-	/**@private */
-	__proto.GetFlags=function(){
-		return this.m_drawFlags;
-	}
-
-	/**@private */
-	__proto.AppendFlags=function(flags){
-		this.m_drawFlags |=flags;
-	}
-
-	/**@private */
-	__proto.ClearFlags=function(flags){
-		this.m_drawFlags &=~flags;
-	}
-
-	/**@private */
-	__proto.PushTransform=function(xf){
-		this._mG.save();
-		this._mG.translate(xf.p.x,xf.p.y);
-		this._mG.rotate(xf.q.GetAngle());
-	}
-
-	/**@private */
-	__proto.PopTransform=function(xf){
-		this._mG.restore();
-	}
-
-	/**@private */
-	__proto.DrawPolygon=function(vertices,vertexCount,color){
-		var i=0,len=0;
-		len=vertices.length;
-		var points;
-		points=[];
-		for (i=0;i < vertexCount;i++){
-			points.push(vertices[i].x,vertices[i].y);
-		}
-		this._mG.drawPoly(0,0,points,null,color.MakeStyleString(1),this.lineWidth);
-	}
-
-	/**@private */
-	__proto.DrawSolidPolygon=function(vertices,vertexCount,color){
-		var i=0,len=0;
-		len=vertices.length;
-		var points;
-		points=[];
-		for (i=0;i < vertexCount;i++){
-			points.push(vertices[i].x,vertices[i].y);
-		}
-		this._mG.drawPoly(0,0,points,color.MakeStyleString(0.5),color.MakeStyleString(1),this.lineWidth);
-	}
-
-	/**@private */
-	__proto.DrawCircle=function(center,radius,color){
-		this._mG.drawCircle(center.x,center.y,radius,null,color.MakeStyleString(1),this.lineWidth);
-	}
-
-	/**@private */
-	__proto.DrawSolidCircle=function(center,radius,axis,color){
-		var cx=center.x;
-		var cy=center.y;
-		this._mG.drawCircle(cx,cy,radius,color.MakeStyleString(0.5),color.MakeStyleString(1),this.lineWidth);
-		this._mG.drawLine(cx,cy,(cx+axis.x *radius),(cy+axis.y *radius),color.MakeStyleString(1),this.lineWidth);
-	}
-
-	/**@private */
-	__proto.DrawParticles=function(centers,radius,colors,count){
-		if (colors!==null){
-			for (var i=0;i < count;++i){
-				var center=centers[i];
-				var color=colors[i];
-				this._mG.drawCircle(center.x,center.y,radius,color.MakeStyleString(),null,this.lineWidth);
-			}
-			}else {
-			for (i=0;i < count;++i){
-				center=centers[i];
-				this._mG.drawCircle(center.x,center.y,radius,"#ffff00",null,this.lineWidth);
-			}
-		}
-	}
-
-	/**@private */
-	__proto.DrawSegment=function(p1,p2,color){
-		this._mG.drawLine(p1.x,p1.y,p2.x,p2.y,color.MakeStyleString(1),this.lineWidth);
-	}
-
-	/**@private */
-	__proto.DrawTransform=function(xf){
-		this.PushTransform(xf);
-		this._mG.drawLine(0,0,1,0,PhysicsDebugDraw.box2d.b2Color.RED.MakeStyleString(1),this.lineWidth);
-		this._mG.drawLine(0,0,0,1,PhysicsDebugDraw.box2d.b2Color.GREEN.MakeStyleString(1),this.lineWidth);
-		this.PopTransform(xf);
-	}
-
-	/**@private */
-	__proto.DrawPoint=function(p,size,color){
-		size *=this._camera.m_zoom;
-		size /=this._camera.m_extent;
-		var hsize=size / 2;
-		this._mG.drawRect(p.x-hsize,p.y-hsize,size,size,color.MakeStyleString(),null);
-	}
-
-	/**@private */
-	__proto.DrawString=function(x,y,message){
-		this._textG.fillText(message,x,y,"15px DroidSans",PhysicsDebugDraw.DrawString_s_color.MakeStyleString(),"left");
-	}
-
-	/**@private */
-	__proto.DrawStringWorld=function(x,y,message){
-		this.DrawString(x,y,message);
-	}
-
-	/**@private */
-	__proto.DrawAABB=function(aabb,color){
-		var x=aabb.lowerBound.x;
-		var y=aabb.lowerBound.y;
-		var w=aabb.upperBound.x-aabb.lowerBound.x;
-		var h=aabb.upperBound.y-aabb.lowerBound.y;
-		this._mG.drawRect(x,y,w,h,null,color.MakeStyleString(),this.lineWidth);
-	}
-
-	PhysicsDebugDraw.init=function(){
-		PhysicsDebugDraw.box2d=Browser.window.box2d;
-		PhysicsDebugDraw.DrawString_s_color=new PhysicsDebugDraw.box2d.b2Color(0.9,0.6,0.6);
-		PhysicsDebugDraw.DrawStringWorld_s_p=new PhysicsDebugDraw.box2d.b2Vec2();
-		PhysicsDebugDraw.DrawStringWorld_s_cc=new PhysicsDebugDraw.box2d.b2Vec2();
-		PhysicsDebugDraw.DrawStringWorld_s_color=new PhysicsDebugDraw.box2d.b2Color(0.5,0.9,0.5);
-	}
-
-	PhysicsDebugDraw.enable=function(flags){
-		(flags===void 0)&& (flags=99);
-		if (!PhysicsDebugDraw.I){
-			var debug=new PhysicsDebugDraw();
-			debug.world=Physics.I.world;
-			debug.world.SetDebugDraw(debug);
-			debug.zOrder=1000;
-			debug.m_drawFlags=flags;
-			Laya.stage.addChild(debug);
-			PhysicsDebugDraw.I=debug;
-		}
-		return debug;
-	}
-
-	PhysicsDebugDraw.box2d=null;
-	PhysicsDebugDraw.DrawString_s_color=null;
-	PhysicsDebugDraw.DrawStringWorld_s_p=null;
-	PhysicsDebugDraw.DrawStringWorld_s_cc=null;
-	PhysicsDebugDraw.DrawStringWorld_s_color=null;
-	PhysicsDebugDraw._canvas=null;
-	PhysicsDebugDraw._inited=false;
-	PhysicsDebugDraw.I=null;
-	return PhysicsDebugDraw;
-})(Sprite)
 
 
 /**
@@ -68461,6 +70428,319 @@ var UnlitMaterial=(function(_super){
 
 
 /**
+*<code>BaseCamera</code> 类用于创建摄像机的父类。
+*/
+//class laya.d3.core.BaseCamera extends laya.d3.core.Sprite3D
+var BaseCamera=(function(_super){
+	function BaseCamera(nearPlane,farPlane){
+		/**@private 渲染顺序。*/
+		//this._renderingOrder=0;
+		/**@private 近裁剪面。*/
+		//this._nearPlane=NaN;
+		/**@private 远裁剪面。*/
+		//this._farPlane=NaN;
+		/**@private 视野。*/
+		//this._fieldOfView=NaN;
+		/**@private 正交投影的垂直尺寸。*/
+		//this._orthographicVerticalSize=NaN;
+		/**@private */
+		//this._orthographic=false;
+		/**@private 渲染目标。*/
+		//this._renderTarget=null;
+		/**@private 是否使用用户自定义投影矩阵，如果使用了用户投影矩阵，摄像机投影矩阵相关的参数改变则不改变投影矩阵的值，需调用ResetProjectionMatrix方法。*/
+		//this._useUserProjectionMatrix=false;
+		/**@private */
+		//this._shaderValues=null;
+		/**清楚标记。*/
+		//this.clearFlag=0;
+		/**摄像机的清除颜色。*/
+		//this.clearColor=null;
+		/**可视层位标记遮罩值,支持混合 例:cullingMask=Math.pow(2,0)|Math.pow(2,1)为第0层和第1层可见。*/
+		//this.cullingMask=0;
+		/**渲染时是否用遮挡剔除。 */
+		//this.useOcclusionCulling=false;
+		BaseCamera.__super.call(this);
+		this._skyRenderer=new SkyRenderer();
+		(nearPlane===void 0)&& (nearPlane=0.3);
+		(farPlane===void 0)&& (farPlane=1000);
+		this._shaderValues=new ShaderData(null);
+		this._fieldOfView=60;
+		this._useUserProjectionMatrix=false;
+		this._orthographic=false;
+		this._orthographicVerticalSize=10;
+		this.renderingOrder=0;
+		this._nearPlane=nearPlane;
+		this._farPlane=farPlane;
+		this.cullingMask=2147483647;
+		this.clearFlag=0;
+		this.useOcclusionCulling=true;
+		this._calculateProjectionMatrix();
+		Laya.stage.on("resize",this,this._onScreenSizeChanged);
+	}
+
+	__class(BaseCamera,'laya.d3.core.BaseCamera',_super);
+	var __proto=BaseCamera.prototype;
+	/**
+	*通过RenderingOrder属性对摄像机机型排序。
+	*/
+	__proto._sortCamerasByRenderingOrder=function(){
+		if (this.displayedInStage){
+			var cameraPool=this.scene._cameraPool;
+			var n=cameraPool.length-1;
+			for (var i=0;i < n;i++){
+				if (cameraPool[i].renderingOrder > cameraPool[n].renderingOrder){
+					var tempCamera=cameraPool[i];
+					cameraPool[i]=cameraPool[n];
+					cameraPool[n]=tempCamera;
+				}
+			}
+		}
+	}
+
+	/**
+	*@private
+	*/
+	__proto._calculateProjectionMatrix=function(){}
+	/**
+	*@private
+	*/
+	__proto._onScreenSizeChanged=function(){
+		this._calculateProjectionMatrix();
+	}
+
+	/**
+	*@private
+	*/
+	__proto._prepareCameraToRender=function(){
+		var cameraSV=this._shaderValues;
+		cameraSV.setVector3(laya.d3.core.BaseCamera.CAMERAPOS,this.transform.position);
+		cameraSV.setVector3(laya.d3.core.BaseCamera.CAMERADIRECTION,this.transform.forward);
+		cameraSV.setVector3(laya.d3.core.BaseCamera.CAMERAUP,this.transform.up);
+	}
+
+	/**
+	*@private
+	*/
+	__proto._prepareCameraViewProject=function(vieMat,proMat,vieProNoTraSca){
+		var cameraSV=this._shaderValues;
+		cameraSV.setMatrix4x4(laya.d3.core.BaseCamera.VIEWMATRIX,vieMat);
+		cameraSV.setMatrix4x4(laya.d3.core.BaseCamera.PROJECTMATRIX,proMat);
+		this.transform.worldMatrix.cloneTo(BaseCamera._tempMatrix4x40);
+		BaseCamera._tempMatrix4x40.transpose();
+		Matrix4x4.multiply(proMat,BaseCamera._tempMatrix4x40,vieProNoTraSca);
+		cameraSV.setMatrix4x4(laya.d3.core.BaseCamera.VPMATRIX_NO_TRANSLATE,vieProNoTraSca);
+	}
+
+	/**
+	*相机渲染。
+	*@param shader 着色器。
+	*@param replacementTag 着色器替换标记。
+	*/
+	__proto.render=function(shader,replacementTag){}
+	/**
+	*增加可视图层,layer值为0到31层。
+	*@param layer 图层。
+	*/
+	__proto.addLayer=function(layer){
+		this.cullingMask |=Math.pow(2,layer);
+	}
+
+	/**
+	*移除可视图层,layer值为0到31层。
+	*@param layer 图层。
+	*/
+	__proto.removeLayer=function(layer){
+		this.cullingMask &=~Math.pow(2,layer);
+	}
+
+	/**
+	*增加所有图层。
+	*/
+	__proto.addAllLayers=function(){
+		this.cullingMask=2147483647;
+	}
+
+	/**
+	*移除所有图层。
+	*/
+	__proto.removeAllLayers=function(){
+		this.cullingMask=0;
+	}
+
+	__proto.resetProjectionMatrix=function(){
+		this._useUserProjectionMatrix=false;
+		this._calculateProjectionMatrix();
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto._onActive=function(){
+		(this._scene)._addCamera(this);
+		laya.display.Node.prototype._onActive.call(this);
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto._onInActive=function(){
+		(this._scene)._removeCamera(this);
+		laya.display.Node.prototype._onInActive.call(this);
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto._parse=function(data){
+		_super.prototype._parse.call(this,data);
+		var clearFlagData=data.clearFlag;
+		(clearFlagData!==undefined)&& (this.clearFlag=clearFlagData);
+		this.orthographic=data.orthographic;
+		this.fieldOfView=data.fieldOfView;
+		this.nearPlane=data.nearPlane;
+		this.farPlane=data.farPlane;
+		var color=data.clearColor;
+		this.clearColor=new Vector4(color[0],color[1],color[2],color[3]);
+		var skyboxMaterial=data.skyboxMaterial;
+		if (skyboxMaterial){
+			this._skyRenderer.material=Loader.getRes(skyboxMaterial.path);
+		}
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto.destroy=function(destroyChild){
+		(destroyChild===void 0)&& (destroyChild=true);
+		this.renderTarget=null;
+		this._skyRenderer.destroy();
+		this._skyRenderer=null;
+		Laya.stage.off("resize",this,this._onScreenSizeChanged);
+		_super.prototype.destroy.call(this,destroyChild);
+	}
+
+	__getset(0,__proto,'renderingOrder',function(){
+		return this._renderingOrder;
+		},function(value){
+		this._renderingOrder=value;
+		this._sortCamerasByRenderingOrder();
+	});
+
+	/**
+	*获取天空渲染器。
+	*@return 天空渲染器。
+	*/
+	__getset(0,__proto,'skyRenderer',function(){
+		return this._skyRenderer;
+	});
+
+	/**
+	*设置远裁面。
+	*@param value 远裁面。
+	*/
+	/**
+	*获取远裁面。
+	*@return 远裁面。
+	*/
+	__getset(0,__proto,'farPlane',function(){
+		return this._farPlane;
+		},function(vaule){
+		this._farPlane=vaule;
+		this._calculateProjectionMatrix();
+	});
+
+	/**
+	*设置渲染场景的渲染目标。
+	*@param value 渲染场景的渲染目标。
+	*/
+	/**
+	*获取渲染场景的渲染目标。
+	*@return 渲染场景的渲染目标。
+	*/
+	__getset(0,__proto,'renderTarget',function(){
+		return this._renderTarget;
+		},function(value){
+		if (this._renderTarget!==value){
+			this._renderTarget=value;
+			this._calculateProjectionMatrix();
+		}
+	});
+
+	/**
+	*设置是否正交投影矩阵。
+	*@param 是否正交投影矩阵。
+	*/
+	/**
+	*获取是否正交投影矩阵。
+	*@return 是否正交投影矩阵。
+	*/
+	__getset(0,__proto,'orthographic',function(){
+		return this._orthographic;
+		},function(vaule){
+		this._orthographic=vaule;
+		this._calculateProjectionMatrix();
+	});
+
+	/**
+	*设置视野。
+	*@param value 视野。
+	*/
+	/**
+	*获取视野。
+	*@return 视野。
+	*/
+	__getset(0,__proto,'fieldOfView',function(){
+		return this._fieldOfView;
+		},function(value){
+		this._fieldOfView=value;
+		this._calculateProjectionMatrix();
+	});
+
+	/**
+	*设置近裁面。
+	*@param value 近裁面。
+	*/
+	/**
+	*获取近裁面。
+	*@return 近裁面。
+	*/
+	__getset(0,__proto,'nearPlane',function(){
+		return this._nearPlane;
+		},function(value){
+		this._nearPlane=value;
+		this._calculateProjectionMatrix();
+	});
+
+	/**
+	*设置正交投影垂直矩阵尺寸。
+	*@param 正交投影垂直矩阵尺寸。
+	*/
+	/**
+	*获取正交投影垂直矩阵尺寸。
+	*@return 正交投影垂直矩阵尺寸。
+	*/
+	__getset(0,__proto,'orthographicVerticalSize',function(){
+		return this._orthographicVerticalSize;
+		},function(vaule){
+		this._orthographicVerticalSize=vaule;
+		this._calculateProjectionMatrix();
+	});
+
+	BaseCamera.VPMATRIX=3;
+	BaseCamera.RENDERINGTYPE_DEFERREDLIGHTING="DEFERREDLIGHTING";
+	BaseCamera.RENDERINGTYPE_FORWARDRENDERING="FORWARDRENDERING";
+	BaseCamera.CLEARFLAG_SOLIDCOLOR=0;
+	BaseCamera.CLEARFLAG_SKY=1;
+	BaseCamera.CLEARFLAG_DEPTHONLY=2;
+	BaseCamera.CLEARFLAG_NONE=3;
+	__static(BaseCamera,
+	['_tempMatrix4x40',function(){return this._tempMatrix4x40=new Matrix4x4();},'CAMERAPOS',function(){return this.CAMERAPOS=Shader3D.propertyNameToID("u_CameraPos");},'VIEWMATRIX',function(){return this.VIEWMATRIX=Shader3D.propertyNameToID("u_View");},'PROJECTMATRIX',function(){return this.PROJECTMATRIX=Shader3D.propertyNameToID("u_Projection");},'VPMATRIX_NO_TRANSLATE',function(){return this.VPMATRIX_NO_TRANSLATE=Shader3D.propertyNameToID("u_MvpMatrix");},'CAMERADIRECTION',function(){return this.CAMERADIRECTION=Shader3D.propertyNameToID("u_CameraDirection");},'CAMERAUP',function(){return this.CAMERAUP=Shader3D.propertyNameToID("u_CameraUp");},'_invertYScaleMatrix',function(){return this._invertYScaleMatrix=new Matrix4x4(1,0,0,0,0,-1,0,0,0,0,1,0,0,0,0,1);},'_invertYProjectionMatrix',function(){return this._invertYProjectionMatrix=new Matrix4x4();},'_invertYProjectionViewMatrix',function(){return this._invertYProjectionViewMatrix=new Matrix4x4();}
+	]);
+	return BaseCamera;
+})(Sprite3D)
+
+
+/**
 *<code>PBRStandardMaterial</code> 类用于实现PBR(Standard)材质。
 */
 //class laya.d3.core.material.PBRStandardMaterial extends laya.d3.core.material.BaseMaterial
@@ -69323,315 +71603,174 @@ var PBRStandardMaterial=(function(_super){
 
 
 /**
-*<code>BaseCamera</code> 类用于创建摄像机的父类。
+*<code>Terrain</code> 类用于创建地块。
 */
-//class laya.d3.core.BaseCamera extends laya.d3.core.Sprite3D
-var BaseCamera=(function(_super){
-	function BaseCamera(nearPlane,farPlane){
-		/**@private 渲染顺序。*/
-		//this._renderingOrder=0;
-		/**@private 近裁剪面。*/
-		//this._nearPlane=NaN;
-		/**@private 远裁剪面。*/
-		//this._farPlane=NaN;
-		/**@private 视野。*/
-		//this._fieldOfView=NaN;
-		/**@private 正交投影的垂直尺寸。*/
-		//this._orthographicVerticalSize=NaN;
-		/**@private */
-		//this._orthographic=false;
-		/**@private 渲染目标。*/
-		//this._renderTarget=null;
-		/**@private 是否使用用户自定义投影矩阵，如果使用了用户投影矩阵，摄像机投影矩阵相关的参数改变则不改变投影矩阵的值，需调用ResetProjectionMatrix方法。*/
-		//this._useUserProjectionMatrix=false;
-		/**@private */
-		//this._shaderValues=null;
-		/**清楚标记。*/
-		//this.clearFlag=0;
-		/**摄像机的清除颜色。*/
-		//this.clearColor=null;
-		/**可视层位标记遮罩值,支持混合 例:cullingMask=Math.pow(2,0)|Math.pow(2,1)为第0层和第1层可见。*/
-		//this.cullingMask=0;
-		/**渲染时是否用遮挡剔除。 */
-		//this.useOcclusionCulling=false;
-		BaseCamera.__super.call(this);
-		this._skyRenderer=new SkyRenderer();
-		(nearPlane===void 0)&& (nearPlane=0.3);
-		(farPlane===void 0)&& (farPlane=1000);
-		this._shaderValues=new ShaderData(null);
-		this._fieldOfView=60;
-		this._useUserProjectionMatrix=false;
-		this._orthographic=false;
-		this._orthographicVerticalSize=10;
-		this.renderingOrder=0;
-		this._nearPlane=nearPlane;
-		this._farPlane=farPlane;
-		this.cullingMask=2147483647;
-		this.clearFlag=0;
-		this.useOcclusionCulling=true;
-		this._calculateProjectionMatrix();
-		Laya.stage.on("resize",this,this._onScreenSizeChanged);
-	}
-
-	__class(BaseCamera,'laya.d3.core.BaseCamera',_super);
-	var __proto=BaseCamera.prototype;
-	/**
-	*通过RenderingOrder属性对摄像机机型排序。
-	*/
-	__proto._sortCamerasByRenderingOrder=function(){
-		if (this.displayedInStage){
-			var cameraPool=this.scene._cameraPool;
-			var n=cameraPool.length-1;
-			for (var i=0;i < n;i++){
-				if (cameraPool[i].renderingOrder > cameraPool[n].renderingOrder){
-					var tempCamera=cameraPool[i];
-					cameraPool[i]=cameraPool[n];
-					cameraPool[n]=tempCamera;
-				}
-			}
+//class laya.d3.terrain.Terrain extends laya.d3.core.Sprite3D
+var Terrain=(function(_super){
+	function Terrain(terrainRes){
+		//地形资源
+		this._terrainRes=null;
+		this._lightmapScaleOffset=null;
+		Terrain.__super.call(this);
+		this._lightmapScaleOffset=new Vector4(1,1,0,0);
+		if (terrainRes){
+			this._terrainRes=terrainRes;
+			this.buildTerrain(terrainRes);
 		}
 	}
 
-	/**
-	*@private
-	*/
-	__proto._calculateProjectionMatrix=function(){}
-	/**
-	*@private
-	*/
-	__proto._onScreenSizeChanged=function(){
-		this._calculateProjectionMatrix();
-	}
-
-	/**
-	*@private
-	*/
-	__proto._prepareCameraToRender=function(){
-		var cameraSV=this._shaderValues;
-		cameraSV.setVector3(laya.d3.core.BaseCamera.CAMERAPOS,this.transform.position);
-		cameraSV.setVector3(laya.d3.core.BaseCamera.CAMERADIRECTION,this.transform.forward);
-		cameraSV.setVector3(laya.d3.core.BaseCamera.CAMERAUP,this.transform.up);
-	}
-
-	/**
-	*@private
-	*/
-	__proto._prepareCameraViewProject=function(vieMat,proMat,vieProNoTraSca){
-		var cameraSV=this._shaderValues;
-		cameraSV.setMatrix4x4(laya.d3.core.BaseCamera.VIEWMATRIX,vieMat);
-		cameraSV.setMatrix4x4(laya.d3.core.BaseCamera.PROJECTMATRIX,proMat);
-		this.transform.worldMatrix.cloneTo(BaseCamera._tempMatrix4x40);
-		BaseCamera._tempMatrix4x40.transpose();
-		Matrix4x4.multiply(proMat,BaseCamera._tempMatrix4x40,vieProNoTraSca);
-		cameraSV.setMatrix4x4(laya.d3.core.BaseCamera.VPMATRIX_NO_TRANSLATE,vieProNoTraSca);
-	}
-
-	/**
-	*相机渲染。
-	*@param shader 着色器。
-	*@param replacementTag 着色器替换标记。
-	*/
-	__proto.render=function(shader,replacementTag){}
-	/**
-	*增加可视图层,layer值为0到31层。
-	*@param layer 图层。
-	*/
-	__proto.addLayer=function(layer){
-		this.cullingMask |=Math.pow(2,layer);
-	}
-
-	/**
-	*移除可视图层,layer值为0到31层。
-	*@param layer 图层。
-	*/
-	__proto.removeLayer=function(layer){
-		this.cullingMask &=~Math.pow(2,layer);
-	}
-
-	/**
-	*增加所有图层。
-	*/
-	__proto.addAllLayers=function(){
-		this.cullingMask=2147483647;
-	}
-
-	/**
-	*移除所有图层。
-	*/
-	__proto.removeAllLayers=function(){
-		this.cullingMask=0;
-	}
-
-	__proto.resetProjectionMatrix=function(){
-		this._useUserProjectionMatrix=false;
-		this._calculateProjectionMatrix();
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto._onActive=function(){
-		(this._scene)._addCamera(this);
-		laya.display.Node.prototype._onActive.call(this);
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto._onInActive=function(){
-		(this._scene)._removeCamera(this);
-		laya.display.Node.prototype._onInActive.call(this);
-	}
-
+	__class(Terrain,'laya.d3.terrain.Terrain',_super);
+	var __proto=Terrain.prototype;
 	/**
 	*@inheritDoc
 	*/
 	__proto._parse=function(data){
 		_super.prototype._parse.call(this,data);
-		var clearFlagData=data.clearFlag;
-		(clearFlagData!==undefined)&& (this.clearFlag=clearFlagData);
-		this.orthographic=data.orthographic;
-		this.fieldOfView=data.fieldOfView;
-		this.nearPlane=data.nearPlane;
-		this.farPlane=data.farPlane;
-		var color=data.clearColor;
-		this.clearColor=new Vector4(color[0],color[1],color[2],color[3]);
-		var skyboxMaterial=data.skyboxMaterial;
-		if (skyboxMaterial){
-			this._skyRenderer.material=Loader.getRes(skyboxMaterial.path);
+		this.terrainRes=Loader.getRes(data.dataPath);
+		var lightmapIndex=data.lightmapIndex;
+		if (lightmapIndex !=null)
+			this.setLightmapIndex(lightmapIndex);
+		var lightmapScaleOffsetArray=data.lightmapScaleOffset;
+		if (lightmapScaleOffsetArray)
+			this.setLightmapScaleOffset(new Vector4(lightmapScaleOffsetArray[0],lightmapScaleOffsetArray[1],lightmapScaleOffsetArray[2],lightmapScaleOffsetArray[3]));
+	}
+
+	__proto.setLightmapIndex=function(value){
+		for (var i=0;i < this._children.length;i++){
+			var terrainChunk=this._children[i];
+			terrainChunk.terrainRender.lightmapIndex=value;
+		}
+	}
+
+	__proto.setLightmapScaleOffset=function(value){
+		if (!value)return;
+		value.cloneTo(this._lightmapScaleOffset);
+		for (var i=0;i < this._children.length;i++){
+			var terrainChunk=this._children[i];
+			terrainChunk.terrainRender.lightmapScaleOffset=this._lightmapScaleOffset;
+		}
+	}
+
+	__proto.disableLight=function(){
+		for (var i=0,n=this._children.length;i < n;i++){
+			var terrainChunk=this._children[i];
+			for (var j=0,m=terrainChunk._render.sharedMaterials.length;j < m;j++){
+				var terrainMaterial=terrainChunk._render.sharedMaterials [j];
+				terrainMaterial.disableLight();
+			}
+		}
+	}
+
+	//建筑地形
+	__proto.buildTerrain=function(terrainRes){
+		var chunkNumX=terrainRes._chunkNumX;
+		var chunkNumZ=terrainRes._chunkNumZ;
+		var heightData=terrainRes._heightData;
+		var n=0;
+		for (var i=0;i < chunkNumZ;i++){
+			for (var j=0;j < chunkNumX;j++){
+				var terrainChunk=new TerrainChunk(j,i,terrainRes._gridSize,heightData._terrainHeightData,heightData._width,heightData._height,terrainRes._cameraCoordinateInverse);
+				var chunkInfo=terrainRes._chunkInfos[n++];
+				for (var k=0;k < chunkInfo.alphaMap.length;k++){
+					var nNum=chunkInfo.detailID[k].length;
+					var sDetialTextureUrl1=(nNum > 0)? terrainRes._detailTextureInfos[chunkInfo.detailID[k][0]].diffuseTexture :null;
+					var sDetialTextureUrl2=(nNum > 1)? terrainRes._detailTextureInfos[chunkInfo.detailID[k][1]].diffuseTexture :null;
+					var sDetialTextureUrl3=(nNum > 2)? terrainRes._detailTextureInfos[chunkInfo.detailID[k][2]].diffuseTexture :null;
+					var sDetialTextureUrl4=(nNum > 3)? terrainRes._detailTextureInfos[chunkInfo.detailID[k][3]].diffuseTexture :null;
+					var detialScale1=(nNum > 0)? terrainRes._detailTextureInfos[chunkInfo.detailID[k][0]].scale :null;
+					var detialScale2=(nNum > 1)? terrainRes._detailTextureInfos[chunkInfo.detailID[k][1]].scale :null;
+					var detialScale3=(nNum > 2)? terrainRes._detailTextureInfos[chunkInfo.detailID[k][2]].scale :null;
+					var detialScale4=(nNum > 3)? terrainRes._detailTextureInfos[chunkInfo.detailID[k][3]].scale :null;
+					terrainChunk.buildRenderElementAndMaterial(nNum,chunkInfo.normalMap,chunkInfo.alphaMap[k],sDetialTextureUrl1,sDetialTextureUrl2,sDetialTextureUrl3,sDetialTextureUrl4,terrainRes._materialInfo.ambientColor,terrainRes._materialInfo.diffuseColor,terrainRes._materialInfo.specularColor,detialScale1 ? detialScale1.x :1,detialScale1 ? detialScale1.y :1,detialScale2 ? detialScale2.x :1,detialScale2 ? detialScale2.y :1,detialScale3 ? detialScale3.x :1,detialScale3 ? detialScale3.y :1,detialScale4 ? detialScale4.x :1,detialScale4 ? detialScale4.y :1);
+				}
+				terrainChunk.terrainRender.receiveShadow=true;
+				terrainChunk.terrainRender.lightmapScaleOffset=this._lightmapScaleOffset;
+				this.addChild(terrainChunk);
+			}
 		}
 	}
 
 	/**
-	*@inheritDoc
+	*获取地形X轴长度。
+	*@return 地形X轴长度。
 	*/
-	__proto.destroy=function(destroyChild){
-		(destroyChild===void 0)&& (destroyChild=true);
-		this.renderTarget=null;
-		this._skyRenderer.destroy();
-		this._skyRenderer=null;
-		Laya.stage.off("resize",this,this._onScreenSizeChanged);
-		_super.prototype.destroy.call(this,destroyChild);
+	__proto.width=function(){
+		return this._terrainRes._chunkNumX *TerrainLeaf.CHUNK_GRID_NUM *this._terrainRes._gridSize;
 	}
 
-	__getset(0,__proto,'renderingOrder',function(){
-		return this._renderingOrder;
-		},function(value){
-		this._renderingOrder=value;
-		this._sortCamerasByRenderingOrder();
-	});
+	/**
+	*获取地形Z轴长度。
+	*@return 地形Z轴长度。
+	*/
+	__proto.depth=function(){
+		return this._terrainRes._chunkNumZ *TerrainLeaf.CHUNK_GRID_NUM *this._terrainRes._gridSize;
+	}
 
 	/**
-	*获取天空渲染器。
-	*@return 天空渲染器。
+	*获取地形高度。
+	*@param x X轴坐标。
+	*@param z Z轴坐标。
 	*/
-	__getset(0,__proto,'skyRenderer',function(){
-		return this._skyRenderer;
-	});
+	__proto.getHeightXZ=function(x,z){
+		if (!this._terrainRes)
+			return NaN;
+		x-=this.transform.position.x;
+		z-=this.transform.position.z;
+		if (!Terrain.__VECTOR3__){
+			Terrain.__VECTOR3__=new Vector3();
+		}
+		Terrain.__VECTOR3__.x=x;
+		Terrain.__VECTOR3__.y=0;
+		Terrain.__VECTOR3__.z=z;
+		Vector3.transformV3ToV3(Terrain.__VECTOR3__,TerrainLeaf.__ADAPT_MATRIX_INV__,Terrain.__VECTOR3__);
+		x=Terrain.__VECTOR3__.x;
+		z=Terrain.__VECTOR3__.z;
+		if (x < 0 || x > this.width()|| z < 0 || z > this.depth())
+			return NaN;
+		var gridSize=this._terrainRes._gridSize;
+		var nIndexX=parseInt(""+x / gridSize);
+		var nIndexZ=parseInt(""+z / gridSize);
+		var offsetX=x-nIndexX *gridSize;
+		var offsetZ=z-nIndexZ *gridSize;
+		var h1=NaN;
+		var h2=NaN;
+		var h3=NaN;
+		var u=NaN;
+		var v=NaN;
+		var heightData=this._terrainRes._heightData;
+		if (offsetX+offsetZ > gridSize){
+			h1=heightData._terrainHeightData[(nIndexZ+1-1)*heightData._width+nIndexX+1];
+			h2=heightData._terrainHeightData[(nIndexZ+1-1)*heightData._width+nIndexX];
+			h3=heightData._terrainHeightData[(nIndexZ-1)*heightData._width+nIndexX+1];
+			u=(gridSize-offsetX)/ gridSize;
+			v=(gridSize-offsetZ)/ gridSize;
+			return h1+(h2-h1)*u+(h3-h1)*v;
+			}else {
+			h1=heightData._terrainHeightData[Math.max(0.0,nIndexZ-1)*heightData._width+nIndexX];
+			h2=heightData._terrainHeightData[Math.min(heightData._width *heightData._height-1,(nIndexZ+1-1)*heightData._width+nIndexX)];
+			h3=heightData._terrainHeightData[Math.min(heightData._width *heightData._height-1,Math.max(0.0,nIndexZ-1)*heightData._width+nIndexX+1)];
+			u=offsetX / gridSize;
+			v=offsetZ / gridSize;
+			return h1+(h2-h1)*v+(h3-h1)*u;
+		}
+	}
 
-	/**
-	*设置远裁面。
-	*@param value 远裁面。
-	*/
-	/**
-	*获取远裁面。
-	*@return 远裁面。
-	*/
-	__getset(0,__proto,'farPlane',function(){
-		return this._farPlane;
-		},function(vaule){
-		this._farPlane=vaule;
-		this._calculateProjectionMatrix();
-	});
-
-	/**
-	*设置渲染场景的渲染目标。
-	*@param value 渲染场景的渲染目标。
-	*/
-	/**
-	*获取渲染场景的渲染目标。
-	*@return 渲染场景的渲染目标。
-	*/
-	__getset(0,__proto,'renderTarget',function(){
-		return this._renderTarget;
-		},function(value){
-		if (this._renderTarget!==value){
-			this._renderTarget=value;
-			this._calculateProjectionMatrix();
+	__getset(0,__proto,'terrainRes',null,function(value){
+		if (value){
+			this._terrainRes=value;
+			this.buildTerrain(value);
 		}
 	});
 
-	/**
-	*设置是否正交投影矩阵。
-	*@param 是否正交投影矩阵。
-	*/
-	/**
-	*获取是否正交投影矩阵。
-	*@return 是否正交投影矩阵。
-	*/
-	__getset(0,__proto,'orthographic',function(){
-		return this._orthographic;
-		},function(vaule){
-		this._orthographic=vaule;
-		this._calculateProjectionMatrix();
-	});
+	Terrain.load=function(url){
+		Laya.loader.create(url,null,null,"TERRAIN",null,null,1,false);
+	}
 
-	/**
-	*设置视野。
-	*@param value 视野。
-	*/
-	/**
-	*获取视野。
-	*@return 视野。
-	*/
-	__getset(0,__proto,'fieldOfView',function(){
-		return this._fieldOfView;
-		},function(value){
-		this._fieldOfView=value;
-		this._calculateProjectionMatrix();
-	});
-
-	/**
-	*设置近裁面。
-	*@param value 近裁面。
-	*/
-	/**
-	*获取近裁面。
-	*@return 近裁面。
-	*/
-	__getset(0,__proto,'nearPlane',function(){
-		return this._nearPlane;
-		},function(value){
-		this._nearPlane=value;
-		this._calculateProjectionMatrix();
-	});
-
-	/**
-	*设置正交投影垂直矩阵尺寸。
-	*@param 正交投影垂直矩阵尺寸。
-	*/
-	/**
-	*获取正交投影垂直矩阵尺寸。
-	*@return 正交投影垂直矩阵尺寸。
-	*/
-	__getset(0,__proto,'orthographicVerticalSize',function(){
-		return this._orthographicVerticalSize;
-		},function(vaule){
-		this._orthographicVerticalSize=vaule;
-		this._calculateProjectionMatrix();
-	});
-
-	BaseCamera.VPMATRIX=3;
-	BaseCamera.RENDERINGTYPE_DEFERREDLIGHTING="DEFERREDLIGHTING";
-	BaseCamera.RENDERINGTYPE_FORWARDRENDERING="FORWARDRENDERING";
-	BaseCamera.CLEARFLAG_SOLIDCOLOR=0;
-	BaseCamera.CLEARFLAG_SKY=1;
-	BaseCamera.CLEARFLAG_DEPTHONLY=2;
-	BaseCamera.CLEARFLAG_NONE=3;
-	__static(BaseCamera,
-	['_tempMatrix4x40',function(){return this._tempMatrix4x40=new Matrix4x4();},'CAMERAPOS',function(){return this.CAMERAPOS=Shader3D.propertyNameToID("u_CameraPos");},'VIEWMATRIX',function(){return this.VIEWMATRIX=Shader3D.propertyNameToID("u_View");},'PROJECTMATRIX',function(){return this.PROJECTMATRIX=Shader3D.propertyNameToID("u_Projection");},'VPMATRIX_NO_TRANSLATE',function(){return this.VPMATRIX_NO_TRANSLATE=Shader3D.propertyNameToID("u_MvpMatrix");},'CAMERADIRECTION',function(){return this.CAMERADIRECTION=Shader3D.propertyNameToID("u_CameraDirection");},'CAMERAUP',function(){return this.CAMERAUP=Shader3D.propertyNameToID("u_CameraUp");},'_invertYScaleMatrix',function(){return this._invertYScaleMatrix=new Matrix4x4(1,0,0,0,0,-1,0,0,0,0,1,0,0,0,0,1);},'_invertYProjectionMatrix',function(){return this._invertYProjectionMatrix=new Matrix4x4();},'_invertYProjectionViewMatrix',function(){return this._invertYProjectionViewMatrix=new Matrix4x4();}
-	]);
-	return BaseCamera;
+	Terrain.RENDER_LINE_MODEL=false;
+	Terrain.LOD_TOLERANCE_VALUE=4;
+	Terrain.LOD_DISTANCE_FACTOR=2.0;
+	Terrain.__VECTOR3__=null;
+	return Terrain;
 })(Sprite3D)
 
 
@@ -69973,214 +72112,6 @@ var EffectMaterial=(function(_super){
 	['defaultMaterial',function(){return this.defaultMaterial=new EffectMaterial();},'MAINTEXTURE',function(){return this.MAINTEXTURE=Shader3D.propertyNameToID("u_AlbedoTexture");},'TINTCOLOR',function(){return this.TINTCOLOR=Shader3D.propertyNameToID("u_AlbedoColor");},'TILINGOFFSET',function(){return this.TILINGOFFSET=Shader3D.propertyNameToID("u_TilingOffset");},'shaderDefines',function(){return this.shaderDefines=new ShaderDefines(BaseMaterial.shaderDefines);}
 	]);
 	return EffectMaterial;
-})(BaseMaterial)
-
-
-/**
-*<code>Terrain</code> 类用于创建地块。
-*/
-//class laya.d3.terrain.Terrain extends laya.d3.core.Sprite3D
-var Terrain=(function(_super){
-	function Terrain(terrainRes){
-		//地形资源
-		this._terrainRes=null;
-		this._lightmapScaleOffset=null;
-		Terrain.__super.call(this);
-		this._lightmapScaleOffset=new Vector4(1,1,0,0);
-		if (terrainRes){
-			this._terrainRes=terrainRes;
-			this.buildTerrain(terrainRes);
-		}
-	}
-
-	__class(Terrain,'laya.d3.terrain.Terrain',_super);
-	var __proto=Terrain.prototype;
-	/**
-	*@inheritDoc
-	*/
-	__proto._parse=function(data){
-		_super.prototype._parse.call(this,data);
-		this.terrainRes=Loader.getRes(data.dataPath);
-		var lightmapIndex=data.lightmapIndex;
-		if (lightmapIndex !=null)
-			this.setLightmapIndex(lightmapIndex);
-		var lightmapScaleOffsetArray=data.lightmapScaleOffset;
-		if (lightmapScaleOffsetArray)
-			this.setLightmapScaleOffset(new Vector4(lightmapScaleOffsetArray[0],lightmapScaleOffsetArray[1],lightmapScaleOffsetArray[2],lightmapScaleOffsetArray[3]));
-	}
-
-	__proto.setLightmapIndex=function(value){
-		for (var i=0;i < this._children.length;i++){
-			var terrainChunk=this._children[i];
-			terrainChunk.terrainRender.lightmapIndex=value;
-		}
-	}
-
-	__proto.setLightmapScaleOffset=function(value){
-		if (!value)return;
-		value.cloneTo(this._lightmapScaleOffset);
-		for (var i=0;i < this._children.length;i++){
-			var terrainChunk=this._children[i];
-			terrainChunk.terrainRender.lightmapScaleOffset=this._lightmapScaleOffset;
-		}
-	}
-
-	__proto.disableLight=function(){
-		for (var i=0,n=this._children.length;i < n;i++){
-			var terrainChunk=this._children[i];
-			for (var j=0,m=terrainChunk._render.sharedMaterials.length;j < m;j++){
-				var terrainMaterial=terrainChunk._render.sharedMaterials [j];
-				terrainMaterial.disableLight();
-			}
-		}
-	}
-
-	//建筑地形
-	__proto.buildTerrain=function(terrainRes){
-		var chunkNumX=terrainRes._chunkNumX;
-		var chunkNumZ=terrainRes._chunkNumZ;
-		var heightData=terrainRes._heightData;
-		var n=0;
-		for (var i=0;i < chunkNumZ;i++){
-			for (var j=0;j < chunkNumX;j++){
-				var terrainChunk=new TerrainChunk(j,i,terrainRes._gridSize,heightData._terrainHeightData,heightData._width,heightData._height,terrainRes._cameraCoordinateInverse);
-				var chunkInfo=terrainRes._chunkInfos[n++];
-				for (var k=0;k < chunkInfo.alphaMap.length;k++){
-					var nNum=chunkInfo.detailID[k].length;
-					var sDetialTextureUrl1=(nNum > 0)? terrainRes._detailTextureInfos[chunkInfo.detailID[k][0]].diffuseTexture :null;
-					var sDetialTextureUrl2=(nNum > 1)? terrainRes._detailTextureInfos[chunkInfo.detailID[k][1]].diffuseTexture :null;
-					var sDetialTextureUrl3=(nNum > 2)? terrainRes._detailTextureInfos[chunkInfo.detailID[k][2]].diffuseTexture :null;
-					var sDetialTextureUrl4=(nNum > 3)? terrainRes._detailTextureInfos[chunkInfo.detailID[k][3]].diffuseTexture :null;
-					var detialScale1=(nNum > 0)? terrainRes._detailTextureInfos[chunkInfo.detailID[k][0]].scale :null;
-					var detialScale2=(nNum > 1)? terrainRes._detailTextureInfos[chunkInfo.detailID[k][1]].scale :null;
-					var detialScale3=(nNum > 2)? terrainRes._detailTextureInfos[chunkInfo.detailID[k][2]].scale :null;
-					var detialScale4=(nNum > 3)? terrainRes._detailTextureInfos[chunkInfo.detailID[k][3]].scale :null;
-					terrainChunk.buildRenderElementAndMaterial(nNum,chunkInfo.normalMap,chunkInfo.alphaMap[k],sDetialTextureUrl1,sDetialTextureUrl2,sDetialTextureUrl3,sDetialTextureUrl4,terrainRes._materialInfo.ambientColor,terrainRes._materialInfo.diffuseColor,terrainRes._materialInfo.specularColor,detialScale1 ? detialScale1.x :1,detialScale1 ? detialScale1.y :1,detialScale2 ? detialScale2.x :1,detialScale2 ? detialScale2.y :1,detialScale3 ? detialScale3.x :1,detialScale3 ? detialScale3.y :1,detialScale4 ? detialScale4.x :1,detialScale4 ? detialScale4.y :1);
-				}
-				terrainChunk.terrainRender.receiveShadow=true;
-				terrainChunk.terrainRender.lightmapScaleOffset=this._lightmapScaleOffset;
-				this.addChild(terrainChunk);
-			}
-		}
-	}
-
-	/**
-	*获取地形X轴长度。
-	*@return 地形X轴长度。
-	*/
-	__proto.width=function(){
-		return this._terrainRes._chunkNumX *TerrainLeaf.CHUNK_GRID_NUM *this._terrainRes._gridSize;
-	}
-
-	/**
-	*获取地形Z轴长度。
-	*@return 地形Z轴长度。
-	*/
-	__proto.depth=function(){
-		return this._terrainRes._chunkNumZ *TerrainLeaf.CHUNK_GRID_NUM *this._terrainRes._gridSize;
-	}
-
-	/**
-	*获取地形高度。
-	*@param x X轴坐标。
-	*@param z Z轴坐标。
-	*/
-	__proto.getHeightXZ=function(x,z){
-		if (!this._terrainRes)
-			return NaN;
-		x-=this.transform.position.x;
-		z-=this.transform.position.z;
-		if (!Terrain.__VECTOR3__){
-			Terrain.__VECTOR3__=new Vector3();
-		}
-		Terrain.__VECTOR3__.x=x;
-		Terrain.__VECTOR3__.y=0;
-		Terrain.__VECTOR3__.z=z;
-		Vector3.transformV3ToV3(Terrain.__VECTOR3__,TerrainLeaf.__ADAPT_MATRIX_INV__,Terrain.__VECTOR3__);
-		x=Terrain.__VECTOR3__.x;
-		z=Terrain.__VECTOR3__.z;
-		if (x < 0 || x > this.width()|| z < 0 || z > this.depth())
-			return NaN;
-		var gridSize=this._terrainRes._gridSize;
-		var nIndexX=parseInt(""+x / gridSize);
-		var nIndexZ=parseInt(""+z / gridSize);
-		var offsetX=x-nIndexX *gridSize;
-		var offsetZ=z-nIndexZ *gridSize;
-		var h1=NaN;
-		var h2=NaN;
-		var h3=NaN;
-		var u=NaN;
-		var v=NaN;
-		var heightData=this._terrainRes._heightData;
-		if (offsetX+offsetZ > gridSize){
-			h1=heightData._terrainHeightData[(nIndexZ+1-1)*heightData._width+nIndexX+1];
-			h2=heightData._terrainHeightData[(nIndexZ+1-1)*heightData._width+nIndexX];
-			h3=heightData._terrainHeightData[(nIndexZ-1)*heightData._width+nIndexX+1];
-			u=(gridSize-offsetX)/ gridSize;
-			v=(gridSize-offsetZ)/ gridSize;
-			return h1+(h2-h1)*u+(h3-h1)*v;
-			}else {
-			h1=heightData._terrainHeightData[Math.max(0.0,nIndexZ-1)*heightData._width+nIndexX];
-			h2=heightData._terrainHeightData[Math.min(heightData._width *heightData._height-1,(nIndexZ+1-1)*heightData._width+nIndexX)];
-			h3=heightData._terrainHeightData[Math.min(heightData._width *heightData._height-1,Math.max(0.0,nIndexZ-1)*heightData._width+nIndexX+1)];
-			u=offsetX / gridSize;
-			v=offsetZ / gridSize;
-			return h1+(h2-h1)*v+(h3-h1)*u;
-		}
-	}
-
-	__getset(0,__proto,'terrainRes',null,function(value){
-		if (value){
-			this._terrainRes=value;
-			this.buildTerrain(value);
-		}
-	});
-
-	Terrain.load=function(url){
-		Laya.loader.create(url,null,null,"TERRAIN",null,null,1,false);
-	}
-
-	Terrain.RENDER_LINE_MODEL=false;
-	Terrain.LOD_TOLERANCE_VALUE=4;
-	Terrain.LOD_DISTANCE_FACTOR=2.0;
-	Terrain.__VECTOR3__=null;
-	return Terrain;
-})(Sprite3D)
-
-
-/**
-*...
-*@author
-*/
-//class laya.d3.core.pixelLine.PixelLineMaterial extends laya.d3.core.material.BaseMaterial
-var PixelLineMaterial=(function(_super){
-	function PixelLineMaterial(){
-		PixelLineMaterial.__super.call(this);
-		this.setShaderName("LineShader");
-		this._shaderValues.setVector(PixelLineMaterial.COLOR,new Vector4(1.0,1.0,1.0,1.0));
-	}
-
-	__class(PixelLineMaterial,'laya.d3.core.pixelLine.PixelLineMaterial',_super);
-	var __proto=PixelLineMaterial.prototype;
-	/**
-	*设置颜色。
-	*@param value 颜色。
-	*/
-	/**
-	*获取颜色。
-	*@return 颜色。
-	*/
-	__getset(0,__proto,'color',function(){
-		return this._shaderValues.getVector(PixelLineMaterial.COLOR);
-		},function(value){
-		this._shaderValues.setVector(PixelLineMaterial.COLOR,value);
-	});
-
-	PixelLineMaterial.__init__=function(){}
-	__static(PixelLineMaterial,
-	['COLOR',function(){return this.COLOR=Shader3D.propertyNameToID("u_Color");},'defaultMaterial',function(){return this.defaultMaterial=new PixelLineMaterial();},'shaderDefines',function(){return this.shaderDefines=new ShaderDefines(BaseMaterial.shaderDefines);}
-	]);
-	return PixelLineMaterial;
 })(BaseMaterial)
 
 
@@ -70872,6 +72803,42 @@ var Stage=(function(_super){
 	]);
 	return Stage;
 })(Sprite)
+
+
+/**
+*...
+*@author
+*/
+//class laya.d3.core.pixelLine.PixelLineMaterial extends laya.d3.core.material.BaseMaterial
+var PixelLineMaterial=(function(_super){
+	function PixelLineMaterial(){
+		PixelLineMaterial.__super.call(this);
+		this.setShaderName("LineShader");
+		this._shaderValues.setVector(PixelLineMaterial.COLOR,new Vector4(1.0,1.0,1.0,1.0));
+	}
+
+	__class(PixelLineMaterial,'laya.d3.core.pixelLine.PixelLineMaterial',_super);
+	var __proto=PixelLineMaterial.prototype;
+	/**
+	*设置颜色。
+	*@param value 颜色。
+	*/
+	/**
+	*获取颜色。
+	*@return 颜色。
+	*/
+	__getset(0,__proto,'color',function(){
+		return this._shaderValues.getVector(PixelLineMaterial.COLOR);
+		},function(value){
+		this._shaderValues.setVector(PixelLineMaterial.COLOR,value);
+	});
+
+	PixelLineMaterial.__init__=function(){}
+	__static(PixelLineMaterial,
+	['COLOR',function(){return this.COLOR=Shader3D.propertyNameToID("u_Color");},'defaultMaterial',function(){return this.defaultMaterial=new PixelLineMaterial();},'shaderDefines',function(){return this.shaderDefines=new ShaderDefines(BaseMaterial.shaderDefines);}
+	]);
+	return PixelLineMaterial;
+})(BaseMaterial)
 
 
 /**
@@ -72200,6 +74167,184 @@ var GameMainSceneUI=(function(_super){
 
 
 /**
+*<code>View</code> 是一个视图类，2.0开始，更改继承至Scene类，相对于Scene，增加相对布局功能。
+*/
+//class laya.ui.View extends laya.display.Scene
+var View=(function(_super){
+	function View(){
+		/**@private */
+		this._watchMap={};
+		/**@private 相对布局组件*/
+		this._widget=null;
+		/**@private 控件的数据源。 */
+		this._dataSource=null;
+		this._anchorX=NaN;
+		this._anchorY=NaN;
+		this._widget=Widget.EMPTY;
+		View.__super.call(this);
+	}
+
+	__class(View,'laya.ui.View',_super);
+	var __proto=View.prototype;
+	/**@inheritDoc */
+	__proto.destroy=function(destroyChild){
+		(destroyChild===void 0)&& (destroyChild=true);
+		this._watchMap=null;
+		_super.prototype.destroy.call(this,destroyChild);
+	}
+
+	/**@private */
+	__proto.changeData=function(key){
+		var arr=this._watchMap[key];
+		if (!arr)return;
+		for (var i=0,n=arr.length;i < n;i++){
+			var watcher=arr[i];
+			watcher.exe(this);
+		}
+	}
+
+	/**@private */
+	__proto._sizeChanged=function(){
+		if (!isNaN(this._anchorX))this.pivotX=this.anchorX *this.width;
+		if (!isNaN(this._anchorY))this.pivotY=this.anchorY *this.height;
+		this.event("resize");
+	}
+
+	/**
+	*@private
+	*<p>获取对象的布局样式。请不要直接修改此对象</p>
+	*/
+	__proto._getWidget=function(){
+		this._widget===Widget.EMPTY && (this._widget=this.addComponent(Widget));
+		return this._widget;
+	}
+
+	/**@private 兼容老版本*/
+	__proto.loadUI=function(path){
+		var uiView=View.uiMap[path];
+		View.uiMap && this.createView(uiView);
+	}
+
+	/**X锚点，值为0-1，设置anchorX值最终通过pivotX值来改变节点轴心点。*/
+	__getset(0,__proto,'anchorX',function(){
+		return this._anchorX;
+		},function(value){
+		if (this._anchorX !=value){
+			this._anchorX=value;
+			this.callLater(this._sizeChanged);
+		}
+	});
+
+	/**
+	*<p>在父容器中，此对象的水平方向中轴线与父容器的水平方向中心线的距离（以像素为单位）。</p>
+	*/
+	__getset(0,__proto,'centerX',function(){
+		return this._widget.centerX;
+		},function(value){
+		if (value !=this._widget.centerX){
+			this._getWidget().centerX=value;
+		}
+	});
+
+	/**
+	*<p>从组件顶边到其内容区域顶边之间的垂直距离（以像素为单位）。</p>
+	*/
+	__getset(0,__proto,'top',function(){
+		return this._widget.top;
+		},function(value){
+		if (value !=this._widget.top){
+			this._getWidget().top=value;
+		}
+	});
+
+	/**
+	*<p>从组件底边到其内容区域底边之间的垂直距离（以像素为单位）。</p>
+	*/
+	__getset(0,__proto,'bottom',function(){
+		return this._widget.bottom;
+		},function(value){
+		if (value !=this._widget.bottom){
+			this._getWidget().bottom=value;
+		}
+	});
+
+	/**@see laya.ui.UIComponent#dataSource*/
+	__getset(0,__proto,'dataSource',function(){
+		return this._dataSource;
+		},function(value){
+		this._dataSource=value;
+		for (var name in value){
+			var comp=this.getChildByName(name);
+			if ((comp instanceof laya.ui.UIComponent ))comp.dataSource=value[name];
+			else if (this.hasOwnProperty(name)&& !((typeof (this[name])=='function')))this[name]=value[name];
+		}
+	});
+
+	/**
+	*<p>从组件左边到其内容区域左边之间的水平距离（以像素为单位）。</p>
+	*/
+	__getset(0,__proto,'left',function(){
+		return this._widget.left;
+		},function(value){
+		if (value !=this._widget.left){
+			this._getWidget().left=value;
+		}
+	});
+
+	/**
+	*<p>从组件右边到其内容区域右边之间的水平距离（以像素为单位）。</p>
+	*/
+	__getset(0,__proto,'right',function(){
+		return this._widget.right;
+		},function(value){
+		if (value !=this._widget.right){
+			this._getWidget().right=value;
+		}
+	});
+
+	/**Y锚点，值为0-1，设置anchorY值最终通过pivotY值来改变节点轴心点。*/
+	__getset(0,__proto,'anchorY',function(){
+		return this._anchorY;
+		},function(value){
+		if (this._anchorY !=value){
+			this._anchorY=value
+			this.callLater(this._sizeChanged);
+		}
+	});
+
+	/**
+	*<p>在父容器中，此对象的垂直方向中轴线与父容器的垂直方向中心线的距离（以像素为单位）。</p>
+	*/
+	__getset(0,__proto,'centerY',function(){
+		return this._widget.centerY;
+		},function(value){
+		if (value !=this._widget.centerY){
+			this._getWidget().centerY=value;
+		}
+	});
+
+	View.regComponent=function(key,compClass){
+		ClassUtils.regClass(key,compClass);
+	}
+
+	View.regViewRuntime=function(key,compClass){
+		ClassUtils.regClass(key,compClass);
+	}
+
+	View.regUI=function(url,json){
+		Laya.loader.cacheRes(url,json);
+	}
+
+	View.uiMap={};
+	View.__init$=function(){
+		ClassUtils.regShortClassName([ViewStack,Button,TextArea,ColorPicker,Box,ScaleBox,Button,CheckBox,Clip,ComboBox,UIComponent,HScrollBar,HSlider,Image,Label,List,Panel,ProgressBar,Radio,RadioGroup,ScrollBar,Slider,Tab,TextInput,View,Dialog,VScrollBar,VSlider,Tree,HBox,VBox,Sprite,Animation,Text,FontClip]);
+	}
+
+	return View;
+})(Scene)
+
+
+/**
 *<code>Box</code> 类是一个控件容器类。
 */
 //class laya.ui.Box extends laya.ui.UIComponent
@@ -72631,184 +74776,6 @@ var Slider=(function(_super){
 	]);
 	return Slider;
 })(UIComponent)
-
-
-/**
-*<code>View</code> 是一个视图类，2.0开始，更改继承至Scene类，相对于Scene，增加相对布局功能。
-*/
-//class laya.ui.View extends laya.display.Scene
-var View=(function(_super){
-	function View(){
-		/**@private */
-		this._watchMap={};
-		/**@private 相对布局组件*/
-		this._widget=null;
-		/**@private 控件的数据源。 */
-		this._dataSource=null;
-		this._anchorX=NaN;
-		this._anchorY=NaN;
-		this._widget=Widget.EMPTY;
-		View.__super.call(this);
-	}
-
-	__class(View,'laya.ui.View',_super);
-	var __proto=View.prototype;
-	/**@inheritDoc */
-	__proto.destroy=function(destroyChild){
-		(destroyChild===void 0)&& (destroyChild=true);
-		this._watchMap=null;
-		_super.prototype.destroy.call(this,destroyChild);
-	}
-
-	/**@private */
-	__proto.changeData=function(key){
-		var arr=this._watchMap[key];
-		if (!arr)return;
-		for (var i=0,n=arr.length;i < n;i++){
-			var watcher=arr[i];
-			watcher.exe(this);
-		}
-	}
-
-	/**@private */
-	__proto._sizeChanged=function(){
-		if (!isNaN(this._anchorX))this.pivotX=this.anchorX *this.width;
-		if (!isNaN(this._anchorY))this.pivotY=this.anchorY *this.height;
-		this.event("resize");
-	}
-
-	/**
-	*@private
-	*<p>获取对象的布局样式。请不要直接修改此对象</p>
-	*/
-	__proto._getWidget=function(){
-		this._widget===Widget.EMPTY && (this._widget=this.addComponent(Widget));
-		return this._widget;
-	}
-
-	/**@private 兼容老版本*/
-	__proto.loadUI=function(path){
-		var uiView=View.uiMap[path];
-		View.uiMap && this.createView(uiView);
-	}
-
-	/**X锚点，值为0-1，设置anchorX值最终通过pivotX值来改变节点轴心点。*/
-	__getset(0,__proto,'anchorX',function(){
-		return this._anchorX;
-		},function(value){
-		if (this._anchorX !=value){
-			this._anchorX=value;
-			this.callLater(this._sizeChanged);
-		}
-	});
-
-	/**
-	*<p>在父容器中，此对象的水平方向中轴线与父容器的水平方向中心线的距离（以像素为单位）。</p>
-	*/
-	__getset(0,__proto,'centerX',function(){
-		return this._widget.centerX;
-		},function(value){
-		if (value !=this._widget.centerX){
-			this._getWidget().centerX=value;
-		}
-	});
-
-	/**
-	*<p>从组件顶边到其内容区域顶边之间的垂直距离（以像素为单位）。</p>
-	*/
-	__getset(0,__proto,'top',function(){
-		return this._widget.top;
-		},function(value){
-		if (value !=this._widget.top){
-			this._getWidget().top=value;
-		}
-	});
-
-	/**
-	*<p>从组件底边到其内容区域底边之间的垂直距离（以像素为单位）。</p>
-	*/
-	__getset(0,__proto,'bottom',function(){
-		return this._widget.bottom;
-		},function(value){
-		if (value !=this._widget.bottom){
-			this._getWidget().bottom=value;
-		}
-	});
-
-	/**@see laya.ui.UIComponent#dataSource*/
-	__getset(0,__proto,'dataSource',function(){
-		return this._dataSource;
-		},function(value){
-		this._dataSource=value;
-		for (var name in value){
-			var comp=this.getChildByName(name);
-			if ((comp instanceof laya.ui.UIComponent ))comp.dataSource=value[name];
-			else if (this.hasOwnProperty(name)&& !((typeof (this[name])=='function')))this[name]=value[name];
-		}
-	});
-
-	/**
-	*<p>从组件左边到其内容区域左边之间的水平距离（以像素为单位）。</p>
-	*/
-	__getset(0,__proto,'left',function(){
-		return this._widget.left;
-		},function(value){
-		if (value !=this._widget.left){
-			this._getWidget().left=value;
-		}
-	});
-
-	/**
-	*<p>从组件右边到其内容区域右边之间的水平距离（以像素为单位）。</p>
-	*/
-	__getset(0,__proto,'right',function(){
-		return this._widget.right;
-		},function(value){
-		if (value !=this._widget.right){
-			this._getWidget().right=value;
-		}
-	});
-
-	/**Y锚点，值为0-1，设置anchorY值最终通过pivotY值来改变节点轴心点。*/
-	__getset(0,__proto,'anchorY',function(){
-		return this._anchorY;
-		},function(value){
-		if (this._anchorY !=value){
-			this._anchorY=value
-			this.callLater(this._sizeChanged);
-		}
-	});
-
-	/**
-	*<p>在父容器中，此对象的垂直方向中轴线与父容器的垂直方向中心线的距离（以像素为单位）。</p>
-	*/
-	__getset(0,__proto,'centerY',function(){
-		return this._widget.centerY;
-		},function(value){
-		if (value !=this._widget.centerY){
-			this._getWidget().centerY=value;
-		}
-	});
-
-	View.regComponent=function(key,compClass){
-		ClassUtils.regClass(key,compClass);
-	}
-
-	View.regViewRuntime=function(key,compClass){
-		ClassUtils.regClass(key,compClass);
-	}
-
-	View.regUI=function(url,json){
-		Laya.loader.cacheRes(url,json);
-	}
-
-	View.uiMap={};
-	View.__init$=function(){
-		ClassUtils.regShortClassName([ViewStack,Button,TextArea,ColorPicker,Box,ScaleBox,Button,CheckBox,Clip,ComboBox,UIComponent,HScrollBar,HSlider,Image,Label,List,Panel,ProgressBar,Radio,RadioGroup,ScrollBar,Slider,Tab,TextInput,View,Dialog,VScrollBar,VSlider,Tree,HBox,VBox,Sprite,Animation,Text,FontClip]);
-	}
-
-	return View;
-})(Scene)
 
 
 /**
@@ -73820,565 +75787,6 @@ var MeshSprite3D=(function(_super){
 
 
 /**
-*<code>SpotLight</code> 类用于创建聚光。
-*/
-//class laya.d3.core.light.SpotLight extends laya.d3.core.light.LightSprite
-var SpotLight=(function(_super){
-	function SpotLight(){
-		/**@private */
-		this._direction=null;
-		/**@private */
-		this._spotAngle=NaN;
-		/**@private */
-		this._range=NaN;
-		SpotLight.__super.call(this);
-		this._spotAngle=30.0;
-		this._range=10.0;
-		this._direction=new Vector3();
-	}
-
-	__class(SpotLight,'laya.d3.core.light.SpotLight',_super);
-	var __proto=SpotLight.prototype;
-	/**
-	*@inheritDoc
-	*/
-	__proto._onActive=function(){
-		_super.prototype._onActive.call(this);
-		(this._lightmapBakedType!==LightSprite.LIGHTMAPBAKEDTYPE_BAKED)&&((this.scene)._defineDatas.add(Scene3D.SHADERDEFINE_SPOTLIGHT));
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto._onInActive=function(){
-		_super.prototype._onInActive.call(this);
-		(this._lightmapBakedType!==LightSprite.LIGHTMAPBAKEDTYPE_BAKED)&&((this.scene)._defineDatas.remove(Scene3D.SHADERDEFINE_SPOTLIGHT));
-	}
-
-	/**
-	*更新聚光相关渲染状态参数。
-	*@param state 渲染状态参数。
-	*/
-	__proto._prepareToScene=function(){
-		var scene=this._scene;
-		if (scene.enableLight && this.activeInHierarchy){
-			var defineDatas=scene._defineDatas;
-			var shaderValue=scene._shaderValues;
-			Vector3.scale(this.color,this._intensity,this._intensityColor);
-			shaderValue.setVector3(Scene3D.SPOTLIGHTCOLOR,this._intensityColor);
-			shaderValue.setVector3(Scene3D.SPOTLIGHTPOS,this.transform.position);
-			this.transform.worldMatrix.getForward(this._direction);
-			Vector3.normalize(this._direction,this._direction);
-			shaderValue.setVector3(Scene3D.SPOTLIGHTDIRECTION,this._direction);
-			shaderValue.setNumber(Scene3D.SPOTLIGHTRANGE,this.range);
-			shaderValue.setNumber(Scene3D.SPOTLIGHTSPOTANGLE,this.spotAngle *Math.PI / 180);
-			return true;
-			}else {
-			return false;
-		}
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto._parse=function(data){
-		_super.prototype._parse.call(this,data);
-		this.range=data.range;
-		this.spotAngle=data.spotAngle;
-	}
-
-	/**
-	*设置聚光灯的锥形角度。
-	*@param value 聚光灯的锥形角度。
-	*/
-	/**
-	*获取聚光灯的锥形角度。
-	*@return 聚光灯的锥形角度。
-	*/
-	__getset(0,__proto,'spotAngle',function(){
-		return this._spotAngle;
-		},function(value){
-		this._spotAngle=Math.max(Math.min(value,180),0);
-	});
-
-	/**
-	*设置聚光的范围。
-	*@param value 聚光的范围值。
-	*/
-	/**
-	*获取聚光的范围。
-	*@return 聚光的范围值。
-	*/
-	__getset(0,__proto,'range',function(){
-		return this._range;
-		},function(value){
-		this._range=value;
-	});
-
-	__static(SpotLight,
-	['_tempMatrix0',function(){return this._tempMatrix0=new Matrix4x4();},'_tempMatrix1',function(){return this._tempMatrix1=new Matrix4x4();}
-	]);
-	return SpotLight;
-})(LightSprite)
-
-
-/**
-*<p><code>Input</code> 类用于创建显示对象以显示和输入文本。</p>
-*<p>Input 类封装了原生的文本输入框，由于不同浏览器的差异，会导致此对象的默认文本的位置与用户点击输入时的文本的位置有少许的偏差。</p>
-*/
-//class laya.display.Input extends laya.display.Text
-var Input=(function(_super){
-	function Input(){
-		/**@private */
-		this._focus=false;
-		/**@private */
-		this._multiline=false;
-		/**@private */
-		this._editable=true;
-		/**@private */
-		this._restrictPattern=null;
-		this._type="text";
-		/**输入提示符。*/
-		this._prompt='';
-		/**输入提示符颜色。*/
-		this._promptColor="#A9A9A9";
-		this._originColor="#000000";
-		this._content='';
-		Input.__super.call(this);
-		this._maxChars=1E5;
-		this._width=100;
-		this._height=20;
-		this.multiline=false;
-		this.overflow="scroll";
-		this.on("mousedown",this,this._onMouseDown);
-		this.on("undisplay",this,this._onUnDisplay);
-	}
-
-	__class(Input,'laya.display.Input',_super);
-	var __proto=Input.prototype;
-	/**
-	*设置光标位置和选取字符。
-	*@param startIndex 光标起始位置。
-	*@param endIndex 光标结束位置。
-	*/
-	__proto.setSelection=function(startIndex,endIndex){
-		this.focus=true;
-		laya.display.Input.inputElement.selectionStart=startIndex;
-		laya.display.Input.inputElement.selectionEnd=endIndex;
-	}
-
-	__proto._onUnDisplay=function(e){
-		this.focus=false;
-	}
-
-	__proto._onMouseDown=function(e){
-		this.focus=true;
-	}
-
-	/**
-	*在输入期间，如果 Input 实例的位置改变，调用_syncInputTransform同步输入框的位置。
-	*/
-	__proto._syncInputTransform=function(){
-		var inputElement=this.nativeInput;
-		var transform=Utils.getTransformRelativeToWindow(this,this.padding[3],this.padding[0]);
-		var inputWid=this._width-this.padding[1]-this.padding[3];
-		var inputHei=this._height-this.padding[0]-this.padding[2];
-		if (Render.isConchApp){
-			inputElement.setScale(transform.scaleX,transform.scaleY);
-			inputElement.setSize(inputWid,inputHei);
-			inputElement.setPos(transform.x,transform.y);
-			}else {
-			Input.inputContainer.style.transform=Input.inputContainer.style.webkitTransform="scale("+transform.scaleX+","+transform.scaleY+") rotate("+(Laya.stage.canvasDegree)+"deg)";
-			inputElement.style.width=inputWid+'px';
-			inputElement.style.height=inputHei+'px';
-			Input.inputContainer.style.left=transform.x+'px';
-			Input.inputContainer.style.top=transform.y+'px';
-		}
-	}
-
-	/**选中当前实例的所有文本。*/
-	__proto.select=function(){
-		this.nativeInput.select();
-	}
-
-	__proto._setInputMethod=function(){
-		Input.input.parentElement && (Input.inputContainer.removeChild(Input.input));
-		Input.area.parentElement && (Input.inputContainer.removeChild(Input.area));
-		Input.inputElement=(this._multiline ? Input.area :Input.input);
-		Input.inputContainer.appendChild(Input.inputElement);
-		if (Text.RightToLeft){
-			Input.inputElement.style.direction="rtl";
-		}
-	}
-
-	__proto._focusIn=function(){
-		laya.display.Input.isInputting=true;
-		var input=this.nativeInput;
-		this._focus=true;
-		var cssStyle=input.style;
-		cssStyle.whiteSpace=(this.wordWrap ? "pre-wrap" :"nowrap");
-		this._setPromptColor();
-		input.readOnly=!this._editable;
-		if (Render.isConchApp){
-			input.setType(this._type);
-			input.setForbidEdit(!this._editable);
-		}
-		input.maxLength=this._maxChars;
-		var padding=this.padding;
-		input.type=this._type;
-		input.value=this._content;
-		input.placeholder=this._prompt;
-		Laya.stage.off("keydown",this,this._onKeyDown);
-		Laya.stage.on("keydown",this,this._onKeyDown);
-		Laya.stage.focus=this;
-		this.event("focus");
-		if (Browser.onPC)input.focus();
-		if(!Browser.onMiniGame && !Browser.onBDMiniGame){
-			var temp=this._text;
-			this._text=null;
-		}
-		this.typeset();
-		input.setColor(this._originColor);
-		input.setFontSize(this.fontSize);
-		input.setFontFace(Browser.onIPhone ? (Text.fontFamilyMap[this.font] || this.font):this.font);
-		if (Render.isConchApp){
-			input.setMultiAble && input.setMultiAble(this._multiline);
-		}
-		cssStyle.lineHeight=(this.leading+this.fontSize)+"px";
-		cssStyle.fontStyle=(this.italic ? "italic" :"normal");
-		cssStyle.fontWeight=(this.bold ? "bold" :"normal");
-		cssStyle.textAlign=this.align;
-		cssStyle.padding="0 0";
-		this._syncInputTransform();
-		if (!Render.isConchApp && Browser.onPC)
-			Laya.systemTimer.frameLoop(1,this,this._syncInputTransform);
-	}
-
-	// 设置DOM输入框提示符颜色。
-	__proto._setPromptColor=function(){
-		Input.promptStyleDOM=Browser.getElementById("promptStyle");
-		if (!Input.promptStyleDOM){
-			Input.promptStyleDOM=Browser.createElement("style");
-			Input.promptStyleDOM.setAttribute("id","promptStyle");
-			Browser.document.head.appendChild(Input.promptStyleDOM);
-		}
-		Input.promptStyleDOM.innerText="input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {"+"color:"+this._promptColor+"}"+"input:-moz-placeholder, textarea:-moz-placeholder {"+"color:"+this._promptColor+"}"+"input::-moz-placeholder, textarea::-moz-placeholder {"+"color:"+this._promptColor+"}"+"input:-ms-input-placeholder, textarea:-ms-input-placeholder {"+"color:"+this._promptColor+"}";
-	}
-
-	/**@private */
-	__proto._focusOut=function(){
-		laya.display.Input.isInputting=false;
-		this._focus=false;
-		this._text=null;
-		this._content=this.nativeInput.value;
-		if (!this._content){
-			Laya.superSet(Text,this,'text',this._prompt);
-			Laya.superSet(Text,this,'color',this._promptColor);
-			}else {
-			Laya.superSet(Text,this,'text',this._content);
-			Laya.superSet(Text,this,'color',this._originColor);
-		}
-		Laya.stage.off("keydown",this,this._onKeyDown);
-		Laya.stage.focus=null;
-		this.event("blur");
-		this.event("change");
-		if (Render.isConchApp)this.nativeInput.blur();
-		Browser.onPC && Laya.systemTimer.clear(this,this._syncInputTransform);
-	}
-
-	/**@private */
-	__proto._onKeyDown=function(e){
-		if (e.keyCode===13){
-			if (Browser.onMobile && !this._multiline)
-				this.focus=false;
-			this.event("enter");
-		}
-	}
-
-	__proto.changeText=function(text){
-		this._content=text;
-		if (this._focus){
-			this.nativeInput.value=text || '';
-			this.event("change");
-		}else
-		_super.prototype.changeText.call(this,text);
-	}
-
-	/**@inheritDoc */
-	__getset(0,__proto,'color',_super.prototype._$get_color,function(value){
-		if (this._focus)
-			this.nativeInput.setColor(value);
-		Laya.superSet(Text,this,'color',this._content?value:this._promptColor);
-		this._originColor=value;
-	});
-
-	/**表示是否是多行输入框。*/
-	__getset(0,__proto,'multiline',function(){
-		return this._multiline;
-		},function(value){
-		this._multiline=value;
-		this.valign=value ? "top" :"middle";
-	});
-
-	/**
-	*<p>字符数量限制，默认为10000。</p>
-	*<p>设置字符数量限制时，小于等于0的值将会限制字符数量为10000。</p>
-	*/
-	__getset(0,__proto,'maxChars',function(){
-		return this._maxChars;
-		},function(value){
-		if (value <=0)
-			value=1E5;
-		this._maxChars=value;
-	});
-
-	/**@inheritDoc */
-	__getset(0,__proto,'text',function(){
-		if (this._focus)
-			return this.nativeInput.value;
-		else
-		return this._content || "";
-		},function(value){
-		Laya.superSet(Text,this,'color',this._originColor);
-		value+='';
-		if (this._focus){
-			this.nativeInput.value=value || '';
-			this.event("change");
-			}else {
-			if (!this._multiline)
-				value=value.replace(/\r?\n/g,'');
-			this._content=value;
-			if (value)
-				Laya.superSet(Text,this,'text',value);
-			else {
-				Laya.superSet(Text,this,'text',this._prompt);
-				Laya.superSet(Text,this,'color',this.promptColor);
-			}
-		}
-	});
-
-	/**
-	*获取对输入框的引用实例。
-	*/
-	__getset(0,__proto,'nativeInput',function(){
-		return this._multiline ? Input.area :Input.input;
-	});
-
-	// 因此 调用focus接口是无法都在移动平台立刻弹出键盘的
-	/**
-	*表示焦点是否在此实例上。
-	*/
-	__getset(0,__proto,'focus',function(){
-		return this._focus;
-		},function(value){
-		var input=this.nativeInput;
-		if (this._focus!==value){
-			if (value){
-				if (input.target){
-					input.target._focusOut();
-					}else {
-					this._setInputMethod();
-				}
-				input.target=this;
-				this._focusIn();
-				}else {
-				input.target=null;
-				this._focusOut();
-				Browser.document.body.scrollTop=0;
-				input.blur();
-				if (Render.isConchApp)input.setPos(-10000,-10000);
-				else if (Input.inputContainer.contains(input))Input.inputContainer.removeChild(input);
-			}
-		}
-	});
-
-	/**
-	*是否可编辑。
-	*/
-	__getset(0,__proto,'editable',function(){
-		return this._editable;
-		},function(value){
-		this._editable=value;
-		if (Render.isConchApp){
-			Input.input.setForbidEdit(!value);
-		}
-	});
-
-	/**@inheritDoc */
-	__getset(0,__proto,'bgColor',_super.prototype._$get_bgColor,function(value){
-		Laya.superSet(Text,this,'bgColor',value);
-		if(Render.isConchApp)
-			this.nativeInput.setBgColor(value);
-	});
-
-	/**限制输入的字符。*/
-	__getset(0,__proto,'restrict',function(){
-		if (this._restrictPattern){
-			return this._restrictPattern.source;
-		}
-		return "";
-		},function(pattern){
-		if (pattern){
-			pattern="[^"+pattern+"]";
-			if (pattern.indexOf("^^")>-1)
-				pattern=pattern.replace("^^","");
-			this._restrictPattern=new RegExp(pattern,"g");
-		}else
-		this._restrictPattern=null;
-	});
-
-	/**
-	*设置输入提示符。
-	*/
-	__getset(0,__proto,'prompt',function(){
-		return this._prompt;
-		},function(value){
-		if (!this._text && value)
-			Laya.superSet(Text,this,'color',this._promptColor);
-		this.promptColor=this._promptColor;
-		if (this._text)
-			Laya.superSet(Text,this,'text',(this._text==this._prompt)?value:this._text);
-		else
-		Laya.superSet(Text,this,'text',value);
-		this._prompt=Text.langPacks && Text.langPacks[value] ? Text.langPacks[value] :value;
-	});
-
-	/**
-	*设置输入提示符颜色。
-	*/
-	__getset(0,__proto,'promptColor',function(){
-		return this._promptColor;
-		},function(value){
-		this._promptColor=value;
-		if (!this._content)Laya.superSet(Text,this,'color',value);
-	});
-
-	/**
-	*<p>输入框类型为Input静态常量之一。</p>
-	*<ul>
-	*<li>TYPE_TEXT</li>
-	*<li>TYPE_PASSWORD</li>
-	*<li>TYPE_EMAIL</li>
-	*<li>TYPE_URL</li>
-	*<li>TYPE_NUMBER</li>
-	*<li>TYPE_RANGE</li>
-	*<li>TYPE_DATE</li>
-	*<li>TYPE_MONTH</li>
-	*<li>TYPE_WEEK</li>
-	*<li>TYPE_TIME</li>
-	*<li>TYPE_DATE_TIME</li>
-	*<li>TYPE_DATE_TIME_LOCAL</li>
-	*</ul>
-	*<p>平台兼容性参见http://www.w3school.com.cn/html5/html_5_form_input_types.asp。</p>
-	*/
-	__getset(0,__proto,'type',function(){
-		return this._type;
-		},function(value){
-		if (value==="password")this._getTextStyle().asPassword=true;
-		else this._getTextStyle().asPassword=false;
-		this._type=value;
-	});
-
-	Input.__init__=function(){
-		Input._createInputElement();
-		if (Browser.onMobile){
-			var isTrue=false;
-			if(Browser.onMiniGame || Browser.onBDMiniGame){
-				isTrue=true;
-			}
-			Render.canvas.addEventListener(Input.IOS_IFRAME ?(isTrue ? "touchend" :"click"):"touchend",Input._popupInputMethod);
-		}
-	}
-
-	Input._popupInputMethod=function(e){
-		if (!laya.display.Input.isInputting)return;
-		var input=laya.display.Input.inputElement;
-		input.focus();
-	}
-
-	Input._createInputElement=function(){
-		Input._initInput(Input.area=Browser.createElement("textarea"));
-		Input._initInput(Input.input=Browser.createElement("input"));
-		Input.inputContainer=Browser.createElement("div");
-		Input.inputContainer.style.position="absolute";
-		Input.inputContainer.style.zIndex=1E5;
-		Browser.container.appendChild(Input.inputContainer);
-		Input.inputContainer.setPos=function (x,y){
-			Input.inputContainer.style.left=x+'px';
-			Input.inputContainer.style.top=y+'px';
-		};
-	}
-
-	Input._initInput=function(input){
-		var style=input.style;
-		style.cssText="position:absolute;overflow:hidden;resize:none;transform-origin:0 0;-webkit-transform-origin:0 0;-moz-transform-origin:0 0;-o-transform-origin:0 0;";
-		style.resize='none';
-		style.backgroundColor='transparent';
-		style.border='none';
-		style.outline='none';
-		style.zIndex=1;
-		input.addEventListener('input',Input._processInputting);
-		input.addEventListener('mousemove',Input._stopEvent);
-		input.addEventListener('mousedown',Input._stopEvent);
-		input.addEventListener('touchmove',Input._stopEvent);
-		input.setFontFace=function (fontFace){input.style.fontFamily=fontFace;};
-		if(!Render.isConchApp){
-			input.setColor=function (color){input.style.color=color;};
-			input.setFontSize=function (fontSize){input.style.fontSize=fontSize+'px';};
-		}
-	}
-
-	Input._processInputting=function(e){
-		var input=laya.display.Input.inputElement.target;
-		if (!input)return;
-		var value=laya.display.Input.inputElement.value;
-		if (input._restrictPattern){
-			value=value.replace(/\u2006|\x27/g,"");
-			if (input._restrictPattern.test(value)){
-				value=value.replace(input._restrictPattern,"");
-				laya.display.Input.inputElement.value=value;
-			}
-		}
-		input._text=value;
-		input.event("input");
-	}
-
-	Input._stopEvent=function(e){
-		if (e.type=='touchmove')
-			e.preventDefault();
-		e.stopPropagation && e.stopPropagation();
-	}
-
-	Input.TYPE_TEXT="text";
-	Input.TYPE_PASSWORD="password";
-	Input.TYPE_EMAIL="email";
-	Input.TYPE_URL="url";
-	Input.TYPE_NUMBER="number";
-	Input.TYPE_RANGE="range";
-	Input.TYPE_DATE="date";
-	Input.TYPE_MONTH="month";
-	Input.TYPE_WEEK="week";
-	Input.TYPE_TIME="time";
-	Input.TYPE_DATE_TIME="datetime";
-	Input.TYPE_DATE_TIME_LOCAL="datetime-local";
-	Input.TYPE_SEARCH="search";
-	Input.input=null;
-	Input.area=null;
-	Input.inputElement=null;
-	Input.inputContainer=null;
-	Input.confirmButton=null;
-	Input.promptStyleDOM=null;
-	Input.inputHeight=45;
-	Input.isInputting=false;
-	Input.stageMatrix=null;
-	__static(Input,
-	['IOS_IFRAME',function(){return this.IOS_IFRAME=(Browser.onIOS && Browser.window.top !=Browser.window.self);}
-	]);
-	return Input;
-})(Text)
-
-
-/**
 *<code>ScrollBar</code> 组件是一个滚动条组件。
 *<p>当数据太多以至于显示区域无法容纳时，最终用户可以使用 <code>ScrollBar</code> 组件控制所显示的数据部分。</p>
 *<p> 滚动条由四部分组成：两个箭头按钮、一个轨道和一个滑块。 </p> *
@@ -74979,6 +76387,565 @@ var ScrollBar=(function(_super){
 
 	return ScrollBar;
 })(UIComponent)
+
+
+/**
+*<p><code>Input</code> 类用于创建显示对象以显示和输入文本。</p>
+*<p>Input 类封装了原生的文本输入框，由于不同浏览器的差异，会导致此对象的默认文本的位置与用户点击输入时的文本的位置有少许的偏差。</p>
+*/
+//class laya.display.Input extends laya.display.Text
+var Input=(function(_super){
+	function Input(){
+		/**@private */
+		this._focus=false;
+		/**@private */
+		this._multiline=false;
+		/**@private */
+		this._editable=true;
+		/**@private */
+		this._restrictPattern=null;
+		this._type="text";
+		/**输入提示符。*/
+		this._prompt='';
+		/**输入提示符颜色。*/
+		this._promptColor="#A9A9A9";
+		this._originColor="#000000";
+		this._content='';
+		Input.__super.call(this);
+		this._maxChars=1E5;
+		this._width=100;
+		this._height=20;
+		this.multiline=false;
+		this.overflow="scroll";
+		this.on("mousedown",this,this._onMouseDown);
+		this.on("undisplay",this,this._onUnDisplay);
+	}
+
+	__class(Input,'laya.display.Input',_super);
+	var __proto=Input.prototype;
+	/**
+	*设置光标位置和选取字符。
+	*@param startIndex 光标起始位置。
+	*@param endIndex 光标结束位置。
+	*/
+	__proto.setSelection=function(startIndex,endIndex){
+		this.focus=true;
+		laya.display.Input.inputElement.selectionStart=startIndex;
+		laya.display.Input.inputElement.selectionEnd=endIndex;
+	}
+
+	__proto._onUnDisplay=function(e){
+		this.focus=false;
+	}
+
+	__proto._onMouseDown=function(e){
+		this.focus=true;
+	}
+
+	/**
+	*在输入期间，如果 Input 实例的位置改变，调用_syncInputTransform同步输入框的位置。
+	*/
+	__proto._syncInputTransform=function(){
+		var inputElement=this.nativeInput;
+		var transform=Utils.getTransformRelativeToWindow(this,this.padding[3],this.padding[0]);
+		var inputWid=this._width-this.padding[1]-this.padding[3];
+		var inputHei=this._height-this.padding[0]-this.padding[2];
+		if (Render.isConchApp){
+			inputElement.setScale(transform.scaleX,transform.scaleY);
+			inputElement.setSize(inputWid,inputHei);
+			inputElement.setPos(transform.x,transform.y);
+			}else {
+			Input.inputContainer.style.transform=Input.inputContainer.style.webkitTransform="scale("+transform.scaleX+","+transform.scaleY+") rotate("+(Laya.stage.canvasDegree)+"deg)";
+			inputElement.style.width=inputWid+'px';
+			inputElement.style.height=inputHei+'px';
+			Input.inputContainer.style.left=transform.x+'px';
+			Input.inputContainer.style.top=transform.y+'px';
+		}
+	}
+
+	/**选中当前实例的所有文本。*/
+	__proto.select=function(){
+		this.nativeInput.select();
+	}
+
+	__proto._setInputMethod=function(){
+		Input.input.parentElement && (Input.inputContainer.removeChild(Input.input));
+		Input.area.parentElement && (Input.inputContainer.removeChild(Input.area));
+		Input.inputElement=(this._multiline ? Input.area :Input.input);
+		Input.inputContainer.appendChild(Input.inputElement);
+		if (Text.RightToLeft){
+			Input.inputElement.style.direction="rtl";
+		}
+	}
+
+	__proto._focusIn=function(){
+		laya.display.Input.isInputting=true;
+		var input=this.nativeInput;
+		this._focus=true;
+		var cssStyle=input.style;
+		cssStyle.whiteSpace=(this.wordWrap ? "pre-wrap" :"nowrap");
+		this._setPromptColor();
+		input.readOnly=!this._editable;
+		if (Render.isConchApp){
+			input.setType(this._type);
+			input.setForbidEdit(!this._editable);
+		}
+		input.maxLength=this._maxChars;
+		var padding=this.padding;
+		input.type=this._type;
+		input.value=this._content;
+		input.placeholder=this._prompt;
+		Laya.stage.off("keydown",this,this._onKeyDown);
+		Laya.stage.on("keydown",this,this._onKeyDown);
+		Laya.stage.focus=this;
+		this.event("focus");
+		if (Browser.onPC)input.focus();
+		if(!Browser.onMiniGame && !Browser.onBDMiniGame){
+			var temp=this._text;
+			this._text=null;
+		}
+		this.typeset();
+		input.setColor(this._originColor);
+		input.setFontSize(this.fontSize);
+		input.setFontFace(Browser.onIPhone ? (Text.fontFamilyMap[this.font] || this.font):this.font);
+		if (Render.isConchApp){
+			input.setMultiAble && input.setMultiAble(this._multiline);
+		}
+		cssStyle.lineHeight=(this.leading+this.fontSize)+"px";
+		cssStyle.fontStyle=(this.italic ? "italic" :"normal");
+		cssStyle.fontWeight=(this.bold ? "bold" :"normal");
+		cssStyle.textAlign=this.align;
+		cssStyle.padding="0 0";
+		this._syncInputTransform();
+		if (!Render.isConchApp && Browser.onPC)
+			Laya.systemTimer.frameLoop(1,this,this._syncInputTransform);
+	}
+
+	// 设置DOM输入框提示符颜色。
+	__proto._setPromptColor=function(){
+		Input.promptStyleDOM=Browser.getElementById("promptStyle");
+		if (!Input.promptStyleDOM){
+			Input.promptStyleDOM=Browser.createElement("style");
+			Input.promptStyleDOM.setAttribute("id","promptStyle");
+			Browser.document.head.appendChild(Input.promptStyleDOM);
+		}
+		Input.promptStyleDOM.innerText="input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {"+"color:"+this._promptColor+"}"+"input:-moz-placeholder, textarea:-moz-placeholder {"+"color:"+this._promptColor+"}"+"input::-moz-placeholder, textarea::-moz-placeholder {"+"color:"+this._promptColor+"}"+"input:-ms-input-placeholder, textarea:-ms-input-placeholder {"+"color:"+this._promptColor+"}";
+	}
+
+	/**@private */
+	__proto._focusOut=function(){
+		laya.display.Input.isInputting=false;
+		this._focus=false;
+		this._text=null;
+		this._content=this.nativeInput.value;
+		if (!this._content){
+			Laya.superSet(Text,this,'text',this._prompt);
+			Laya.superSet(Text,this,'color',this._promptColor);
+			}else {
+			Laya.superSet(Text,this,'text',this._content);
+			Laya.superSet(Text,this,'color',this._originColor);
+		}
+		Laya.stage.off("keydown",this,this._onKeyDown);
+		Laya.stage.focus=null;
+		this.event("blur");
+		this.event("change");
+		if (Render.isConchApp)this.nativeInput.blur();
+		Browser.onPC && Laya.systemTimer.clear(this,this._syncInputTransform);
+	}
+
+	/**@private */
+	__proto._onKeyDown=function(e){
+		if (e.keyCode===13){
+			if (Browser.onMobile && !this._multiline)
+				this.focus=false;
+			this.event("enter");
+		}
+	}
+
+	__proto.changeText=function(text){
+		this._content=text;
+		if (this._focus){
+			this.nativeInput.value=text || '';
+			this.event("change");
+		}else
+		_super.prototype.changeText.call(this,text);
+	}
+
+	/**@inheritDoc */
+	__getset(0,__proto,'color',_super.prototype._$get_color,function(value){
+		if (this._focus)
+			this.nativeInput.setColor(value);
+		Laya.superSet(Text,this,'color',this._content?value:this._promptColor);
+		this._originColor=value;
+	});
+
+	/**表示是否是多行输入框。*/
+	__getset(0,__proto,'multiline',function(){
+		return this._multiline;
+		},function(value){
+		this._multiline=value;
+		this.valign=value ? "top" :"middle";
+	});
+
+	/**
+	*<p>字符数量限制，默认为10000。</p>
+	*<p>设置字符数量限制时，小于等于0的值将会限制字符数量为10000。</p>
+	*/
+	__getset(0,__proto,'maxChars',function(){
+		return this._maxChars;
+		},function(value){
+		if (value <=0)
+			value=1E5;
+		this._maxChars=value;
+	});
+
+	/**@inheritDoc */
+	__getset(0,__proto,'text',function(){
+		if (this._focus)
+			return this.nativeInput.value;
+		else
+		return this._content || "";
+		},function(value){
+		Laya.superSet(Text,this,'color',this._originColor);
+		value+='';
+		if (this._focus){
+			this.nativeInput.value=value || '';
+			this.event("change");
+			}else {
+			if (!this._multiline)
+				value=value.replace(/\r?\n/g,'');
+			this._content=value;
+			if (value)
+				Laya.superSet(Text,this,'text',value);
+			else {
+				Laya.superSet(Text,this,'text',this._prompt);
+				Laya.superSet(Text,this,'color',this.promptColor);
+			}
+		}
+	});
+
+	/**
+	*获取对输入框的引用实例。
+	*/
+	__getset(0,__proto,'nativeInput',function(){
+		return this._multiline ? Input.area :Input.input;
+	});
+
+	// 因此 调用focus接口是无法都在移动平台立刻弹出键盘的
+	/**
+	*表示焦点是否在此实例上。
+	*/
+	__getset(0,__proto,'focus',function(){
+		return this._focus;
+		},function(value){
+		var input=this.nativeInput;
+		if (this._focus!==value){
+			if (value){
+				if (input.target){
+					input.target._focusOut();
+					}else {
+					this._setInputMethod();
+				}
+				input.target=this;
+				this._focusIn();
+				}else {
+				input.target=null;
+				this._focusOut();
+				Browser.document.body.scrollTop=0;
+				input.blur();
+				if (Render.isConchApp)input.setPos(-10000,-10000);
+				else if (Input.inputContainer.contains(input))Input.inputContainer.removeChild(input);
+			}
+		}
+	});
+
+	/**
+	*是否可编辑。
+	*/
+	__getset(0,__proto,'editable',function(){
+		return this._editable;
+		},function(value){
+		this._editable=value;
+		if (Render.isConchApp){
+			Input.input.setForbidEdit(!value);
+		}
+	});
+
+	/**@inheritDoc */
+	__getset(0,__proto,'bgColor',_super.prototype._$get_bgColor,function(value){
+		Laya.superSet(Text,this,'bgColor',value);
+		if(Render.isConchApp)
+			this.nativeInput.setBgColor(value);
+	});
+
+	/**限制输入的字符。*/
+	__getset(0,__proto,'restrict',function(){
+		if (this._restrictPattern){
+			return this._restrictPattern.source;
+		}
+		return "";
+		},function(pattern){
+		if (pattern){
+			pattern="[^"+pattern+"]";
+			if (pattern.indexOf("^^")>-1)
+				pattern=pattern.replace("^^","");
+			this._restrictPattern=new RegExp(pattern,"g");
+		}else
+		this._restrictPattern=null;
+	});
+
+	/**
+	*设置输入提示符。
+	*/
+	__getset(0,__proto,'prompt',function(){
+		return this._prompt;
+		},function(value){
+		if (!this._text && value)
+			Laya.superSet(Text,this,'color',this._promptColor);
+		this.promptColor=this._promptColor;
+		if (this._text)
+			Laya.superSet(Text,this,'text',(this._text==this._prompt)?value:this._text);
+		else
+		Laya.superSet(Text,this,'text',value);
+		this._prompt=Text.langPacks && Text.langPacks[value] ? Text.langPacks[value] :value;
+	});
+
+	/**
+	*设置输入提示符颜色。
+	*/
+	__getset(0,__proto,'promptColor',function(){
+		return this._promptColor;
+		},function(value){
+		this._promptColor=value;
+		if (!this._content)Laya.superSet(Text,this,'color',value);
+	});
+
+	/**
+	*<p>输入框类型为Input静态常量之一。</p>
+	*<ul>
+	*<li>TYPE_TEXT</li>
+	*<li>TYPE_PASSWORD</li>
+	*<li>TYPE_EMAIL</li>
+	*<li>TYPE_URL</li>
+	*<li>TYPE_NUMBER</li>
+	*<li>TYPE_RANGE</li>
+	*<li>TYPE_DATE</li>
+	*<li>TYPE_MONTH</li>
+	*<li>TYPE_WEEK</li>
+	*<li>TYPE_TIME</li>
+	*<li>TYPE_DATE_TIME</li>
+	*<li>TYPE_DATE_TIME_LOCAL</li>
+	*</ul>
+	*<p>平台兼容性参见http://www.w3school.com.cn/html5/html_5_form_input_types.asp。</p>
+	*/
+	__getset(0,__proto,'type',function(){
+		return this._type;
+		},function(value){
+		if (value==="password")this._getTextStyle().asPassword=true;
+		else this._getTextStyle().asPassword=false;
+		this._type=value;
+	});
+
+	Input.__init__=function(){
+		Input._createInputElement();
+		if (Browser.onMobile){
+			var isTrue=false;
+			if(Browser.onMiniGame || Browser.onBDMiniGame){
+				isTrue=true;
+			}
+			Render.canvas.addEventListener(Input.IOS_IFRAME ?(isTrue ? "touchend" :"click"):"touchend",Input._popupInputMethod);
+		}
+	}
+
+	Input._popupInputMethod=function(e){
+		if (!laya.display.Input.isInputting)return;
+		var input=laya.display.Input.inputElement;
+		input.focus();
+	}
+
+	Input._createInputElement=function(){
+		Input._initInput(Input.area=Browser.createElement("textarea"));
+		Input._initInput(Input.input=Browser.createElement("input"));
+		Input.inputContainer=Browser.createElement("div");
+		Input.inputContainer.style.position="absolute";
+		Input.inputContainer.style.zIndex=1E5;
+		Browser.container.appendChild(Input.inputContainer);
+		Input.inputContainer.setPos=function (x,y){
+			Input.inputContainer.style.left=x+'px';
+			Input.inputContainer.style.top=y+'px';
+		};
+	}
+
+	Input._initInput=function(input){
+		var style=input.style;
+		style.cssText="position:absolute;overflow:hidden;resize:none;transform-origin:0 0;-webkit-transform-origin:0 0;-moz-transform-origin:0 0;-o-transform-origin:0 0;";
+		style.resize='none';
+		style.backgroundColor='transparent';
+		style.border='none';
+		style.outline='none';
+		style.zIndex=1;
+		input.addEventListener('input',Input._processInputting);
+		input.addEventListener('mousemove',Input._stopEvent);
+		input.addEventListener('mousedown',Input._stopEvent);
+		input.addEventListener('touchmove',Input._stopEvent);
+		input.setFontFace=function (fontFace){input.style.fontFamily=fontFace;};
+		if(!Render.isConchApp){
+			input.setColor=function (color){input.style.color=color;};
+			input.setFontSize=function (fontSize){input.style.fontSize=fontSize+'px';};
+		}
+	}
+
+	Input._processInputting=function(e){
+		var input=laya.display.Input.inputElement.target;
+		if (!input)return;
+		var value=laya.display.Input.inputElement.value;
+		if (input._restrictPattern){
+			value=value.replace(/\u2006|\x27/g,"");
+			if (input._restrictPattern.test(value)){
+				value=value.replace(input._restrictPattern,"");
+				laya.display.Input.inputElement.value=value;
+			}
+		}
+		input._text=value;
+		input.event("input");
+	}
+
+	Input._stopEvent=function(e){
+		if (e.type=='touchmove')
+			e.preventDefault();
+		e.stopPropagation && e.stopPropagation();
+	}
+
+	Input.TYPE_TEXT="text";
+	Input.TYPE_PASSWORD="password";
+	Input.TYPE_EMAIL="email";
+	Input.TYPE_URL="url";
+	Input.TYPE_NUMBER="number";
+	Input.TYPE_RANGE="range";
+	Input.TYPE_DATE="date";
+	Input.TYPE_MONTH="month";
+	Input.TYPE_WEEK="week";
+	Input.TYPE_TIME="time";
+	Input.TYPE_DATE_TIME="datetime";
+	Input.TYPE_DATE_TIME_LOCAL="datetime-local";
+	Input.TYPE_SEARCH="search";
+	Input.input=null;
+	Input.area=null;
+	Input.inputElement=null;
+	Input.inputContainer=null;
+	Input.confirmButton=null;
+	Input.promptStyleDOM=null;
+	Input.inputHeight=45;
+	Input.isInputting=false;
+	Input.stageMatrix=null;
+	__static(Input,
+	['IOS_IFRAME',function(){return this.IOS_IFRAME=(Browser.onIOS && Browser.window.top !=Browser.window.self);}
+	]);
+	return Input;
+})(Text)
+
+
+/**
+*<code>SpotLight</code> 类用于创建聚光。
+*/
+//class laya.d3.core.light.SpotLight extends laya.d3.core.light.LightSprite
+var SpotLight=(function(_super){
+	function SpotLight(){
+		/**@private */
+		this._direction=null;
+		/**@private */
+		this._spotAngle=NaN;
+		/**@private */
+		this._range=NaN;
+		SpotLight.__super.call(this);
+		this._spotAngle=30.0;
+		this._range=10.0;
+		this._direction=new Vector3();
+	}
+
+	__class(SpotLight,'laya.d3.core.light.SpotLight',_super);
+	var __proto=SpotLight.prototype;
+	/**
+	*@inheritDoc
+	*/
+	__proto._onActive=function(){
+		_super.prototype._onActive.call(this);
+		(this._lightmapBakedType!==LightSprite.LIGHTMAPBAKEDTYPE_BAKED)&&((this.scene)._defineDatas.add(Scene3D.SHADERDEFINE_SPOTLIGHT));
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto._onInActive=function(){
+		_super.prototype._onInActive.call(this);
+		(this._lightmapBakedType!==LightSprite.LIGHTMAPBAKEDTYPE_BAKED)&&((this.scene)._defineDatas.remove(Scene3D.SHADERDEFINE_SPOTLIGHT));
+	}
+
+	/**
+	*更新聚光相关渲染状态参数。
+	*@param state 渲染状态参数。
+	*/
+	__proto._prepareToScene=function(){
+		var scene=this._scene;
+		if (scene.enableLight && this.activeInHierarchy){
+			var defineDatas=scene._defineDatas;
+			var shaderValue=scene._shaderValues;
+			Vector3.scale(this.color,this._intensity,this._intensityColor);
+			shaderValue.setVector3(Scene3D.SPOTLIGHTCOLOR,this._intensityColor);
+			shaderValue.setVector3(Scene3D.SPOTLIGHTPOS,this.transform.position);
+			this.transform.worldMatrix.getForward(this._direction);
+			Vector3.normalize(this._direction,this._direction);
+			shaderValue.setVector3(Scene3D.SPOTLIGHTDIRECTION,this._direction);
+			shaderValue.setNumber(Scene3D.SPOTLIGHTRANGE,this.range);
+			shaderValue.setNumber(Scene3D.SPOTLIGHTSPOTANGLE,this.spotAngle *Math.PI / 180);
+			return true;
+			}else {
+			return false;
+		}
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto._parse=function(data){
+		_super.prototype._parse.call(this,data);
+		this.range=data.range;
+		this.spotAngle=data.spotAngle;
+	}
+
+	/**
+	*设置聚光灯的锥形角度。
+	*@param value 聚光灯的锥形角度。
+	*/
+	/**
+	*获取聚光灯的锥形角度。
+	*@return 聚光灯的锥形角度。
+	*/
+	__getset(0,__proto,'spotAngle',function(){
+		return this._spotAngle;
+		},function(value){
+		this._spotAngle=Math.max(Math.min(value,180),0);
+	});
+
+	/**
+	*设置聚光的范围。
+	*@param value 聚光的范围值。
+	*/
+	/**
+	*获取聚光的范围。
+	*@return 聚光的范围值。
+	*/
+	__getset(0,__proto,'range',function(){
+		return this._range;
+		},function(value){
+		this._range=value;
+	});
+
+	__static(SpotLight,
+	['_tempMatrix0',function(){return this._tempMatrix0=new Matrix4x4();},'_tempMatrix1',function(){return this._tempMatrix1=new Matrix4x4();}
+	]);
+	return SpotLight;
+})(LightSprite)
 
 
 /**
@@ -76244,6 +78211,387 @@ var Button=(function(_super){
 
 
 /**
+*<p> <code>Label</code> 类用于创建显示对象以显示文本。</p>
+*
+*@example <caption>以下示例代码，创建了一个 <code>Label</code> 实例。</caption>
+*package
+*{
+	*import laya.ui.Label;
+	*public class Label_Example
+	*{
+		*public function Label_Example()
+		*{
+			*Laya.init(640,800);//设置游戏画布宽高、渲染模式。
+			*Laya.stage.bgColor="#efefef";//设置画布的背景颜色。
+			*onInit();
+			*}
+		*private function onInit():void
+		*{
+			*var label:Label=new Label();//创建一个 Label 类的实例对象 label 。
+			*label.font="Arial";//设置 label 的字体。
+			*label.bold=true;//设置 label 显示为粗体。
+			*label.leading=4;//设置 label 的行间距。
+			*label.wordWrap=true;//设置 label 自动换行。
+			*label.padding="10,10,10,10";//设置 label 的边距。
+			*label.color="#ff00ff";//设置 label 的颜色。
+			*label.text="Hello everyone,我是一个可爱的文本！";//设置 label 的文本内容。
+			*label.x=100;//设置 label 对象的属性 x 的值，用于控制 label 对象的显示位置。
+			*label.y=100;//设置 label 对象的属性 y 的值，用于控制 label 对象的显示位置。
+			*label.width=300;//设置 label 的宽度。
+			*label.height=200;//设置 label 的高度。
+			*Laya.stage.addChild(label);//将 label 添加到显示列表。
+			*var passwordLabel:Label=new Label("请原谅我，我不想被人看到我心里话。");//创建一个 Label 类的实例对象 passwordLabel 。
+			*passwordLabel.asPassword=true;//设置 passwordLabel 的显示反式为密码显示。
+			*passwordLabel.x=100;//设置 passwordLabel 对象的属性 x 的值，用于控制 passwordLabel 对象的显示位置。
+			*passwordLabel.y=350;//设置 passwordLabel 对象的属性 y 的值，用于控制 passwordLabel 对象的显示位置。
+			*passwordLabel.width=300;//设置 passwordLabel 的宽度。
+			*passwordLabel.color="#000000";//设置 passwordLabel 的文本颜色。
+			*passwordLabel.bgColor="#ccffff";//设置 passwordLabel 的背景颜色。
+			*passwordLabel.fontSize=20;//设置 passwordLabel 的文本字体大小。
+			*Laya.stage.addChild(passwordLabel);//将 passwordLabel 添加到显示列表。
+			*}
+		*}
+	*}
+*@example
+*Laya.init(640,800);//设置游戏画布宽高
+*Laya.stage.bgColor="#efefef";//设置画布的背景颜色
+*onInit();
+*function onInit(){
+	*var label=new laya.ui.Label();//创建一个 Label 类的实例对象 label 。
+	*label.font="Arial";//设置 label 的字体。
+	*label.bold=true;//设置 label 显示为粗体。
+	*label.leading=4;//设置 label 的行间距。
+	*label.wordWrap=true;//设置 label 自动换行。
+	*label.padding="10,10,10,10";//设置 label 的边距。
+	*label.color="#ff00ff";//设置 label 的颜色。
+	*label.text="Hello everyone,我是一个可爱的文本！";//设置 label 的文本内容。
+	*label.x=100;//设置 label 对象的属性 x 的值，用于控制 label 对象的显示位置。
+	*label.y=100;//设置 label 对象的属性 y 的值，用于控制 label 对象的显示位置。
+	*label.width=300;//设置 label 的宽度。
+	*label.height=200;//设置 label 的高度。
+	*Laya.stage.addChild(label);//将 label 添加到显示列表。
+	*var passwordLabel=new laya.ui.Label("请原谅我，我不想被人看到我心里话。");//创建一个 Label 类的实例对象 passwordLabel 。
+	*passwordLabel.asPassword=true;//设置 passwordLabel 的显示反式为密码显示。
+	*passwordLabel.x=100;//设置 passwordLabel 对象的属性 x 的值，用于控制 passwordLabel 对象的显示位置。
+	*passwordLabel.y=350;//设置 passwordLabel 对象的属性 y 的值，用于控制 passwordLabel 对象的显示位置。
+	*passwordLabel.width=300;//设置 passwordLabel 的宽度。
+	*passwordLabel.color="#000000";//设置 passwordLabel 的文本颜色。
+	*passwordLabel.bgColor="#ccffff";//设置 passwordLabel 的背景颜色。
+	*passwordLabel.fontSize=20;//设置 passwordLabel 的文本字体大小。
+	*Laya.stage.addChild(passwordLabel);//将 passwordLabel 添加到显示列表。
+	*}
+*@example
+*import Label=laya.ui.Label;
+*class Label_Example {
+	*constructor(){
+		*Laya.init(640,800);//设置游戏画布宽高。
+		*Laya.stage.bgColor="#efefef";//设置画布的背景颜色。
+		*this.onInit();
+		*}
+	*private onInit():void {
+		*var label:Label=new Label();//创建一个 Label 类的实例对象 label 。
+		*label.font="Arial";//设置 label 的字体。
+		*label.bold=true;//设置 label 显示为粗体。
+		*label.leading=4;//设置 label 的行间距。
+		*label.wordWrap=true;//设置 label 自动换行。
+		*label.padding="10,10,10,10";//设置 label 的边距。
+		*label.color="#ff00ff";//设置 label 的颜色。
+		*label.text="Hello everyone,我是一个可爱的文本！";//设置 label 的文本内容。
+		*label.x=100;//设置 label 对象的属性 x 的值，用于控制 label 对象的显示位置。
+		*label.y=100;//设置 label 对象的属性 y 的值，用于控制 label 对象的显示位置。
+		*label.width=300;//设置 label 的宽度。
+		*label.height=200;//设置 label 的高度。
+		*Laya.stage.addChild(label);//将 label 添加到显示列表。
+		*var passwordLabel:Label=new Label("请原谅我，我不想被人看到我心里话。");//创建一个 Label 类的实例对象 passwordLabel 。
+		*passwordLabel.asPassword=true;//设置 passwordLabel 的显示反式为密码显示。
+		*passwordLabel.x=100;//设置 passwordLabel 对象的属性 x 的值，用于控制 passwordLabel 对象的显示位置。
+		*passwordLabel.y=350;//设置 passwordLabel 对象的属性 y 的值，用于控制 passwordLabel 对象的显示位置。
+		*passwordLabel.width=300;//设置 passwordLabel 的宽度。
+		*passwordLabel.color="#000000";//设置 passwordLabel 的文本颜色。
+		*passwordLabel.bgColor="#ccffff";//设置 passwordLabel 的背景颜色。
+		*passwordLabel.fontSize=20;//设置 passwordLabel 的文本字体大小。
+		*Laya.stage.addChild(passwordLabel);//将 passwordLabel 添加到显示列表。
+		*}
+	*}
+*@see laya.display.Text
+*/
+//class laya.ui.Label extends laya.ui.UIComponent
+var Label=(function(_super){
+	function Label(text){
+		/**
+		*@private
+		*文本 <code>Text</code> 实例。
+		*/
+		this._tf=null;
+		Label.__super.call(this);
+		(text===void 0)&& (text="");
+		this.text=text;
+	}
+
+	__class(Label,'laya.ui.Label',_super);
+	var __proto=Label.prototype;
+	/**@inheritDoc */
+	__proto.destroy=function(destroyChild){
+		(destroyChild===void 0)&& (destroyChild=true);
+		_super.prototype.destroy.call(this,destroyChild);
+		this._tf=null;
+	}
+
+	/**@inheritDoc */
+	__proto.createChildren=function(){
+		this.addChild(this._tf=new Text());
+	}
+
+	/**@copy laya.display.Text#changeText()
+	**/
+	__proto.changeText=function(text){
+		this._tf.changeText(text);
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto.measureWidth=function(){
+		return this._tf.width;
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto.measureHeight=function(){
+		return this._tf.height;
+	}
+
+	/**
+	*<p>边距信息</p>
+	*<p>"上边距，右边距，下边距 , 左边距（边距以像素为单位）"</p>
+	*@see laya.display.Text.padding
+	*/
+	__getset(0,__proto,'padding',function(){
+		return this._tf.padding.join(",");
+		},function(value){
+		this._tf.padding=UIUtils.fillArray(Styles.labelPadding,value,Number);
+	});
+
+	/**
+	*@copy laya.display.Text#bold
+	*/
+	__getset(0,__proto,'bold',function(){
+		return this._tf.bold;
+		},function(value){
+		this._tf.bold=value;
+	});
+
+	/**
+	*@copy laya.display.Text#align
+	*/
+	__getset(0,__proto,'align',function(){
+		return this._tf.align;
+		},function(value){
+		this._tf.align=value;
+	});
+
+	/**
+	*当前文本内容字符串。
+	*@see laya.display.Text.text
+	*/
+	__getset(0,__proto,'text',function(){
+		return this._tf.text;
+		},function(value){
+		if (this._tf.text !=value){
+			if(value)
+				value=UIUtils.adptString(value+"");
+			this._tf.text=value;
+			this.event("change");
+			if (!this._width || !this._height)this.onCompResize();
+		}
+	});
+
+	/**
+	*@copy laya.display.Text#italic
+	*/
+	__getset(0,__proto,'italic',function(){
+		return this._tf.italic;
+		},function(value){
+		this._tf.italic=value;
+	});
+
+	/**
+	*@copy laya.display.Text#wordWrap
+	*/
+	/**
+	*@copy laya.display.Text#wordWrap
+	*/
+	__getset(0,__proto,'wordWrap',function(){
+		return this._tf.wordWrap;
+		},function(value){
+		this._tf.wordWrap=value;
+	});
+
+	/**
+	*@copy laya.display.Text#font
+	*/
+	__getset(0,__proto,'font',function(){
+		return this._tf.font;
+		},function(value){
+		this._tf.font=value;
+	});
+
+	/**@inheritDoc */
+	__getset(0,__proto,'dataSource',_super.prototype._$get_dataSource,function(value){
+		this._dataSource=value;
+		if ((typeof value=='number')|| (typeof value=='string'))this.text=value+"";
+		else Laya.superSet(UIComponent,this,'dataSource',value);
+	});
+
+	/**
+	*@copy laya.display.Text#color
+	*/
+	__getset(0,__proto,'color',function(){
+		return this._tf.color;
+		},function(value){
+		this._tf.color=value;
+	});
+
+	/**
+	*@copy laya.display.Text#valign
+	*/
+	__getset(0,__proto,'valign',function(){
+		return this._tf.valign;
+		},function(value){
+		this._tf.valign=value;
+	});
+
+	/**
+	*@copy laya.display.Text#leading
+	*/
+	__getset(0,__proto,'leading',function(){
+		return this._tf.leading;
+		},function(value){
+		this._tf.leading=value;
+	});
+
+	/**
+	*@copy laya.display.Text#fontSize
+	*/
+	__getset(0,__proto,'fontSize',function(){
+		return this._tf.fontSize;
+		},function(value){
+		this._tf.fontSize=value;
+	});
+
+	/**
+	*@copy laya.display.Text#bgColor
+	*/
+	__getset(0,__proto,'bgColor',function(){
+		return this._tf.bgColor
+		},function(value){
+		this._tf.bgColor=value;
+	});
+
+	/**
+	*@copy laya.display.Text#borderColor
+	*/
+	__getset(0,__proto,'borderColor',function(){
+		return this._tf.borderColor
+		},function(value){
+		this._tf.borderColor=value;
+	});
+
+	/**
+	*@copy laya.display.Text#stroke
+	*/
+	__getset(0,__proto,'stroke',function(){
+		return this._tf.stroke;
+		},function(value){
+		this._tf.stroke=value;
+	});
+
+	/**
+	*@copy laya.display.Text#strokeColor
+	*/
+	__getset(0,__proto,'strokeColor',function(){
+		return this._tf.strokeColor;
+		},function(value){
+		this._tf.strokeColor=value;
+	});
+
+	/**
+	*文本控件实体 <code>Text</code> 实例。
+	*/
+	__getset(0,__proto,'textField',function(){
+		return this._tf;
+	});
+
+	/**
+	*@inheritDoc
+	*/
+	/**
+	*@inheritDoc
+	*/
+	__getset(0,__proto,'width',function(){
+		if (this._width || this._tf.text)return Laya.superGet(UIComponent,this,'width');
+		return 0;
+		},function(value){
+		Laya.superSet(UIComponent,this,'width',value);
+		this._tf.width=value;
+	});
+
+	/**
+	*@inheritDoc
+	*/
+	/**
+	*@inheritDoc
+	*/
+	__getset(0,__proto,'height',function(){
+		if (this._height || this._tf.text)return Laya.superGet(UIComponent,this,'height');
+		return 0;
+		},function(value){
+		Laya.superSet(UIComponent,this,'height',value);
+		this._tf.height=value;
+	});
+
+	/**
+	*@copy laya.display.Text#overflow
+	*/
+	/**
+	*@copy laya.display.Text#overflow
+	*/
+	__getset(0,__proto,'overflow',function(){
+		return this._tf.overflow;
+		},function(value){
+		this._tf.overflow=value;
+	});
+
+	/**
+	*@copy laya.display.Text#underline
+	*/
+	/**
+	*@copy laya.display.Text#underline
+	*/
+	__getset(0,__proto,'underline',function(){
+		return this._tf.underline;
+		},function(value){
+		this._tf.underline=value;
+	});
+
+	/**
+	*@copy laya.display.Text#underlineColor
+	*/
+	/**
+	*@copy laya.display.Text#underlineColor
+	*/
+	__getset(0,__proto,'underlineColor',function(){
+		return this._tf.underlineColor;
+		},function(value){
+		this._tf.underlineColor=value;
+	});
+
+	return Label;
+})(UIComponent)
+
+
+/**
 *<code>ShuriKenParticle3D</code> 3D粒子。
 */
 //class laya.d3.core.particleShuriKen.ShuriKenParticle3D extends laya.d3.core.RenderableSprite3D
@@ -76820,550 +79168,6 @@ var ShuriKenParticle3D=(function(_super){
 
 
 /**
-*<p> <code>Label</code> 类用于创建显示对象以显示文本。</p>
-*
-*@example <caption>以下示例代码，创建了一个 <code>Label</code> 实例。</caption>
-*package
-*{
-	*import laya.ui.Label;
-	*public class Label_Example
-	*{
-		*public function Label_Example()
-		*{
-			*Laya.init(640,800);//设置游戏画布宽高、渲染模式。
-			*Laya.stage.bgColor="#efefef";//设置画布的背景颜色。
-			*onInit();
-			*}
-		*private function onInit():void
-		*{
-			*var label:Label=new Label();//创建一个 Label 类的实例对象 label 。
-			*label.font="Arial";//设置 label 的字体。
-			*label.bold=true;//设置 label 显示为粗体。
-			*label.leading=4;//设置 label 的行间距。
-			*label.wordWrap=true;//设置 label 自动换行。
-			*label.padding="10,10,10,10";//设置 label 的边距。
-			*label.color="#ff00ff";//设置 label 的颜色。
-			*label.text="Hello everyone,我是一个可爱的文本！";//设置 label 的文本内容。
-			*label.x=100;//设置 label 对象的属性 x 的值，用于控制 label 对象的显示位置。
-			*label.y=100;//设置 label 对象的属性 y 的值，用于控制 label 对象的显示位置。
-			*label.width=300;//设置 label 的宽度。
-			*label.height=200;//设置 label 的高度。
-			*Laya.stage.addChild(label);//将 label 添加到显示列表。
-			*var passwordLabel:Label=new Label("请原谅我，我不想被人看到我心里话。");//创建一个 Label 类的实例对象 passwordLabel 。
-			*passwordLabel.asPassword=true;//设置 passwordLabel 的显示反式为密码显示。
-			*passwordLabel.x=100;//设置 passwordLabel 对象的属性 x 的值，用于控制 passwordLabel 对象的显示位置。
-			*passwordLabel.y=350;//设置 passwordLabel 对象的属性 y 的值，用于控制 passwordLabel 对象的显示位置。
-			*passwordLabel.width=300;//设置 passwordLabel 的宽度。
-			*passwordLabel.color="#000000";//设置 passwordLabel 的文本颜色。
-			*passwordLabel.bgColor="#ccffff";//设置 passwordLabel 的背景颜色。
-			*passwordLabel.fontSize=20;//设置 passwordLabel 的文本字体大小。
-			*Laya.stage.addChild(passwordLabel);//将 passwordLabel 添加到显示列表。
-			*}
-		*}
-	*}
-*@example
-*Laya.init(640,800);//设置游戏画布宽高
-*Laya.stage.bgColor="#efefef";//设置画布的背景颜色
-*onInit();
-*function onInit(){
-	*var label=new laya.ui.Label();//创建一个 Label 类的实例对象 label 。
-	*label.font="Arial";//设置 label 的字体。
-	*label.bold=true;//设置 label 显示为粗体。
-	*label.leading=4;//设置 label 的行间距。
-	*label.wordWrap=true;//设置 label 自动换行。
-	*label.padding="10,10,10,10";//设置 label 的边距。
-	*label.color="#ff00ff";//设置 label 的颜色。
-	*label.text="Hello everyone,我是一个可爱的文本！";//设置 label 的文本内容。
-	*label.x=100;//设置 label 对象的属性 x 的值，用于控制 label 对象的显示位置。
-	*label.y=100;//设置 label 对象的属性 y 的值，用于控制 label 对象的显示位置。
-	*label.width=300;//设置 label 的宽度。
-	*label.height=200;//设置 label 的高度。
-	*Laya.stage.addChild(label);//将 label 添加到显示列表。
-	*var passwordLabel=new laya.ui.Label("请原谅我，我不想被人看到我心里话。");//创建一个 Label 类的实例对象 passwordLabel 。
-	*passwordLabel.asPassword=true;//设置 passwordLabel 的显示反式为密码显示。
-	*passwordLabel.x=100;//设置 passwordLabel 对象的属性 x 的值，用于控制 passwordLabel 对象的显示位置。
-	*passwordLabel.y=350;//设置 passwordLabel 对象的属性 y 的值，用于控制 passwordLabel 对象的显示位置。
-	*passwordLabel.width=300;//设置 passwordLabel 的宽度。
-	*passwordLabel.color="#000000";//设置 passwordLabel 的文本颜色。
-	*passwordLabel.bgColor="#ccffff";//设置 passwordLabel 的背景颜色。
-	*passwordLabel.fontSize=20;//设置 passwordLabel 的文本字体大小。
-	*Laya.stage.addChild(passwordLabel);//将 passwordLabel 添加到显示列表。
-	*}
-*@example
-*import Label=laya.ui.Label;
-*class Label_Example {
-	*constructor(){
-		*Laya.init(640,800);//设置游戏画布宽高。
-		*Laya.stage.bgColor="#efefef";//设置画布的背景颜色。
-		*this.onInit();
-		*}
-	*private onInit():void {
-		*var label:Label=new Label();//创建一个 Label 类的实例对象 label 。
-		*label.font="Arial";//设置 label 的字体。
-		*label.bold=true;//设置 label 显示为粗体。
-		*label.leading=4;//设置 label 的行间距。
-		*label.wordWrap=true;//设置 label 自动换行。
-		*label.padding="10,10,10,10";//设置 label 的边距。
-		*label.color="#ff00ff";//设置 label 的颜色。
-		*label.text="Hello everyone,我是一个可爱的文本！";//设置 label 的文本内容。
-		*label.x=100;//设置 label 对象的属性 x 的值，用于控制 label 对象的显示位置。
-		*label.y=100;//设置 label 对象的属性 y 的值，用于控制 label 对象的显示位置。
-		*label.width=300;//设置 label 的宽度。
-		*label.height=200;//设置 label 的高度。
-		*Laya.stage.addChild(label);//将 label 添加到显示列表。
-		*var passwordLabel:Label=new Label("请原谅我，我不想被人看到我心里话。");//创建一个 Label 类的实例对象 passwordLabel 。
-		*passwordLabel.asPassword=true;//设置 passwordLabel 的显示反式为密码显示。
-		*passwordLabel.x=100;//设置 passwordLabel 对象的属性 x 的值，用于控制 passwordLabel 对象的显示位置。
-		*passwordLabel.y=350;//设置 passwordLabel 对象的属性 y 的值，用于控制 passwordLabel 对象的显示位置。
-		*passwordLabel.width=300;//设置 passwordLabel 的宽度。
-		*passwordLabel.color="#000000";//设置 passwordLabel 的文本颜色。
-		*passwordLabel.bgColor="#ccffff";//设置 passwordLabel 的背景颜色。
-		*passwordLabel.fontSize=20;//设置 passwordLabel 的文本字体大小。
-		*Laya.stage.addChild(passwordLabel);//将 passwordLabel 添加到显示列表。
-		*}
-	*}
-*@see laya.display.Text
-*/
-//class laya.ui.Label extends laya.ui.UIComponent
-var Label=(function(_super){
-	function Label(text){
-		/**
-		*@private
-		*文本 <code>Text</code> 实例。
-		*/
-		this._tf=null;
-		Label.__super.call(this);
-		(text===void 0)&& (text="");
-		this.text=text;
-	}
-
-	__class(Label,'laya.ui.Label',_super);
-	var __proto=Label.prototype;
-	/**@inheritDoc */
-	__proto.destroy=function(destroyChild){
-		(destroyChild===void 0)&& (destroyChild=true);
-		_super.prototype.destroy.call(this,destroyChild);
-		this._tf=null;
-	}
-
-	/**@inheritDoc */
-	__proto.createChildren=function(){
-		this.addChild(this._tf=new Text());
-	}
-
-	/**@copy laya.display.Text#changeText()
-	**/
-	__proto.changeText=function(text){
-		this._tf.changeText(text);
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto.measureWidth=function(){
-		return this._tf.width;
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto.measureHeight=function(){
-		return this._tf.height;
-	}
-
-	/**
-	*<p>边距信息</p>
-	*<p>"上边距，右边距，下边距 , 左边距（边距以像素为单位）"</p>
-	*@see laya.display.Text.padding
-	*/
-	__getset(0,__proto,'padding',function(){
-		return this._tf.padding.join(",");
-		},function(value){
-		this._tf.padding=UIUtils.fillArray(Styles.labelPadding,value,Number);
-	});
-
-	/**
-	*@copy laya.display.Text#bold
-	*/
-	__getset(0,__proto,'bold',function(){
-		return this._tf.bold;
-		},function(value){
-		this._tf.bold=value;
-	});
-
-	/**
-	*@copy laya.display.Text#align
-	*/
-	__getset(0,__proto,'align',function(){
-		return this._tf.align;
-		},function(value){
-		this._tf.align=value;
-	});
-
-	/**
-	*当前文本内容字符串。
-	*@see laya.display.Text.text
-	*/
-	__getset(0,__proto,'text',function(){
-		return this._tf.text;
-		},function(value){
-		if (this._tf.text !=value){
-			if(value)
-				value=UIUtils.adptString(value+"");
-			this._tf.text=value;
-			this.event("change");
-			if (!this._width || !this._height)this.onCompResize();
-		}
-	});
-
-	/**
-	*@copy laya.display.Text#italic
-	*/
-	__getset(0,__proto,'italic',function(){
-		return this._tf.italic;
-		},function(value){
-		this._tf.italic=value;
-	});
-
-	/**
-	*@copy laya.display.Text#wordWrap
-	*/
-	/**
-	*@copy laya.display.Text#wordWrap
-	*/
-	__getset(0,__proto,'wordWrap',function(){
-		return this._tf.wordWrap;
-		},function(value){
-		this._tf.wordWrap=value;
-	});
-
-	/**
-	*@copy laya.display.Text#font
-	*/
-	__getset(0,__proto,'font',function(){
-		return this._tf.font;
-		},function(value){
-		this._tf.font=value;
-	});
-
-	/**@inheritDoc */
-	__getset(0,__proto,'dataSource',_super.prototype._$get_dataSource,function(value){
-		this._dataSource=value;
-		if ((typeof value=='number')|| (typeof value=='string'))this.text=value+"";
-		else Laya.superSet(UIComponent,this,'dataSource',value);
-	});
-
-	/**
-	*@copy laya.display.Text#color
-	*/
-	__getset(0,__proto,'color',function(){
-		return this._tf.color;
-		},function(value){
-		this._tf.color=value;
-	});
-
-	/**
-	*@copy laya.display.Text#valign
-	*/
-	__getset(0,__proto,'valign',function(){
-		return this._tf.valign;
-		},function(value){
-		this._tf.valign=value;
-	});
-
-	/**
-	*@copy laya.display.Text#leading
-	*/
-	__getset(0,__proto,'leading',function(){
-		return this._tf.leading;
-		},function(value){
-		this._tf.leading=value;
-	});
-
-	/**
-	*@copy laya.display.Text#fontSize
-	*/
-	__getset(0,__proto,'fontSize',function(){
-		return this._tf.fontSize;
-		},function(value){
-		this._tf.fontSize=value;
-	});
-
-	/**
-	*@copy laya.display.Text#bgColor
-	*/
-	__getset(0,__proto,'bgColor',function(){
-		return this._tf.bgColor
-		},function(value){
-		this._tf.bgColor=value;
-	});
-
-	/**
-	*@copy laya.display.Text#borderColor
-	*/
-	__getset(0,__proto,'borderColor',function(){
-		return this._tf.borderColor
-		},function(value){
-		this._tf.borderColor=value;
-	});
-
-	/**
-	*@copy laya.display.Text#stroke
-	*/
-	__getset(0,__proto,'stroke',function(){
-		return this._tf.stroke;
-		},function(value){
-		this._tf.stroke=value;
-	});
-
-	/**
-	*@copy laya.display.Text#strokeColor
-	*/
-	__getset(0,__proto,'strokeColor',function(){
-		return this._tf.strokeColor;
-		},function(value){
-		this._tf.strokeColor=value;
-	});
-
-	/**
-	*文本控件实体 <code>Text</code> 实例。
-	*/
-	__getset(0,__proto,'textField',function(){
-		return this._tf;
-	});
-
-	/**
-	*@inheritDoc
-	*/
-	/**
-	*@inheritDoc
-	*/
-	__getset(0,__proto,'width',function(){
-		if (this._width || this._tf.text)return Laya.superGet(UIComponent,this,'width');
-		return 0;
-		},function(value){
-		Laya.superSet(UIComponent,this,'width',value);
-		this._tf.width=value;
-	});
-
-	/**
-	*@inheritDoc
-	*/
-	/**
-	*@inheritDoc
-	*/
-	__getset(0,__proto,'height',function(){
-		if (this._height || this._tf.text)return Laya.superGet(UIComponent,this,'height');
-		return 0;
-		},function(value){
-		Laya.superSet(UIComponent,this,'height',value);
-		this._tf.height=value;
-	});
-
-	/**
-	*@copy laya.display.Text#overflow
-	*/
-	/**
-	*@copy laya.display.Text#overflow
-	*/
-	__getset(0,__proto,'overflow',function(){
-		return this._tf.overflow;
-		},function(value){
-		this._tf.overflow=value;
-	});
-
-	/**
-	*@copy laya.display.Text#underline
-	*/
-	/**
-	*@copy laya.display.Text#underline
-	*/
-	__getset(0,__proto,'underline',function(){
-		return this._tf.underline;
-		},function(value){
-		this._tf.underline=value;
-	});
-
-	/**
-	*@copy laya.display.Text#underlineColor
-	*/
-	/**
-	*@copy laya.display.Text#underlineColor
-	*/
-	__getset(0,__proto,'underlineColor',function(){
-		return this._tf.underlineColor;
-		},function(value){
-		this._tf.underlineColor=value;
-	});
-
-	return Label;
-})(UIComponent)
-
-
-/**
-//*<code>RenderTexture</code> 类用于创建渲染目标。
-*/
-//class laya.d3.resource.RenderTexture extends laya.webgl.resource.BaseTexture
-var RenderTexture=(function(_super){
-	function RenderTexture(width,height,format,depthStencilFormat){
-		/**@private */
-		//this._frameBuffer=null;
-		/**@private */
-		//this._depthStencilBuffer=null;
-		/**@private */
-		//this._depthStencilFormat=0;
-		(format===void 0)&& (format=0);
-		(depthStencilFormat===void 0)&& (depthStencilFormat=0);
-		RenderTexture.__super.call(this,format,false);
-		this._glTextureType=0x0DE1;
-		this._width=width;
-		this._height=height;
-		this._depthStencilFormat=depthStencilFormat;
-		this._create(width,height);
-	}
-
-	__class(RenderTexture,'laya.d3.resource.RenderTexture',_super);
-	var __proto=RenderTexture.prototype;
-	/**
-	*@private
-	*/
-	__proto._create=function(width,height){
-		var gl=LayaGL.instance;
-		this._frameBuffer=gl.createFramebuffer();
-		WebGLContext.bindTexture(gl,this._glTextureType,this._glTexture);
-		var glFormat=this._getGLFormat();
-		gl.texImage2D(this._glTextureType,0,glFormat,width,height,0,glFormat,0x1401,null);
-		this._setGPUMemory(width *height *4);
-		gl.bindFramebuffer(0x8D40,this._frameBuffer);
-		gl.framebufferTexture2D(0x8D40,0x8CE0,0x0DE1,this._glTexture,0);
-		if (this._depthStencilFormat!==3){
-			this._depthStencilBuffer=gl.createRenderbuffer();
-			gl.bindRenderbuffer(0x8D41,this._depthStencilBuffer);
-			switch (this._depthStencilFormat){
-				case 0:
-					gl.renderbufferStorage(0x8D41,0x81A5,width,height);
-					gl.framebufferRenderbuffer(0x8D40,0x8D00,0x8D41,this._depthStencilBuffer);
-					break ;
-				case 1:
-					gl.renderbufferStorage(0x8D41,0x8D48,width,height);
-					gl.framebufferRenderbuffer(0x8D40,0x8D20,0x8D41,this._depthStencilBuffer);
-					break ;
-				case 2:
-					gl.renderbufferStorage(0x8D41,0x84F9,width,height);
-					gl.framebufferRenderbuffer(0x8D40,0x821A,0x8D41,this._depthStencilBuffer);
-					break ;
-				default :
-					throw "RenderTexture: unkonw depth format.";
-				}
-		}
-		gl.bindFramebuffer(0x8D40,null);
-		gl.bindRenderbuffer(0x8D41,null);
-		this._setWarpMode(0x2802,this._wrapModeU);
-		this._setWarpMode(0x2803,this._wrapModeV);
-		this._setFilterMode(this._filterMode);
-		this._setAnisotropy(this._anisoLevel);
-		this._readyed=true;
-		this._activeResource();
-	}
-
-	/**
-	*生成mipMap。
-	*/
-	__proto.generateMipmap=function(){
-		if (this._isPot(this.width)&& this._isPot(this.height)){
-			this._mipmap=true;
-			LayaGL.instance.generateMipmap(this._glTextureType);
-			this._setFilterMode(this._filterMode);
-			this._setGPUMemory(this.width *this.height *4 *(1+1 / 3));
-			}else {
-			this._mipmap=false;
-			this._setGPUMemory(this.width *this.height *4 *(1+1 / 3));
-		}
-	}
-
-	/**
-	*开始绑定。
-	*/
-	__proto.start=function(){
-		LayaGL.instance.bindFramebuffer(0x8D40,this._frameBuffer);
-		RenderTexture._currentActive=this;
-		this._readyed=false;
-	}
-
-	/**
-	*结束绑定。
-	*/
-	__proto.end=function(){
-		LayaGL.instance.bindFramebuffer(0x8D40,null);
-		RenderTexture._currentActive=null;
-		this._readyed=true;
-	}
-
-	/**
-	*获得像素数据。
-	*@param x X像素坐标。
-	*@param y Y像素坐标。
-	*@param width 宽度。
-	*@param height 高度。
-	*@return 像素数据。
-	*/
-	__proto.getData=function(x,y,width,height,out){
-		var gl=LayaGL.instance;
-		gl.bindFramebuffer(0x8D40,this._frameBuffer);
-		var canRead=(gl.checkFramebufferStatus(0x8D40)===0x8CD5);
-		if (!canRead){
-			gl.bindFramebuffer(0x8D40,null);
-			return null;
-		}
-		gl.readPixels(x,y,width,height,0x1908,0x1401,out);
-		gl.bindFramebuffer(0x8D40,null);
-		return out;
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto._disposeResource=function(){
-		if (this._frameBuffer){
-			var gl=LayaGL.instance;
-			gl.deleteTexture(this._glTexture);
-			gl.deleteFramebuffer(this._frameBuffer);
-			gl.deleteRenderbuffer(this._depthStencilBuffer);
-			this._glTexture=null;
-			this._frameBuffer=null;
-			this._depthStencilBuffer=null;
-			this._setGPUMemory(0);
-		}
-	}
-
-	/**
-	*获取深度格式。
-	*@return 深度格式。
-	*/
-	__getset(0,__proto,'depthStencilFormat',function(){
-		return this._depthStencilFormat;
-	});
-
-	/**
-	*@inheritDoc
-	*/
-	__getset(0,__proto,'defaulteTexture',function(){
-		return Texture2D.grayTexture;
-	});
-
-	/**
-	*获取当前激活的Rendertexture
-	*/
-	__getset(1,RenderTexture,'currentActive',function(){
-		return RenderTexture._currentActive;
-	},laya.webgl.resource.BaseTexture._$SET_currentActive);
-
-	RenderTexture._currentActive=null;
-	return RenderTexture;
-})(BaseTexture)
-
-
-/**
 *<code>TrailSprite3D</code> 类用于创建拖尾渲染精灵。
 */
 //class laya.d3.core.trail.TrailSprite3D extends laya.d3.core.RenderableSprite3D
@@ -77757,6 +79561,169 @@ var ProgressBar=(function(_super){
 
 	return ProgressBar;
 })(UIComponent)
+
+
+/**
+//*<code>RenderTexture</code> 类用于创建渲染目标。
+*/
+//class laya.d3.resource.RenderTexture extends laya.webgl.resource.BaseTexture
+var RenderTexture=(function(_super){
+	function RenderTexture(width,height,format,depthStencilFormat){
+		/**@private */
+		//this._frameBuffer=null;
+		/**@private */
+		//this._depthStencilBuffer=null;
+		/**@private */
+		//this._depthStencilFormat=0;
+		(format===void 0)&& (format=0);
+		(depthStencilFormat===void 0)&& (depthStencilFormat=0);
+		RenderTexture.__super.call(this,format,false);
+		this._glTextureType=0x0DE1;
+		this._width=width;
+		this._height=height;
+		this._depthStencilFormat=depthStencilFormat;
+		this._create(width,height);
+	}
+
+	__class(RenderTexture,'laya.d3.resource.RenderTexture',_super);
+	var __proto=RenderTexture.prototype;
+	/**
+	*@private
+	*/
+	__proto._create=function(width,height){
+		var gl=LayaGL.instance;
+		this._frameBuffer=gl.createFramebuffer();
+		WebGLContext.bindTexture(gl,this._glTextureType,this._glTexture);
+		var glFormat=this._getGLFormat();
+		gl.texImage2D(this._glTextureType,0,glFormat,width,height,0,glFormat,0x1401,null);
+		this._setGPUMemory(width *height *4);
+		gl.bindFramebuffer(0x8D40,this._frameBuffer);
+		gl.framebufferTexture2D(0x8D40,0x8CE0,0x0DE1,this._glTexture,0);
+		if (this._depthStencilFormat!==3){
+			this._depthStencilBuffer=gl.createRenderbuffer();
+			gl.bindRenderbuffer(0x8D41,this._depthStencilBuffer);
+			switch (this._depthStencilFormat){
+				case 0:
+					gl.renderbufferStorage(0x8D41,0x81A5,width,height);
+					gl.framebufferRenderbuffer(0x8D40,0x8D00,0x8D41,this._depthStencilBuffer);
+					break ;
+				case 1:
+					gl.renderbufferStorage(0x8D41,0x8D48,width,height);
+					gl.framebufferRenderbuffer(0x8D40,0x8D20,0x8D41,this._depthStencilBuffer);
+					break ;
+				case 2:
+					gl.renderbufferStorage(0x8D41,0x84F9,width,height);
+					gl.framebufferRenderbuffer(0x8D40,0x821A,0x8D41,this._depthStencilBuffer);
+					break ;
+				default :
+					throw "RenderTexture: unkonw depth format.";
+				}
+		}
+		gl.bindFramebuffer(0x8D40,null);
+		gl.bindRenderbuffer(0x8D41,null);
+		this._setWarpMode(0x2802,this._wrapModeU);
+		this._setWarpMode(0x2803,this._wrapModeV);
+		this._setFilterMode(this._filterMode);
+		this._setAnisotropy(this._anisoLevel);
+		this._readyed=true;
+		this._activeResource();
+	}
+
+	/**
+	*生成mipMap。
+	*/
+	__proto.generateMipmap=function(){
+		if (this._isPot(this.width)&& this._isPot(this.height)){
+			this._mipmap=true;
+			LayaGL.instance.generateMipmap(this._glTextureType);
+			this._setFilterMode(this._filterMode);
+			this._setGPUMemory(this.width *this.height *4 *(1+1 / 3));
+			}else {
+			this._mipmap=false;
+			this._setGPUMemory(this.width *this.height *4 *(1+1 / 3));
+		}
+	}
+
+	/**
+	*开始绑定。
+	*/
+	__proto.start=function(){
+		LayaGL.instance.bindFramebuffer(0x8D40,this._frameBuffer);
+		RenderTexture._currentActive=this;
+		this._readyed=false;
+	}
+
+	/**
+	*结束绑定。
+	*/
+	__proto.end=function(){
+		LayaGL.instance.bindFramebuffer(0x8D40,null);
+		RenderTexture._currentActive=null;
+		this._readyed=true;
+	}
+
+	/**
+	*获得像素数据。
+	*@param x X像素坐标。
+	*@param y Y像素坐标。
+	*@param width 宽度。
+	*@param height 高度。
+	*@return 像素数据。
+	*/
+	__proto.getData=function(x,y,width,height,out){
+		var gl=LayaGL.instance;
+		gl.bindFramebuffer(0x8D40,this._frameBuffer);
+		var canRead=(gl.checkFramebufferStatus(0x8D40)===0x8CD5);
+		if (!canRead){
+			gl.bindFramebuffer(0x8D40,null);
+			return null;
+		}
+		gl.readPixels(x,y,width,height,0x1908,0x1401,out);
+		gl.bindFramebuffer(0x8D40,null);
+		return out;
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto._disposeResource=function(){
+		if (this._frameBuffer){
+			var gl=LayaGL.instance;
+			gl.deleteTexture(this._glTexture);
+			gl.deleteFramebuffer(this._frameBuffer);
+			gl.deleteRenderbuffer(this._depthStencilBuffer);
+			this._glTexture=null;
+			this._frameBuffer=null;
+			this._depthStencilBuffer=null;
+			this._setGPUMemory(0);
+		}
+	}
+
+	/**
+	*获取深度格式。
+	*@return 深度格式。
+	*/
+	__getset(0,__proto,'depthStencilFormat',function(){
+		return this._depthStencilFormat;
+	});
+
+	/**
+	*@inheritDoc
+	*/
+	__getset(0,__proto,'defaulteTexture',function(){
+		return Texture2D.grayTexture;
+	});
+
+	/**
+	*获取当前激活的Rendertexture
+	*/
+	__getset(1,RenderTexture,'currentActive',function(){
+		return RenderTexture._currentActive;
+	},laya.webgl.resource.BaseTexture._$SET_currentActive);
+
+	RenderTexture._currentActive=null;
+	return RenderTexture;
+})(BaseTexture)
 
 
 /**
@@ -80241,9 +82208,9 @@ var GameStart=(function(_super){
 		Laya.init(667,375,WebGL);
 		Laya.stage.screenMode="horizontal";
 		Laya.stage.scaleMode="fixedwidth";
-		Stat.show();
 	}
 
+	// Stat.show();
 	__proto.onDisable=function(){}
 	return GameStart;
 })(GameMainSceneUI)
@@ -85258,7 +87225,7 @@ var TextArea=(function(_super){
 })(TextInput)
 
 
-	Laya.__init([EventDispatcher,LoaderManager,GameConfig,Timer,SceneUtils,WebGLContext2D,LocalStorage,CallLater,GraphicAnimation,Physics,Render,Path,View]);
+	Laya.__init([LoaderManager,EventDispatcher,GameConfig,View,Render,Timer,SceneUtils,WebGLContext2D,LocalStorage,CallLater,GraphicAnimation,Physics,Path]);
 	/**LayaGameStart**/
 	new Main();
 
