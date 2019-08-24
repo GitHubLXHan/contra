@@ -53,7 +53,7 @@
             "source":"src/propScript/FlyProp.as",
             "searchKey":"Script,FlyProp",
             "removeAble":true,
-            "props":{"propS":"@Prefab:prefab/prop_s.prefab","propR":"@Prefab:prefab/prop_r.prefab","propM":"@Prefab:prefab/prop_m.prefab","propL":"@Prefab:prefab/prop_l.prefab","propF":"@Prefab:prefab/prop_f.prefab","propB":"@Prefab:prefab/prop_b.prefab","presetID":4,"preset":"laya/pages/prefab/fly_prop.prefab"},
+            "props":{"propsBox":"@Prefab:prefab/propsBox.prefab","propS":"@Prefab:prefab/prop_s.prefab","propR":"@Prefab:prefab/prop_r.prefab","propM":"@Prefab:prefab/prop_m.prefab","propL":"@Prefab:prefab/prop_l.prefab","propF":"@Prefab:prefab/prop_f.prefab","propB":"@Prefab:prefab/prop_b.prefab","presetID":4,"preset":"laya/pages/prefab/fly_prop.prefab"},
             "nodeParent":237,
             "label":"FlyProp",
             "isDirectory":false,

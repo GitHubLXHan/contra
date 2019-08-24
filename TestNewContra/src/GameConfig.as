@@ -22,13 +22,8 @@ package {
 	import enemyScript.EnemyThree;
 	import enemyScript.EnemyTow;
 	import propScript.FlyProp;
-	import propScript.PropB;
-	import propScript.PropF;
+	import propScript.PropsBox;
 	import propScript.PropFrame;
-	import propScript.PropL;
-	import propScript.PropM;
-	import propScript.PropR;
-	import propScript.PropS;
 	import script.Role;
 	import propScript.TouchDestroy;
 	/**
@@ -70,13 +65,8 @@ package {
 			reg("enemyScript.EnemyThree",EnemyThree);
 			reg("enemyScript.EnemyTow",EnemyTow);
 			reg("propScript.FlyProp",FlyProp);
-			reg("propScript.PropB",PropB);
-			reg("propScript.PropF",PropF);
+			reg("propScript.PropsBox",PropsBox);
 			reg("propScript.PropFrame",PropFrame);
-			reg("propScript.PropL",PropL);
-			reg("propScript.PropM",PropM);
-			reg("propScript.PropR",PropR);
-			reg("propScript.PropS",PropS);
 			reg("script.Role",Role);
 			reg("propScript.TouchDestroy",TouchDestroy);
 		}

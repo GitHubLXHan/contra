@@ -7,6 +7,8 @@ package enemyScript {
 	import laya.ui.Image;
 	import laya.utils.Pool;
 	
+	import utils.CreateEffect;
+	
 	public class BossTopOne extends Script {
 		/** @prop {name:bullet, tips:"子弹", type:prefab}*/
 		public var bullet: Prefab;
@@ -64,7 +66,7 @@ package enemyScript {
 					
 					console.log("top01销毁");
 					// 通过对象池获取动画
-					var aniBoom:Animation = Pool.getItem("enemyObjBoom");
+					var aniBoom:Animation = Pool.getItemByCreateFun('enemyObjBoom',CreateEffect.getInstance().createEnemyObjBoomAni, this);
 					if (aniBoom) {
 						aniBoom.pos(thisSp.x, thisSp.y);
 						// 播放动画

@@ -10,6 +10,8 @@ package enemyScript {
 	
 	import script.Role;
 	
+	import utils.CreateEffect;
+	
 	public class EnemyOne extends Script {
 
 		/** @prop {name:enemyBullet, tips:"敌人子弹", type:prefab}*/
@@ -19,10 +21,7 @@ package enemyScript {
 		private var thisSp:Sprite;
 
 		// 主角色
-		private var role:Sprite;
-		
-
-		
+		private var role:Sprite;	
 		
 		// 是否需要改变图片
 		private var isNeedChange:Boolean = false;
@@ -88,34 +87,17 @@ package enemyScript {
 		override public function onTriggerEnter(other:*, self:*, contact:*):void {
 			if (other.label === "bullet" && self.label === "enemy_one") {
 				// 从对象池中加载爆炸动画后播放
-				var boomAni:Animation = Pool.getItemByCreateFun("enemyRoleBoom", createEnemyRoleBoomAni, this);
+				var boomAni:Animation = Pool.getItemByCreateFun("enemyRoleBoom", CreateEffect.getInstance().createEnemyRoleBoomAni, this);
 				boomAni.play(0, false, "enemyRoleBoom");
 				boomAni.pos(thisSp.x, thisSp.y);
 				thisSp.parent.addChild(boomAni);
 				
-				// 删除本对象并回收
+				// 删除自己待系统回收
 				thisSp.removeSelf();
-				Pool.recover("enemyThree", thisSp);
+				
 			}
 		}
-		
-		/**
-		 * 当对象池中没有爆炸动画时，
-		 * 则调用此函数创建动画
-		 */
-		private function createEnemyRoleBoomAni():Animation
-		{
-			var ani:Animation = new Animation();
-			ani.loadAnimation("GameScene/EnemyRoleBoom.ani", null, "res/atlas/boom.atlas");
-			
-			ani.on(Event.COMPLETE, null, function():void {
-				ani.removeSelf();
-				Pool.recover("enemyRoleBoom",ani);
-			});
-			return ani;
-		}
-		
-		
+
 		override public function onUpdate():void {
 			var imgPath:String;
 			
@@ -165,8 +147,12 @@ package enemyScript {
 		
 		
 		override public function onDisable():void {
-			Pool.recover("enemyOne", thisSp);
+			// 清除所有定时器
 			Laya.timer.clearAll(this);
+			// 回收自己
+			console.log('enmeyOne在OnDisable中回收');
+			Pool.recover("enemyOne", thisSp);
+			
 		}
 		
 	}

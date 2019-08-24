@@ -11,6 +11,8 @@ package enemyScript {
 	import laya.utils.Handler;
 	import laya.utils.Pool;
 	
+	import utils.CreateEffect;
+	
 	public class BossOne extends Script {
 		/** @prop {name:bullet, tips:"子弹", type:prefab}*/
 		public var bullet: Prefab;
@@ -66,12 +68,12 @@ package enemyScript {
 		
 		private function boom():void{
 			// 通过对象池获取动画
-			var aniBoom01:Animation = Pool.getItemByCreateFun("enemyObjBoom", createEnemyObjBoomAni, this);
-			var aniBoom02:Animation = Pool.getItemByCreateFun("enemyObjBoom", createEnemyObjBoomAni, this);
-			var aniBoom03:Animation = Pool.getItemByCreateFun("enemyObjBoom", createEnemyObjBoomAni, this);
-			var aniBoom04:Animation = Pool.getItemByCreateFun("enemyObjBoom", createEnemyObjBoomAni, this);
-			var aniBoom05:Animation = Pool.getItemByCreateFun("enemyObjBoom", createEnemyObjBoomAni, this);
-			var aniBoom06:Animation = Pool.getItemByCreateFun("enemyObjBoom", createEnemyObjBoomAni, this);
+			var aniBoom01:Animation = Pool.getItemByCreateFun("enemyObjBoom", CreateEffect.getInstance().createEnemyObjBoomAni, this);
+			var aniBoom02:Animation = Pool.getItemByCreateFun("enemyObjBoom", CreateEffect.getInstance().createEnemyObjBoomAni, this);
+			var aniBoom03:Animation = Pool.getItemByCreateFun("enemyObjBoom", CreateEffect.getInstance().createEnemyObjBoomAni, this);
+			var aniBoom04:Animation = Pool.getItemByCreateFun("enemyObjBoom", CreateEffect.getInstance().createEnemyObjBoomAni, this);
+			var aniBoom05:Animation = Pool.getItemByCreateFun("enemyObjBoom", CreateEffect.getInstance().createEnemyObjBoomAni, this);
+			var aniBoom06:Animation = Pool.getItemByCreateFun("enemyObjBoom", CreateEffect.getInstance().createEnemyObjBoomAni, this);
 			
 			// 随机设置位置
 			aniBoom01.pos(box.x + Math.random() * 190, box.y + 160 + Math.random() * 90);

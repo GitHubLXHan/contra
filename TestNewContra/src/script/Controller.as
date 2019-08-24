@@ -20,6 +20,8 @@ package script {
 	
 	import propScript.PropFrame;
 	
+	import utils.CreateEnemy;
+	
 	public class Controller extends Script {
 		/** @prop {name:role, tips:"Role脚本", type:prefab}*/
 		public var role:Prefab;
@@ -42,6 +44,10 @@ package script {
 		/** @prop {name:flyProp, tips:"飞行物", type:prefab}*/
 		public var flyProp:Prefab;
 		
+		
+		
+		
+		
 		// 触碰即销毁的地图
 		private var touchDestroySp:Sprite;
 		
@@ -55,6 +61,11 @@ package script {
 		// 人物当前方向
 		private var curDir:String;
 		
+		
+		// 产生敌人的实例对象
+		private var createEnemy:CreateEnemy = CreateEnemy.getInstance();
+		// 产生道具的实例对象
+//		private var c
 		
 		/*
 		  关于摇杆的参数
@@ -200,7 +211,7 @@ package script {
 		}
 		
 		/**
-		 * 延迟300毫秒后执行此函数
+		 * 延迟500毫秒后执行此函数
 		 * 用于计算一些需要在浏览器完全打开之后
 		 * 再计算的数据
 		 */ 
@@ -242,7 +253,7 @@ package script {
 			Laya.stage.scrollRect = rec;
 			
 			// 给本角色添加游戏循环
-			Laya.stage.timer.loop(10, this, onLoop);
+			Laya.timer.loop(10, this, onLoop);
 		}
 		
 		
@@ -256,8 +267,7 @@ package script {
 			// 调动移动 滚动区域 函数
 			moveMap();
 			if (!roleClass.isAlive) {
-				Laya.stage.clearTimer(this, onLoop);
-				Laya.stage.clearTimer(this, produceEnemyTow);
+				Laya.timer.clear(this, onLoop);
 				var text:Text = new Text();
 				text.visible = true;
 				text.pivot(30, 30);
@@ -271,7 +281,7 @@ package script {
 					roleSp.pos(Laya.stage.scrollRect.x  + 50, 0);
 					roleClass.reStart();					
 					// 给本角色添加游戏循环
-					Laya.stage.timer.loop(10, this, onLoop);	
+					Laya.timer.loop(10, this, onLoop);	
 					Laya.stage.on(Event.MOUSE_UP, this, function up():void {
 						text.visible = false;
 						Laya.stage.off(Event.MOUSE_DOWN, this, resume);
@@ -279,9 +289,6 @@ package script {
 					});
 				}
 				Laya.stage.on(Event.MOUSE_DOWN, this, resume);
-				
-
-				
 			}
 			
 			
@@ -294,16 +301,16 @@ package script {
 		 */
 		override public function onTriggerEnter(other:*, self:*, contact:*):void {
 			if (other.label === "produce" && self.label === "produceOne") {
-				Laya.stage.timer.loop(1500, this, produceEnemyTow, [900, 128, {x:-1, y:0}]);
+				Laya.timer.loop(1500, this, createEnemy.produceEnemyTow, [enemyTow, map, 900, 128, {x:-1, y:0}]);
 				// 销毁碰撞点，避免再次碰撞产生敌人
 				circleColliderArr[0].destroy();
 			}
 			if (other.label === "produce" && self.label === "cancelProduceOne") {
-				Laya.stage.clearTimer(this, produceEnemyTow);
-				Laya.stage.timer.once(0, this, produceEnemyOne, ([1000, 290]));
+				Laya.timer.clear(this, createEnemy.produceEnemyTow);
+				Laya.timer.once(0, this, createEnemy.produceEnemyOne, [enemyOne, map, 1000, 290]);
 				
 				// 产生飞行物
-				Laya.stage.timer.once(0, this, produceFlyProp, [50]);
+				Laya.timer.once(0, this, createEnemy.produceFlyProp, [flyProp, map, 50]);
 				
 				// 销毁碰撞点，避免再次碰撞产生敌人
 				circleColliderArr[1].destroy();
@@ -311,208 +318,113 @@ package script {
 			
 			
 			if (other.label === "produce" && self.label === "produceTow") {
-				Laya.stage.timer.loop(1500, this, produceEnemyTow, [483, 290, {x:2, y:0}]);
+				Laya.timer.loop(1500, this, createEnemy.produceEnemyTow, [enemyTow, map, 483, 290, {x:2, y:0}]);
 				circleColliderArr[2].destroy();
 			}
 			
 			if (other.label === "produce" && self.label === "cancelProduceTow") {
-				Laya.stage.clearTimer(this, produceEnemyTow);
-				Laya.stage.timer.loop(1500, this, produceEnemyTow, [1670, 130, {x:-1, y:0}]);
+				Laya.timer.clear(this, createEnemy.produceEnemyTow);
+				Laya.timer.loop(1500, this, createEnemy.produceEnemyTow, [enemyTow, map, 1670, 130, {x:-1, y:0}]);
 				circleColliderArr[3].destroy();
 			}
 			
 			if (other.label === "produce" && self.label === "cancelProduceThree") {
-				Laya.stage.clearTimer(this, produceEnemyTow);
+				Laya.timer.clear(this, createEnemy.produceEnemyTow);
 				circleColliderArr[4].destroy();
 			}
 			
 			
 			if (other.label === "produce" && self.label === "produceFour") {
-				Laya.stage.timer.loop(2000, this, produceEnemyTow, [1940, 130, {x: -1, y:0}]);
-				Laya.stage.timer.once(0, this, produceEnemyOne, ([2000, 128]));
-				Laya.stage.timer.once(0, this, produceEnemyThree, ([2200, 154]));
-				Laya.stage.timer.once(0, this, produceEnemyFour, ([2040, 265]));
+				Laya.timer.loop(2000, this, createEnemy.produceEnemyTow, [enemyTow, map, 1940, 130, {x: -1, y:0}]);
+				Laya.timer.once(0, this, createEnemy.produceEnemyOne, [enemyOne, map, 2000, 128]);
+				Laya.timer.once(0, this, createEnemy.produceEnemyThree, [enemyThree, map, 2200, 154]);
+				Laya.timer.once(0, this, createEnemy.produceEnemyFour, [enemyFour, map, 2040, 265]);
 				circleColliderArr[5].destroy();
 				
 			}
 			
 			if (other.label === "produce" && self.label === "cancelProduceFour") {
-				Laya.stage.clearTimer(this, produceEnemyTow);
-				Laya.stage.timer.loop(2000, this, produceEnemyTow, [2960, 182, {x: -1, y:0}]);
+				Laya.timer.clear(this, createEnemy.produceEnemyTow);
+				Laya.timer.loop(2000, this, createEnemy.produceEnemyTow, [enemyTow, map, 2960, 182, {x: -1, y:0}]);
 				circleColliderArr[6].destroy();
 			}
 			
 			
 			if (other.label === "produce" && self.label === "cancelProduceFive") {
-				Laya.stage.clearTimer(this, produceEnemyTow);
-				Laya.stage.timer.loop(2000, this, produceEnemyTow, [3060, 76, {x: -1, y:0}]);
-				Laya.stage.timer.once(0, this, produceEnemyThree, ([2500, 100]));
-				Laya.stage.timer.once(0, this, producePropFrame, ([2574, 230]));
+				Laya.timer.clear(this, createEnemy.produceEnemyTow);
+				Laya.timer.loop(2000, this, createEnemy.produceEnemyTow, [enemyTow, map, 3060, 76, {x: -1, y:0}]);
+				Laya.timer.once(0, this, createEnemy.produceEnemyThree, [enemyThree, map, 2500, 100]);
+				Laya.timer.once(0, this, createEnemy.producePropFrame, [propFrame, map, 2574, 230]);
 				circleColliderArr[7].destroy();
 			}
 			
 			
 			if (other.label === "produce" && self.label === "cancelProduceSix") {
-				Laya.stage.clearTimer(this, produceEnemyTow);
-				Laya.stage.timer.once(0, this, produceEnemyFour, ([2680, 211]));
+				Laya.timer.clear(this, createEnemy.produceEnemyTow);
+				Laya.timer.once(0, this, createEnemy.produceEnemyFour, [enemyFour, map, 2680, 211]);
 				circleColliderArr[8].destroy();
 			}
 			
 			
 			if (other.label === "produce" && self.label === "produceSeven") {
-				Laya.stage.timer.once(0, this, produceEnemyFour, ([3026, 207]));
-				Laya.stage.timer.loop(2000, this, produceEnemyTow, [3130, 290, {x: -1, y:0}]);
+				Laya.timer.once(0, this, createEnemy.produceEnemyFour, [enemyFour, map, 3026, 207]);
+				Laya.timer.loop(2000, this, createEnemy.produceEnemyTow, [enemyTow, map, 3130, 290, {x: -1, y:0}]);
 				circleColliderArr[9].destroy();
 			}
 			
 			if (other.label === "produce" && self.label === "cancelProduceSeven") {
-				Laya.stage.timer.clear(this, produceEnemyTow);
-				Laya.stage.timer.once(0, this, produceEnemyTow, [3400, 130, {x: -1, y:0}]);
+				Laya.timer.clear(this, createEnemy.produceEnemyTow);
+				Laya.timer.once(0, this, createEnemy.produceEnemyTow, [enemyTow, map, 3400, 130, {x: -1, y:0}]);
 				circleColliderArr[10].destroy();
 			}
 			
 			if (other.label === "produce" && self.label === "produceEight") {
-				Laya.stage.timer.once(0, this, produceEnemyFive, ([3380, 256]));
+				Laya.timer.once(0, this, createEnemy.produceEnemyFive, [enemyFive, map, 3380, 256]);
 				circleColliderArr[11].destroy();
 			}
 			
 			if (other.label === "produce" && self.label === "cancelProduceEight") {
-				Laya.stage.timer.once(0, this, produceEnemyFive, ([3593, 100]));
-				Laya.stage.timer.once(0, this, producePropFrame, ([3755, 283]));
+				Laya.timer.once(0, this, createEnemy.produceEnemyFive, [enemyFive, map, 3593, 100]);
+				Laya.timer.once(0, this, createEnemy.producePropFrame, [propFrame, map, 3755, 283]);
 				circleColliderArr[12].destroy();
 			}
 			
 			if (other.label === "produce" && self.label === "produceNine") {
-				Laya.stage.timer.once(0, this, produceEnemyOne, ([3893, 182]));
-				Laya.stage.timer.once(0, this, produceEnemyTow, [4046, 238, {x: -1, y:0}]);
+				Laya.timer.once(0, this, createEnemy.produceEnemyOne, [enemyOne, map, 3893, 182]);
+				Laya.timer.once(0, this, createEnemy.produceEnemyTow, [enemyTow, map, 4046, 238, {x: -1, y:0}]);
 				circleColliderArr[13].destroy();
 			}
 			
 			if (other.label === "produce" && self.label === "cancelProduceNine") {
 				// 在这里产生飞行道具
-				Laya.stage.timer.once(0, this, produceFlyProp, [50]);
-				Laya.stage.timer.once(0, this, produceFlyProp, [150]);
-				Laya.stage.timer.once(0, this, produceFlyProp, [250]);
+				Laya.timer.once(0, this, createEnemy.produceFlyProp, [flyProp, map, 50]);
+				Laya.timer.once(0, this, createEnemy.produceFlyProp, [flyProp, map, 150]);
+				Laya.timer.once(0, this, createEnemy.produceFlyProp, [flyProp, map, 250]);
 				
-				Laya.stage.timer.once(0, this, produceEnemyTow, [4582, 183, {x: -1, y:0}]);
+				Laya.timer.once(0, this, createEnemy.produceEnemyTow, [enemyTow, map, 4582, 183, {x: -1, y:0}]);
 				circleColliderArr[14].destroy();
 				
 			}
 			
 			
 			if (other.label === "produce" && self.label === "produceTen") {
-				Laya.stage.timer.once(0, this, produceEnemyFive, ([4585, 207]));
-				Laya.stage.timer.once(0, this, produceEnemyTow, [4632, 290, {x: -1, y:0}]);
+				Laya.timer.once(0, this, createEnemy.produceEnemyFive, [enemyFive, map, 4585, 207]);
+				Laya.timer.once(0, this, createEnemy.produceEnemyTow, [enemyTow, map, 4632, 290, {x: -1, y:0}]);
 				circleColliderArr[15].destroy();
 			}
 			
 			
 			if (other.label === "produce" && self.label === "cancelProduceTen") {
-				Laya.stage.timer.once(0, this, produceEnemyFour, ([4956, 315]));
-				Laya.stage.timer.once(0, this, produceEnemyFour, ([5198, 313]));
+				Laya.timer.once(0, this, createEnemy.produceEnemyFour, [enemyFour, map, 4956, 315]);
+				Laya.timer.once(0, this, createEnemy.produceEnemyFour, [enemyFour, map, 5198, 313]);
 				circleColliderArr[16].destroy();
 			}
 			
 			if (other.label === "produce" && self.label === "produceEleven") {
-				Laya.stage.timer.once(0, this, produceBoss01, ([5382, 67]));
+				Laya.timer.once(0, this, createEnemy.produceBoss01, [enemyBossOne, map, 5382, 67]);
 				circleColliderArr[17].destroy();
 			}
 			
-		}
-		
-		/**
-		 * 产生第一类敌人
-		 */
-		private function produceEnemyOne(...args):void {
-			// 第一类敌人临时变量
-			var enemyOneSp:Sprite;
-			enemyOneSp = Pool.getItemByCreateFun("enemyOne", enemyOne.create, enemyOne);
-			enemyOneSp.pos(args[0], args[1]);
-			map.addChild(enemyOneSp);
-		}
-		
-		
-		/**
-		 * 产生第二类敌人
-		 */
-		private function produceEnemyTow(...args):void
-		{
-			// 第二类敌人临时变量
-			var enemyTowSp:Sprite;
-			// 初始化第二类敌人
-			enemyTowSp = Pool.getItemByCreateFun("enemyTow", enemyTow.create, enemyTow);
-			enemyTowSp.pos(args[0], args[1]);
-			//设置速度
-			var r:RigidBody = enemyTowSp.getComponent(RigidBody);
-			r.setVelocity(args[2]);
-			map.addChild(enemyTowSp);
-		}	
-		
-		
-		/**
-		 * 产生第三类敌人
-		 */
-		private function produceEnemyThree(...args):void {
-			// 第三类敌人临时变量
-			var enemyThreeSp:Sprite;
-			enemyThreeSp = Pool.getItemByCreateFun("enemyThree", enemyThree.create, enemyThree);
-			enemyThreeSp.pos(args[0], args[1]);
-			map.addChild(enemyThreeSp);
-		}
-		
-		
-		/**
-		 * 产生第四类敌人
-		 */
-		private function produceEnemyFour(...args):void {
-			// 测试--第四类敌人
-			var enemyFourSp:Box;
-			enemyFourSp = Pool.getItemByCreateFun("enemyFour", enemyFour.create, enemyFour);
-			enemyFourSp.pos(args[0], args[1]);
-			map.addChild(enemyFourSp);
-		}
-		
-		/**
-		 * 生产第五类敌人
-		 */
-		private function produceEnemyFive(...args):void
-		{
-			var enemyFiveSp:Sprite;
-			enemyFiveSp = Pool.getItemByCreateFun("enemyFive", enemyFive.create, enemyFive);
-			enemyFiveSp.pos(args[0],args[1]);
-			map.addChild(enemyFiveSp);	
-		}
-		
-		
-		/**
-		 * 生产第一关BOSS
-		 */
-		private function produceBoss01(...args):void {
-			var enemyBoss01Sp:Sprite;
-			enemyBoss01Sp = Pool.getItemByCreateFun("enemyBoss01", enemyBossOne.create, enemyBossOne);
-			enemyBoss01Sp.pos(args[0], args[1]);
-			map.addChild(enemyBoss01Sp);
-		}
-		
-		/**
-		 * 生产道具框架
-		 */
-		private function producePropFrame(...args):void
-		{
-			var propFrameSp:Box;
-			propFrameSp = Pool.getItemByCreateFun("enemyProp", propFrame.create, propFrame);
-			propFrameSp.pos(args[0], args[1]);
-			map.addChild(propFrameSp);			
-		}		
-		
-		/**
-		 * 生产飞行物
-		 */		
-		private function produceFlyProp(...args):void {
-			var flyPropSp:Sprite;
-			flyPropSp = Pool.getItemByCreateFun("flyProp", flyProp.create, flyProp);
-			flyPropSp.pos(Laya.stage.scrollRect.x, args[0]);
-			map.addChild(flyPropSp);
 		}
 		
 		/**
@@ -521,9 +433,7 @@ package script {
 		 */
 		private function onIconAtlasLoaded():void
 		{
-			/*
-			 * 处理摇杆 
-			*/
+			/* 处理摇杆 */
 			// 为摇杆两个 Sprite 加载图片资源
 			rockerBig.loadImage("icon/rocker.png",Handler.create(this, onBigLoaded));
 			rockerSmall.loadImage("icon/rocker_center.png", Handler.create(this, onSmallLoaded));
@@ -543,23 +453,17 @@ package script {
 			rocker.addChild(rockerSmall);
 			rocker.addChild(rockerBig);
 			Laya.stage.addChild(rocker);
-			/*
-			 * 结束
-			*/		
+			/* 结束 */		
 			
 			
-			/*
-			 * 处理按钮 
-			*/
+			/* 处理按钮 */
 			// 为按钮 Sprite 加载图片资源
 			fireBtn.loadImage("icon/fire.png",Handler.create(this, onFireBtnLoaded));
 			jumpUpBtn.loadImage("icon/jump.png",Handler.create(this, onJumpUpBtnLoaded));
 			jumpDownBtn.loadImage("icon/jump_down.png", Handler.create(this, onJumpDownBtnLoaded));
 			// 将按钮添加到舞台
 			Laya.stage.addChildren(fireBtn, jumpUpBtn,jumpDownBtn); 
-			/*
-			 * 结束
-			*/
+			/* 结束 */
 			
 			
 		}	
@@ -777,23 +681,22 @@ package script {
 
 		
 		override public function onKeyDown(e:Event):void {
+			
 			switch(e.keyCode)
 			{
-				
-				
 				// 跳
 				case Keyboard.SPACE:
 				{
 					roleClass.jumpUp();	
 					break;
 				}
-					
 				// 开枪
 				case Keyboard.V:
 				{
 					roleClass.onFire();
 					break;					
 				}
+				// 复活
 				case Keyboard.R:
 				{
 					roleSp.pos(Laya.stage.scrollRect.x  + 50, 0);
@@ -801,6 +704,62 @@ package script {
 					// 给本角色添加游戏循环
 					Laya.stage.timer.loop(10, this, onLoop);
 					break;
+				}
+				// 向上
+				case 104:
+				{
+					roleClass.move(80);
+					break;					
+				}
+				// 向下
+				case 98:
+				{
+					roleClass.move(250);
+					break;					
+				}
+				// 左
+				case 100:
+				{
+					roleClass.move(160);
+					break;					
+				}
+				// 右
+				case 102:
+				{
+					roleClass.move(20);
+					break;					
+				}
+				// 左上
+				case 105:
+				{
+					roleClass.move(140);
+					break;					
+				}
+				// 左下
+				case 97:
+				{
+					roleClass.move(210);
+					break;					
+				}
+				// 右上
+				case 103:
+				{
+					roleClass.move(50);
+					break;					
+				}
+				// 右下
+				case 99:
+				{
+					roleClass.move(300);
+					break;					
+				}
+				case Keyboard.P:
+				{
+					var n:Number = Math.random();
+				
+					console.log('n = ' + n);
+					var type:uint = Math.round(n*5);				
+					console.log('type' + type);
 				}
 				default:
 				{

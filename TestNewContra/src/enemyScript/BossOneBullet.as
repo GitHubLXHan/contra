@@ -6,6 +6,8 @@ package enemyScript {
 	import laya.ui.Box;
 	import laya.utils.Pool;
 	
+	import utils.CreateEffect;
+	
 	public class BossOneBullet extends Script {
 		/** @prop {name:intType, tips:"整数类型示例", type:Int, default:1000}*/
 		public var intType: int = 1000;
@@ -30,7 +32,7 @@ package enemyScript {
 		override public function onTriggerEnter(other:*, self:*, contact:*):void {
 			if (other.label === "pass_n" || other.label === "pass_y") {
 				// 通过对象池获取动画
-				var aniBoom:Animation = Pool.getItemByCreateFun("enemyObjBoom", createEnemyObjBoomAni, this);
+				var aniBoom:Animation = Pool.getItemByCreateFun("enemyObjBoom", CreateEffect.getInstance().createEnemyObjBoomAni, this);
 				aniBoom.pos(thisSp.x, thisSp.y);
 				// 播放动画
 				aniBoom.play(0,false);
@@ -42,20 +44,7 @@ package enemyScript {
 			}
 		}
 		
-		private function createEnemyObjBoomAni():Animation
-		{
-			var ani:Animation = new Animation();
-			// 加载动画
-			ani.loadAnimation("GameScene/EnemyObjBoom.ani",null, "res/atlas/boom.atlas");
-			// 动画播放完后又回收到对象池中
-			ani.on(Event.COMPLETE, null, function ():void{
-				// 从容器中移除动画
-				ani.removeSelf();
-				// 回收到对象池
-				Pool.recover("enemyObjBoom", ani);
-			});
-			return ani;
-		}
+	
 		
 		override public function onDisable():void {
 			Pool.recover("bossOneBullet", thisSp);

@@ -28,7 +28,7 @@ package script {
 			Laya.stage.screenMode = Stage.SCREEN_HORIZONTAL;			
 			Laya.stage.scaleMode = Stage.SCALE_FIXED_WIDTH;	
 			// Laya.enableDebugPanel();
-			// Stat.show();						
+			Stat.show();						
 		}
 		
 		override public function onDisable():void {

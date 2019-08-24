@@ -11,6 +11,8 @@ package enemyScript {
 	import laya.utils.Pool;
 	import laya.utils.Tween;
 	
+	import utils.CreateEffect;
+	
 	public class EnemyThree extends Script {
 		/** @prop {name:enemyBullet, tips:"敌人子弹", type:prefab}*/
 		public var enemyBullet:Prefab;
@@ -78,7 +80,7 @@ package enemyScript {
 			}
 			
 			// 射击后停顿
-			Laya.stage.timer.once(1000, this, turnDown);
+			Laya.timer.once(1000, this, turnDown);
 		}		
 
 		/**
@@ -99,7 +101,7 @@ package enemyScript {
 			// 让刚体失效，此时不能被射击
 			rigid.enabled = false;
 			
-			Laya.stage.timer.once(1500, this, turnUp);			
+			Laya.timer.once(1500, this, turnUp);			
 		}		
 		
 		
@@ -110,49 +112,35 @@ package enemyScript {
 				thisSp.visible = false;
 				
 				// 从对象池中加载爆炸动画后播放
-				var boomAni:Animation = Pool.getItemByCreateFun("enemyRoleBoom", createEnemyRoleBoomAni, this);
+				var boomAni:Animation = Pool.getItemByCreateFun("enemyRoleBoom", CreateEffect.getInstance().createEnemyRoleBoomAni, this);
 				boomAni.play(0, false, "enemyRoleBoom");
 				boomAni.pos(thisSp.x, thisSp.y);
 				thisSp.parent.addChild(boomAni);
 				
-				// 最后清楚所有 timer事件、删除本对象并回收
-				Laya.stage.timer.clearAll(this);
+				// 删除本对象待系统回收
 				thisSp.removeSelf();
-				Pool.recover("enemyThree", thisSp);
 			}
-
 		}
 		
-		/**
-		 * 当对象池中没有爆炸动画时，
-		 * 则调用此函数创建动画
-		 */
-		private function createEnemyRoleBoomAni():Animation
-		{
-			var ani:Animation = new Animation();
-			ani.loadAnimation("GameScene/EnemyRoleBoom.ani", null, "res/atlas/boom.atlas");
-			
-			ani.on(Event.COMPLETE, null, function():void {
-				ani.removeSelf();
-				Pool.recover("enemyRoleBoom",ani);
-			});
-			return ani;
-		}
 		
 		override public function onUpdate():void {
 			// 超出显示区域则删除及回收自己
 			var scrollRect:Rectangle = Laya.stage.scrollRect ? Laya.stage.scrollRect : new Rectangle();
 			if ((scrollRect.width != 0) && thisSp.x < scrollRect.x) {
-				Tween.clearTween(thisSp); // 清楚该节点上所有的Tween缓东对象
-				thisSp.removeSelf();
-				Pool.recover("enemyThree", thisSp);	
+				// 删除自己
+				thisSp.removeSelf();	
 				shadeSp.removeSelf();
 			}
 		}
 		
 		
 		override public function onDisable():void {
-		
+			// 清楚该节点上所有的Tween缓东对象
+			Tween.clearTween(thisSp);
+			// 清除所有定时器
+			Laya.timer.clearAll(this);
+			// 回收到对象池
+			Pool.recover("enemyThree", thisSp);
 		}
 	}
 }

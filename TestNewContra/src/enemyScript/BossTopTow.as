@@ -4,8 +4,10 @@ package enemyScript {
 	import laya.display.Animation;
 	import laya.display.Sprite;
 	import laya.physics.RigidBody;
-	import laya.utils.Pool;
 	import laya.ui.Image;
+	import laya.utils.Pool;
+	
+	import utils.CreateEffect;
 	
 	public class BossTopTow extends Script {
 		/** @prop {name:bullet, tips:"子弹", type:prefab}*/
@@ -60,7 +62,7 @@ package enemyScript {
 				if (top02HP <= 0) {
 					console.log("top02销毁");
 					// 通过对象池获取动画
-					var aniBoom:Animation = Pool.getItem("enemyObjBoom");
+					var aniBoom:Animation = Pool.getItemByCreateFun('enemyObjBoom', CreateEffect.getInstance().createEnemyObjBoomAni, this);
 					if (aniBoom) {
 						aniBoom.pos(thisSp.x, thisSp.y);
 						// 播放动画

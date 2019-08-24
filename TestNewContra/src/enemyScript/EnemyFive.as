@@ -12,6 +12,8 @@ package enemyScript {
 	
 	import script.Role;
 	
+	import utils.CreateEffect;
+	
 	public class EnemyFive extends Script {
 		/** @prop {name:enemyBullet, tips:"敌人子弹", type:prefab}*/
 		public var enemyBullet:Prefab;
@@ -216,7 +218,7 @@ package enemyScript {
 				PH --;
 				if (PH <= 0) {
 					// 通过对象池获取动画
-					var aniBoom:Animation = Pool.getItemByCreateFun("enemyObjBoom", createEnemyObjBoomAni, this);
+					var aniBoom:Animation = Pool.getItemByCreateFun("enemyObjBoom", CreateEffect.getInstance().createEnemyRoleBoomAni, this);
 					aniBoom.width = 50;
 					aniBoom.height = 50;
 					aniBoom.pos(box.x - 25, box.y - 25);
@@ -230,27 +232,8 @@ package enemyScript {
 					
 					// 最后删除自己并回收
 					box.removeSelf();
-					Pool.recover("enemyFive", box);
-					
 				}
 			}
-		}
-		
-		// 创建爆炸动画
-		private function createEnemyObjBoomAni():Animation
-		{
-			var ani:Animation = new Animation();
-			// 加载动画
-			ani.loadAnimation("GameScene/EnemyObjBoom.ani",null, "res/atlas/boom.atlas");
-			// 动画播放完后又回收到对象池中
-			ani.on(Event.COMPLETE, null, function ():void{
-				// 从容器中移除动画
-				ani.removeSelf();
-				// 回收到对象池
-				Pool.recover("enemyObjBoom", ani);
-			});
-			return ani;
-			
 		}
 		
 		
@@ -259,14 +242,18 @@ package enemyScript {
 			// 超出显示区域则删除及回收自己
 			var scrollRect:Rectangle = Laya.stage.scrollRect ? Laya.stage.scrollRect : new Rectangle();
 			if ((scrollRect.width != 0) && box.x < scrollRect.x) {
+				// 删除自己
 				box.removeSelf();
-				Pool.recover("enemyFive", box);
 			}
 			
 		}
 		
 		override public function onDisable():void {
+			// 清除所有定时器
 			Laya.timer.clearAll(this);
+			// 回收到对象池
+			console.log('在 Five 中 onDisable');
+			Pool.recover("enemyFive", box);
 		}
 	}
 }

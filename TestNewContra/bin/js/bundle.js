@@ -1,14 +1,3 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 
 /***********************************/
 /*http://www.layabox.com  2017/12/12*/
@@ -227,8 +216,8 @@ Laya.interface('laya.webgl.submit.ISubmit');
 Laya.interface('laya.runtime.ICPlatformClass');
 Laya.interface('laya.resource.ICreateResource');
 Laya.interface('laya.webgl.canvas.save.ISaveData');
-Laya.interface('laya.d3.core.scene.IOctreeObject');
 Laya.interface('laya.resource.ISingletonElement');
+Laya.interface('laya.d3.core.scene.IOctreeObject');
 /**
 *<code>Laya</code> 是全局对象的引用入口集。
 *Laya类引用了一些常用的全局对象，比如Laya.stage：舞台，Laya.timer：时间管理器，Laya.loader：加载管理器，使用时注意大小写。
@@ -2115,6 +2104,127 @@ var SaveBase=(function(){
 
 
 /**
+*使用单例模式创建 CreateEnemy 对象
+*详细见 CreateEffect.as
+*/
+//class utils.CreateEnemy
+var CreateEnemy=(function(){
+	var Singletonm;
+	function CreateEnemy(sn){}
+	__class(CreateEnemy,'utils.CreateEnemy');
+	var __proto=CreateEnemy.prototype;
+	/**
+	*产生第一类敌人
+	*/
+	__proto.produceEnemyOne=function(__args){
+		var args=arguments;
+		var enemyOneSp;
+		enemyOneSp=Pool.getItemByCreateFun("enemyOne",args[0].create,args[0]);
+		enemyOneSp.pos(args[2],args[3]);
+		args[1].addChild(enemyOneSp);
+	}
+
+	/**
+	*产生第二类敌人
+	*/
+	__proto.produceEnemyTow=function(__args){
+		var args=arguments;
+		var enemyTowSp;
+		enemyTowSp=Pool.getItemByCreateFun("enemyTow",args[0].create,args[0]);
+		enemyTowSp.pos(args[2],args[3]);
+		var r=enemyTowSp.getComponent(RigidBody);
+		r.setVelocity(args[4]);
+		args[1].addChild(enemyTowSp);
+	}
+
+	/**
+	*产生第三类敌人
+	*/
+	__proto.produceEnemyThree=function(__args){
+		var args=arguments;
+		var enemyThreeSp;
+		enemyThreeSp=Pool.getItemByCreateFun("enemyThree",args[0].create,args[0]);
+		enemyThreeSp.pos(args[2],args[3]);
+		args[1].addChild(enemyThreeSp);
+	}
+
+	/**
+	*产生第四类敌人
+	*/
+	__proto.produceEnemyFour=function(__args){
+		var args=arguments;
+		var enemyFourSp;
+		enemyFourSp=Pool.getItemByCreateFun("enemyFour",args[0].create,args[0]);
+		enemyFourSp.pos(args[2],args[3]);
+		args[1].addChild(enemyFourSp);
+	}
+
+	/**
+	*生产第五类敌人
+	*/
+	__proto.produceEnemyFive=function(__args){
+		var args=arguments;
+		var enemyFiveSp;
+		enemyFiveSp=Pool.getItemByCreateFun("enemyFive",args[0].create,args[0]);
+		enemyFiveSp.pos(args[2],args[3]);
+		args[1].addChild(enemyFiveSp);
+	}
+
+	/**
+	*生产第一关BOSS
+	*/
+	__proto.produceBoss01=function(__args){
+		var args=arguments;
+		var enemyBoss01Sp;
+		enemyBoss01Sp=Pool.getItemByCreateFun("enemyBoss01",args[0].create,args[0]);
+		enemyBoss01Sp.pos(args[2],args[3]);
+		args[1].addChild(enemyBoss01Sp);
+	}
+
+	/**
+	*生产道具框架
+	*/
+	__proto.producePropFrame=function(__args){
+		var args=arguments;
+		var propFrameSp;
+		propFrameSp=Pool.getItemByCreateFun("enemyProp",args[0].create,args[0]);
+		propFrameSp.pos(args[2],args[3]);
+		args[1].addChild(propFrameSp);
+	}
+
+	/**
+	*生产飞行物
+	*/
+	__proto.produceFlyProp=function(__args){
+		var args=arguments;
+		var flyPropSp;
+		flyPropSp=Pool.getItemByCreateFun("flyProp",args[0].create,args[0]);
+		flyPropSp.pos(Laya.stage.scrollRect.x,args[2]);
+		args[1].addChild(flyPropSp);
+	}
+
+	CreateEnemy.getInstance=function(){
+		if (utils.CreateEnemy._instance==null){
+			CreateEnemy._instance=new CreateEnemy(new Singletonm());
+		}
+		return utils.CreateEnemy._instance;
+	}
+
+	CreateEnemy._instance=null;
+	CreateEnemy.__init$=function(){
+		//class Singletonm
+		Singletonm=(function(){
+			function Singletonm(){}
+			__class(Singletonm,'');
+			return Singletonm;
+		})()
+	}
+
+	return CreateEnemy;
+})()
+
+
+/**
 *<code>EventDispatcher</code> 类是可调度事件的所有类的基类。
 */
 //class laya.events.EventDispatcher
@@ -2430,6 +2540,44 @@ var Handler=(function(){
 })()
 
 
+//class utils.CreateProps
+var CreateProps=(function(){
+	var Singlestonm;
+	function CreateProps(sn){}
+	__class(CreateProps,'utils.CreateProps');
+	var __proto=CreateProps.prototype;
+	/**
+	*随机创建道具
+	*/
+	__proto.createProp=function(__args){
+		var args=arguments;
+		var singArray=["prop_m","prop_b","prop_f","prop_s","prop_l","prop_r"];
+		var type=Math.round(Math.random()*5);
+		var prop=Pool.getItemByCreateFun(singArray[type],args[type].create,args[type]);
+		return prop;
+	}
+
+	CreateProps.getInstance=function(){
+		if (utils.CreateProps._instance==null){
+			utils.CreateProps._instance=new CreateProps(new Singlestonm());
+		}
+		return utils.CreateProps._instance;
+	}
+
+	CreateProps._instance=null;
+	CreateProps.__init$=function(){
+		//class Singlestonm
+		Singlestonm=(function(){
+			function Singlestonm(){}
+			__class(Singlestonm,'');
+			return Singlestonm;
+		})()
+	}
+
+	return CreateProps;
+})()
+
+
 /**
 *<code>Component</code> 类用于创建组件的基类。
 */
@@ -2630,6 +2778,72 @@ var Component=(function(){
 })()
 
 
+//class utils.CreateEffect
+var CreateEffect=(function(){
+	var Singletonm;
+	/**
+	*1.函数的参数没有默认值，在没有传递参数的情况下去调用这个函数，编译器就会报错
+	*2.内部类 Singletonm 只能对包内可见。在一个 .as 文件里可以写多个类。与文件名
+	*相同的那个类叫主类，主类只能有一个，其它类可以是任意多个，而且其它类只对包
+	*内可见，不能被外部引用。
+	*/
+	function CreateEffect(sn){}
+	__class(CreateEffect,'utils.CreateEffect');
+	var __proto=CreateEffect.prototype;
+	// 创建爆炸动画
+	__proto.createEnemyObjBoomAni=function(){
+		console.log('工具中创建daoju爆炸');
+		var ani=new Animation();
+		ani.loadAnimation("GameScene/EnemyObjBoom.ani",Handler.create(this,function(){
+			console.log('Enemy 爆炸资源动画完毕');
+		}));
+		ani.on("complete",null,function(){
+			ani.removeSelf();
+			Pool.recover("enemyObjBoom",ani);
+		});
+		return ani;
+	}
+
+	/**
+	*当对象池中没有爆炸动画时，
+	*则调用此函数创建动画
+	*/
+	__proto.createEnemyRoleBoomAni=function(){
+		var ani=new Animation();
+		ani.loadAnimation("GameScene/EnemyObjBoom.ani",Handler.create(this,function(){
+			console.log('Role 爆炸资源动画完毕');
+		}),'res/atlas/boom.atlas');
+		console.log('在One中创建juese爆炸');
+		console.log(ani);
+		ani.on("complete",null,function(){
+			ani.removeSelf();
+			Pool.recover("enemyRoleBoom",ani);
+		});
+		return ani;
+	}
+
+	CreateEffect.getInstance=function(){
+		if (utils.CreateEffect._instance==null){
+			utils.CreateEffect._instance=new CreateEffect(new Singletonm());
+		}
+		return utils.CreateEffect._instance;
+	}
+
+	CreateEffect._instance=null;
+	CreateEffect.__init$=function(){
+		//class Singletonm
+		Singletonm=(function(){
+			function Singletonm(){}
+			__class(Singletonm,'');
+			return Singletonm;
+		})()
+	}
+
+	return CreateEffect;
+})()
+
+
+;
 //class Main
 var Main=(function(){
 	function Main(){
@@ -2691,13 +2905,8 @@ var GameConfig=(function(){
 		reg("enemyScript.EnemyThree",EnemyThree);
 		reg("enemyScript.EnemyTow",EnemyTow);
 		reg("propScript.FlyProp",FlyProp);
-		reg("propScript.PropB",PropB);
-		reg("propScript.PropF",PropF);
+		reg("propScript.PropsBox",PropsBox);
 		reg("propScript.PropFrame",PropFrame);
-		reg("propScript.PropL",PropL);
-		reg("propScript.PropM",PropM);
-		reg("propScript.PropR",PropR);
-		reg("propScript.PropS",PropS);
 		reg("script.Role",Role);
 		reg("propScript.TouchDestroy",TouchDestroy);
 	}
@@ -37666,6 +37875,139 @@ var WorkerLoader=(function(_super){
 
 
 /**
+*<code>VertexShurikenParticle</code> 类用于创建粒子顶点结构。
+*/
+//class laya.d3.graphics.Vertex.VertexShurikenParticleMesh extends laya.d3.graphics.Vertex.VertexShuriKenParticle
+var VertexShurikenParticleMesh=(function(_super){
+	function VertexShurikenParticleMesh(cornerTextureCoordinate,positionStartLifeTime,velocity,startColor,startSize,startRotation0,startRotation1,startRotation2,ageAddScale,time,startSpeed,randoms0,randoms1,simulationWorldPostion){
+		/**@private */
+		this._cornerTextureCoordinate=null;
+		/**@private */
+		this._positionStartLifeTime=null;
+		/**@private */
+		this._velocity=null;
+		/**@private */
+		this._startColor=null;
+		/**@private */
+		this._startSize=null;
+		/**@private */
+		this._startRotation0=null;
+		/**@private */
+		this._startRotation1=null;
+		/**@private */
+		this._startRotation2=null;
+		/**@private */
+		this._startLifeTime=NaN;
+		/**@private */
+		this._time=NaN;
+		/**@private */
+		this._startSpeed=NaN;
+		/**@private */
+		this._randoms0=null;
+		/**@private */
+		this._randoms1=null;
+		/**@private */
+		this._simulationWorldPostion=null;
+		VertexShurikenParticleMesh.__super.call(this);
+		this._cornerTextureCoordinate=cornerTextureCoordinate;
+		this._positionStartLifeTime=positionStartLifeTime;
+		this._velocity=velocity;
+		this._startColor=startColor;
+		this._startSize=startSize;
+		this._startRotation0=startRotation0;
+		this._startRotation1=startRotation1;
+		this._startRotation2=startRotation2;
+		this._startLifeTime=ageAddScale;
+		this._time=time;
+		this._startSpeed=startSpeed;
+		this._randoms0=this.random0;
+		this._randoms1=this.random1;
+		this._simulationWorldPostion=simulationWorldPostion;
+	}
+
+	__class(VertexShurikenParticleMesh,'laya.d3.graphics.Vertex.VertexShurikenParticleMesh',_super);
+	var __proto=VertexShurikenParticleMesh.prototype;
+	__getset(0,__proto,'cornerTextureCoordinate',function(){
+		return this._cornerTextureCoordinate;
+	});
+
+	__getset(0,__proto,'velocity',function(){
+		return this._velocity;
+	});
+
+	__getset(0,__proto,'position',function(){
+		return this._positionStartLifeTime;
+	});
+
+	__getset(0,__proto,'random0',function(){
+		return this._randoms0;
+	});
+
+	__getset(0,__proto,'startSize',function(){
+		return this._startSize;
+	});
+
+	__getset(0,__proto,'startColor',function(){
+		return this._startColor;
+	});
+
+	__getset(0,__proto,'startRotation0',function(){
+		return this._startRotation0;
+	});
+
+	__getset(0,__proto,'startRotation1',function(){
+		return this._startRotation1;
+	});
+
+	__getset(0,__proto,'random1',function(){
+		return this._randoms1;
+	});
+
+	__getset(0,__proto,'startRotation2',function(){
+		return this._startRotation2;
+	});
+
+	__getset(0,__proto,'startLifeTime',function(){
+		return this._startLifeTime;
+	});
+
+	__getset(0,__proto,'time',function(){
+		return this._time;
+	});
+
+	__getset(0,__proto,'startSpeed',function(){
+		return this._startSpeed;
+	});
+
+	__getset(0,__proto,'simulationWorldPostion',function(){
+		return this._simulationWorldPostion;
+	});
+
+	__getset(1,VertexShurikenParticleMesh,'vertexDeclaration',function(){
+		return VertexShurikenParticleMesh._vertexDeclaration;
+	},laya.d3.graphics.Vertex.VertexShuriKenParticle._$SET_vertexDeclaration);
+
+	__static(VertexShurikenParticleMesh,
+	['_vertexDeclaration',function(){return this._vertexDeclaration=new VertexDeclaration(172,[
+		new VertexElement(0,"vector3",1),
+		new VertexElement(12,"vector4",2),
+		new VertexElement(28,"vector2",3),
+		new VertexElement(36,"vector4",4),
+		new VertexElement(52,"vector4",5),
+		new VertexElement(68,"vector4",6),
+		new VertexElement(84,"vector3",8),
+		new VertexElement(96,"vector3",9),
+		new VertexElement(108,"single",10),
+		new VertexElement(112,"vector4",11),
+		new VertexElement(128,"vector4",12),
+		new VertexElement(144,"vector3",13),
+		new VertexElement(156,"vector4",14)]);}
+	]);
+	return VertexShurikenParticleMesh;
+})(VertexShuriKenParticle)
+
+
+/**
 *@private
 *<code>Resource</code> 资源存取类。
 */
@@ -37889,139 +38231,6 @@ var Resource=(function(_super){
 	Resource._gpuMemory=0;
 	return Resource;
 })(EventDispatcher)
-
-
-/**
-*<code>VertexShurikenParticle</code> 类用于创建粒子顶点结构。
-*/
-//class laya.d3.graphics.Vertex.VertexShurikenParticleMesh extends laya.d3.graphics.Vertex.VertexShuriKenParticle
-var VertexShurikenParticleMesh=(function(_super){
-	function VertexShurikenParticleMesh(cornerTextureCoordinate,positionStartLifeTime,velocity,startColor,startSize,startRotation0,startRotation1,startRotation2,ageAddScale,time,startSpeed,randoms0,randoms1,simulationWorldPostion){
-		/**@private */
-		this._cornerTextureCoordinate=null;
-		/**@private */
-		this._positionStartLifeTime=null;
-		/**@private */
-		this._velocity=null;
-		/**@private */
-		this._startColor=null;
-		/**@private */
-		this._startSize=null;
-		/**@private */
-		this._startRotation0=null;
-		/**@private */
-		this._startRotation1=null;
-		/**@private */
-		this._startRotation2=null;
-		/**@private */
-		this._startLifeTime=NaN;
-		/**@private */
-		this._time=NaN;
-		/**@private */
-		this._startSpeed=NaN;
-		/**@private */
-		this._randoms0=null;
-		/**@private */
-		this._randoms1=null;
-		/**@private */
-		this._simulationWorldPostion=null;
-		VertexShurikenParticleMesh.__super.call(this);
-		this._cornerTextureCoordinate=cornerTextureCoordinate;
-		this._positionStartLifeTime=positionStartLifeTime;
-		this._velocity=velocity;
-		this._startColor=startColor;
-		this._startSize=startSize;
-		this._startRotation0=startRotation0;
-		this._startRotation1=startRotation1;
-		this._startRotation2=startRotation2;
-		this._startLifeTime=ageAddScale;
-		this._time=time;
-		this._startSpeed=startSpeed;
-		this._randoms0=this.random0;
-		this._randoms1=this.random1;
-		this._simulationWorldPostion=simulationWorldPostion;
-	}
-
-	__class(VertexShurikenParticleMesh,'laya.d3.graphics.Vertex.VertexShurikenParticleMesh',_super);
-	var __proto=VertexShurikenParticleMesh.prototype;
-	__getset(0,__proto,'cornerTextureCoordinate',function(){
-		return this._cornerTextureCoordinate;
-	});
-
-	__getset(0,__proto,'velocity',function(){
-		return this._velocity;
-	});
-
-	__getset(0,__proto,'position',function(){
-		return this._positionStartLifeTime;
-	});
-
-	__getset(0,__proto,'random0',function(){
-		return this._randoms0;
-	});
-
-	__getset(0,__proto,'startSize',function(){
-		return this._startSize;
-	});
-
-	__getset(0,__proto,'startColor',function(){
-		return this._startColor;
-	});
-
-	__getset(0,__proto,'startRotation0',function(){
-		return this._startRotation0;
-	});
-
-	__getset(0,__proto,'startRotation1',function(){
-		return this._startRotation1;
-	});
-
-	__getset(0,__proto,'random1',function(){
-		return this._randoms1;
-	});
-
-	__getset(0,__proto,'startRotation2',function(){
-		return this._startRotation2;
-	});
-
-	__getset(0,__proto,'startLifeTime',function(){
-		return this._startLifeTime;
-	});
-
-	__getset(0,__proto,'time',function(){
-		return this._time;
-	});
-
-	__getset(0,__proto,'startSpeed',function(){
-		return this._startSpeed;
-	});
-
-	__getset(0,__proto,'simulationWorldPostion',function(){
-		return this._simulationWorldPostion;
-	});
-
-	__getset(1,VertexShurikenParticleMesh,'vertexDeclaration',function(){
-		return VertexShurikenParticleMesh._vertexDeclaration;
-	},laya.d3.graphics.Vertex.VertexShuriKenParticle._$SET_vertexDeclaration);
-
-	__static(VertexShurikenParticleMesh,
-	['_vertexDeclaration',function(){return this._vertexDeclaration=new VertexDeclaration(172,[
-		new VertexElement(0,"vector3",1),
-		new VertexElement(12,"vector4",2),
-		new VertexElement(28,"vector2",3),
-		new VertexElement(36,"vector4",4),
-		new VertexElement(52,"vector4",5),
-		new VertexElement(68,"vector4",6),
-		new VertexElement(84,"vector3",8),
-		new VertexElement(96,"vector3",9),
-		new VertexElement(108,"single",10),
-		new VertexElement(112,"vector4",11),
-		new VertexElement(128,"vector4",12),
-		new VertexElement(144,"vector3",13),
-		new VertexElement(156,"vector4",14)]);}
-	]);
-	return VertexShurikenParticleMesh;
-})(VertexShuriKenParticle)
 
 
 /**
@@ -42132,6 +42341,106 @@ var HemisphereShape=(function(_super){
 
 
 /**
+*<code>MeshColliderShape</code> 类用于创建网格碰撞器。
+*/
+//class laya.d3.physics.shape.MeshColliderShape extends laya.d3.physics.shape.ColliderShape
+var MeshColliderShape=(function(_super){
+	function MeshColliderShape(){
+		/**@private */
+		this._mesh=null;
+		/**@private */
+		this._convex=false;
+		MeshColliderShape.__super.call(this);
+	}
+
+	__class(MeshColliderShape,'laya.d3.physics.shape.MeshColliderShape',_super);
+	var __proto=MeshColliderShape.prototype;
+	/**
+	*@inheritDoc
+	*/
+	__proto._setScale=function(value){
+		if (this._compoundParent){
+			this.updateLocalTransformations();
+			}else {
+			ColliderShape._nativeScale.setValue(value.x,value.y,value.z);
+			this._nativeShape.setLocalScaling(ColliderShape._nativeScale);
+			this._nativeShape.updateBound();
+		}
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto.cloneTo=function(destObject){
+		var destMeshCollider=destObject;
+		destMeshCollider.convex=this._convex;
+		destMeshCollider.mesh=this._mesh;
+		_super.prototype.cloneTo.call(this,destObject);
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto.clone=function(){
+		var dest=new MeshColliderShape();
+		this.cloneTo(dest);
+		return dest;
+	}
+
+	/**
+	*@inheritDoc
+	*/
+	__proto.destroy=function(){
+		if (this._nativeShape){
+			var physics3D=Laya3D._physics3D;
+			physics3D.destroy(this._nativeShape);
+			this._nativeShape=null;
+		}
+	}
+
+	/**
+	*设置网格。
+	*@param 网格。
+	*/
+	/**
+	*获取网格。
+	*@return 网格。
+	*/
+	__getset(0,__proto,'mesh',function(){
+		return this._mesh;
+		},function(value){
+		if (this._mesh!==value){
+			var physics3D=Laya3D._physics3D;
+			if (this._mesh){
+				physics3D.destroy(this._nativeShape);
+			}
+			if (value){
+				this._nativeShape=new physics3D.btGImpactMeshShape(value._getPhysicMesh());
+				this._nativeShape.updateBound();
+			}
+			this._mesh=value;
+		}
+	});
+
+	/**
+	*设置是否使用凸多边形。
+	*@param value 是否使用凸多边形。
+	*/
+	/**
+	*获取是否使用凸多边形。
+	*@return 是否使用凸多边形。
+	*/
+	__getset(0,__proto,'convex',function(){
+		return this._convex;
+		},function(value){
+		this._convex=value;
+	});
+
+	return MeshColliderShape;
+})(ColliderShape)
+
+
+/**
 *<code>AnimationTransform3D</code> 类用于实现3D变换。
 */
 //class laya.d3.animation.AnimationTransform3D extends laya.events.EventDispatcher
@@ -42324,106 +42633,6 @@ var AnimationTransform3D=(function(_super){
 	]);
 	return AnimationTransform3D;
 })(EventDispatcher)
-
-
-/**
-*<code>MeshColliderShape</code> 类用于创建网格碰撞器。
-*/
-//class laya.d3.physics.shape.MeshColliderShape extends laya.d3.physics.shape.ColliderShape
-var MeshColliderShape=(function(_super){
-	function MeshColliderShape(){
-		/**@private */
-		this._mesh=null;
-		/**@private */
-		this._convex=false;
-		MeshColliderShape.__super.call(this);
-	}
-
-	__class(MeshColliderShape,'laya.d3.physics.shape.MeshColliderShape',_super);
-	var __proto=MeshColliderShape.prototype;
-	/**
-	*@inheritDoc
-	*/
-	__proto._setScale=function(value){
-		if (this._compoundParent){
-			this.updateLocalTransformations();
-			}else {
-			ColliderShape._nativeScale.setValue(value.x,value.y,value.z);
-			this._nativeShape.setLocalScaling(ColliderShape._nativeScale);
-			this._nativeShape.updateBound();
-		}
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto.cloneTo=function(destObject){
-		var destMeshCollider=destObject;
-		destMeshCollider.convex=this._convex;
-		destMeshCollider.mesh=this._mesh;
-		_super.prototype.cloneTo.call(this,destObject);
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto.clone=function(){
-		var dest=new MeshColliderShape();
-		this.cloneTo(dest);
-		return dest;
-	}
-
-	/**
-	*@inheritDoc
-	*/
-	__proto.destroy=function(){
-		if (this._nativeShape){
-			var physics3D=Laya3D._physics3D;
-			physics3D.destroy(this._nativeShape);
-			this._nativeShape=null;
-		}
-	}
-
-	/**
-	*设置网格。
-	*@param 网格。
-	*/
-	/**
-	*获取网格。
-	*@return 网格。
-	*/
-	__getset(0,__proto,'mesh',function(){
-		return this._mesh;
-		},function(value){
-		if (this._mesh!==value){
-			var physics3D=Laya3D._physics3D;
-			if (this._mesh){
-				physics3D.destroy(this._nativeShape);
-			}
-			if (value){
-				this._nativeShape=new physics3D.btGImpactMeshShape(value._getPhysicMesh());
-				this._nativeShape.updateBound();
-			}
-			this._mesh=value;
-		}
-	});
-
-	/**
-	*设置是否使用凸多边形。
-	*@param value 是否使用凸多边形。
-	*/
-	/**
-	*获取是否使用凸多边形。
-	*@return 是否使用凸多边形。
-	*/
-	__getset(0,__proto,'convex',function(){
-		return this._convex;
-		},function(value){
-		this._convex=value;
-	});
-
-	return MeshColliderShape;
-})(ColliderShape)
 
 
 /**
@@ -47407,6 +47616,266 @@ var TrailGeometry=(function(_super){
 
 
 /**
+*与MeshQuadTexture基本相同。不过index不是固定的
+*/
+//class laya.webgl.utils.MeshTexture extends laya.webgl.utils.Mesh2D
+var MeshTexture=(function(_super){
+	function MeshTexture(){
+		MeshTexture.__super.call(this,laya.webgl.utils.MeshTexture.const_stride,4,4);
+		this.canReuse=true;
+		this.setAttributes(laya.webgl.utils.MeshTexture._fixattriInfo);
+	}
+
+	__class(MeshTexture,'laya.webgl.utils.MeshTexture',_super);
+	var __proto=MeshTexture.prototype;
+	__proto.addData=function(vertices,uvs,idx,matrix,rgba,ctx){
+		var vertsz=vertices.length / 2;
+		var startpos=this._vb.needSize(vertsz *MeshTexture.const_stride);
+		var f32pos=startpos >> 2;
+		var vbdata=this._vb._floatArray32 || this._vb.getFloat32Array();
+		var vbu32Arr=this._vb._uint32Array;
+		var ci=0;
+		for (var i=0;i < vertsz;i++){
+			var x=vertices[ci],y=vertices[ci+1];
+			var x1=x *matrix.a+y *matrix.c+matrix.tx;
+			var y1=x *matrix.b+y *matrix.d+matrix.ty;
+			vbdata[f32pos++]=x1;vbdata[f32pos++]=y1;
+			vbdata[f32pos++]=uvs[ci];vbdata[f32pos++]=uvs[ci+1];
+			ci+=2;
+			vbu32Arr[f32pos++]=rgba;
+			vbu32Arr[f32pos++]=0xff;
+		}
+		this._vb.setNeedUpload();
+		var vertN=this.vertNum;
+		if (vertN > 0){
+			var sz=idx.length;
+			if (sz > MeshTexture.tmpIdx.length)MeshTexture.tmpIdx=new Uint16Array(sz);
+			for (var ii=0;ii < sz;ii++){
+				MeshTexture.tmpIdx[ii]=idx[ii]+vertN;
+			}
+			this._ib.appendU16Array(MeshTexture.tmpIdx,idx.length);
+			}else {
+			this._ib.append(idx);
+		}
+		this._ib.setNeedUpload();
+		this.vertNum+=vertsz;
+		this.indexNum+=idx.length;
+	}
+
+	/**
+	*把本对象放到回收池中，以便getMesh能用。
+	*/
+	__proto.releaseMesh=function(){
+		this._vb.setByteLength(0);
+		this._ib.setByteLength(0);
+		this.vertNum=0;
+		this.indexNum=0;
+		laya.webgl.utils.MeshTexture._POOL.push(this);
+	}
+
+	__proto.destroy=function(){
+		this._ib.destroy();
+		this._vb.destroy();
+		this._ib.disposeResource();
+		this._vb.deleteBuffer();
+	}
+
+	MeshTexture.getAMesh=function(){
+		if (laya.webgl.utils.MeshTexture._POOL.length){
+			return laya.webgl.utils.MeshTexture._POOL.pop();
+		}
+		return new MeshTexture();
+	}
+
+	MeshTexture.const_stride=24;
+	MeshTexture._POOL=[];
+	__static(MeshTexture,
+	['_fixattriInfo',function(){return this._fixattriInfo=[
+		0x1406,4,0,
+		0x1401,4,16,
+		0x1401,4,20];},'tmpIdx',function(){return this.tmpIdx=new Uint16Array(4);}
+	]);
+	return MeshTexture;
+})(Mesh2D)
+
+
+/**
+*@private
+*使用Audio标签播放声音
+*/
+//class laya.media.h5audio.AudioSound extends laya.events.EventDispatcher
+var AudioSound=(function(_super){
+	function AudioSound(){
+		/**
+		*声音URL
+		*/
+		this.url=null;
+		/**
+		*播放用的audio标签
+		*/
+		this.audio=null;
+		/**
+		*是否已加载完成
+		*/
+		this.loaded=false;
+		AudioSound.__super.call(this);
+	}
+
+	__class(AudioSound,'laya.media.h5audio.AudioSound',_super);
+	var __proto=AudioSound.prototype;
+	/**
+	*释放声音
+	*
+	*/
+	__proto.dispose=function(){
+		var ad=AudioSound._audioCache[this.url];
+		Pool.clearBySign("audio:"+this.url);
+		if (ad){
+			if (!Render.isConchApp){
+				ad.src="";
+			}
+			delete AudioSound._audioCache[this.url];
+		}
+	}
+
+	/**
+	*加载声音
+	*@param url
+	*
+	*/
+	__proto.load=function(url){
+		url=URL.formatURL(url);
+		this.url=url;
+		var ad;
+		if (url==SoundManager._bgMusic){
+			AudioSound._initMusicAudio();
+			ad=AudioSound._musicAudio;
+			if (ad.src !=url){
+				AudioSound._audioCache[ad.src]=null;
+				ad=null;
+			}
+			}else{
+			ad=AudioSound._audioCache[url];
+		}
+		if (ad && ad.readyState >=2){
+			this.event("complete");
+			return;
+		}
+		if (!ad){
+			if (url==SoundManager._bgMusic){
+				AudioSound._initMusicAudio();
+				ad=AudioSound._musicAudio;
+				}else{
+				ad=Browser.createElement("audio");
+			}
+			AudioSound._audioCache[url]=ad;
+			ad.src=url;
+		}
+		ad.addEventListener("canplaythrough",onLoaded);
+		ad.addEventListener("error",onErr);
+		var me=this;
+		function onLoaded (){
+			offs();
+			me.loaded=true;
+			me.event("complete");
+		}
+		function onErr (){
+			ad.load=null;
+			offs();
+			me.event("error");
+		}
+		function offs (){
+			ad.removeEventListener("canplaythrough",onLoaded);
+			ad.removeEventListener("error",onErr);
+		}
+		this.audio=ad;
+		if (ad.load){
+			ad.load();
+			}else {
+			onErr();
+		}
+	}
+
+	/**
+	*播放声音
+	*@param startTime 起始时间
+	*@param loops 循环次数
+	*@return
+	*
+	*/
+	__proto.play=function(startTime,loops){
+		(startTime===void 0)&& (startTime=0);
+		(loops===void 0)&& (loops=0);
+		if (!this.url)return null;
+		var ad;
+		if (this.url==SoundManager._bgMusic){
+			ad=AudioSound._musicAudio;
+			}else{
+			ad=AudioSound._audioCache[this.url];
+		}
+		if (!ad)return null;
+		var tAd;
+		tAd=Pool.getItem("audio:"+this.url);
+		if (Render.isConchApp){
+			if (!tAd){
+				tAd=Browser.createElement("audio");
+				tAd.src=this.url;
+			}
+		}
+		else {
+			if (this.url==SoundManager._bgMusic){
+				AudioSound._initMusicAudio();
+				tAd=AudioSound._musicAudio;
+				tAd.src=this.url;
+				}else{
+				tAd=tAd ? tAd :ad.cloneNode(true);
+			}
+		};
+		var channel=new AudioSoundChannel(tAd);
+		channel.url=this.url;
+		channel.loops=loops;
+		channel.startTime=startTime;
+		channel.play();
+		SoundManager.addChannel(channel);
+		return channel;
+	}
+
+	/**
+	*获取总时间。
+	*/
+	__getset(0,__proto,'duration',function(){
+		var ad;
+		ad=AudioSound._audioCache[this.url];
+		if (!ad)
+			return 0;
+		return ad.duration;
+	});
+
+	AudioSound._initMusicAudio=function(){
+		if (AudioSound._musicAudio)return;
+		if (!AudioSound._musicAudio)AudioSound._musicAudio=Browser.createElement("audio");
+		if (!Render.isConchApp){
+			Browser.document.addEventListener("mousedown",AudioSound._makeMusicOK);
+		}
+	}
+
+	AudioSound._makeMusicOK=function(){
+		Browser.document.removeEventListener("mousedown",AudioSound._makeMusicOK);
+		if (!AudioSound._musicAudio.src){
+			AudioSound._musicAudio.src="";
+			AudioSound._musicAudio.load();
+			}else{
+			AudioSound._musicAudio.play();
+		}
+	}
+
+	AudioSound._audioCache={};
+	AudioSound._musicAudio=null;
+	return AudioSound;
+})(EventDispatcher)
+
+
+/**
 *2D刚体，显示对象通过RigidBody和物理世界进行绑定，保持物理和显示对象之间的位置同步
 *物理世界的位置变化会自动同步到显示对象，显示对象本身的位移，旋转（父对象位移无效）也会自动同步到物理世界
 *由于引擎限制，暂时不支持以下情形：
@@ -47794,266 +48263,6 @@ var RigidBody=(function(_super){
 
 	return RigidBody;
 })(Component)
-
-
-/**
-*@private
-*使用Audio标签播放声音
-*/
-//class laya.media.h5audio.AudioSound extends laya.events.EventDispatcher
-var AudioSound=(function(_super){
-	function AudioSound(){
-		/**
-		*声音URL
-		*/
-		this.url=null;
-		/**
-		*播放用的audio标签
-		*/
-		this.audio=null;
-		/**
-		*是否已加载完成
-		*/
-		this.loaded=false;
-		AudioSound.__super.call(this);
-	}
-
-	__class(AudioSound,'laya.media.h5audio.AudioSound',_super);
-	var __proto=AudioSound.prototype;
-	/**
-	*释放声音
-	*
-	*/
-	__proto.dispose=function(){
-		var ad=AudioSound._audioCache[this.url];
-		Pool.clearBySign("audio:"+this.url);
-		if (ad){
-			if (!Render.isConchApp){
-				ad.src="";
-			}
-			delete AudioSound._audioCache[this.url];
-		}
-	}
-
-	/**
-	*加载声音
-	*@param url
-	*
-	*/
-	__proto.load=function(url){
-		url=URL.formatURL(url);
-		this.url=url;
-		var ad;
-		if (url==SoundManager._bgMusic){
-			AudioSound._initMusicAudio();
-			ad=AudioSound._musicAudio;
-			if (ad.src !=url){
-				AudioSound._audioCache[ad.src]=null;
-				ad=null;
-			}
-			}else{
-			ad=AudioSound._audioCache[url];
-		}
-		if (ad && ad.readyState >=2){
-			this.event("complete");
-			return;
-		}
-		if (!ad){
-			if (url==SoundManager._bgMusic){
-				AudioSound._initMusicAudio();
-				ad=AudioSound._musicAudio;
-				}else{
-				ad=Browser.createElement("audio");
-			}
-			AudioSound._audioCache[url]=ad;
-			ad.src=url;
-		}
-		ad.addEventListener("canplaythrough",onLoaded);
-		ad.addEventListener("error",onErr);
-		var me=this;
-		function onLoaded (){
-			offs();
-			me.loaded=true;
-			me.event("complete");
-		}
-		function onErr (){
-			ad.load=null;
-			offs();
-			me.event("error");
-		}
-		function offs (){
-			ad.removeEventListener("canplaythrough",onLoaded);
-			ad.removeEventListener("error",onErr);
-		}
-		this.audio=ad;
-		if (ad.load){
-			ad.load();
-			}else {
-			onErr();
-		}
-	}
-
-	/**
-	*播放声音
-	*@param startTime 起始时间
-	*@param loops 循环次数
-	*@return
-	*
-	*/
-	__proto.play=function(startTime,loops){
-		(startTime===void 0)&& (startTime=0);
-		(loops===void 0)&& (loops=0);
-		if (!this.url)return null;
-		var ad;
-		if (this.url==SoundManager._bgMusic){
-			ad=AudioSound._musicAudio;
-			}else{
-			ad=AudioSound._audioCache[this.url];
-		}
-		if (!ad)return null;
-		var tAd;
-		tAd=Pool.getItem("audio:"+this.url);
-		if (Render.isConchApp){
-			if (!tAd){
-				tAd=Browser.createElement("audio");
-				tAd.src=this.url;
-			}
-		}
-		else {
-			if (this.url==SoundManager._bgMusic){
-				AudioSound._initMusicAudio();
-				tAd=AudioSound._musicAudio;
-				tAd.src=this.url;
-				}else{
-				tAd=tAd ? tAd :ad.cloneNode(true);
-			}
-		};
-		var channel=new AudioSoundChannel(tAd);
-		channel.url=this.url;
-		channel.loops=loops;
-		channel.startTime=startTime;
-		channel.play();
-		SoundManager.addChannel(channel);
-		return channel;
-	}
-
-	/**
-	*获取总时间。
-	*/
-	__getset(0,__proto,'duration',function(){
-		var ad;
-		ad=AudioSound._audioCache[this.url];
-		if (!ad)
-			return 0;
-		return ad.duration;
-	});
-
-	AudioSound._initMusicAudio=function(){
-		if (AudioSound._musicAudio)return;
-		if (!AudioSound._musicAudio)AudioSound._musicAudio=Browser.createElement("audio");
-		if (!Render.isConchApp){
-			Browser.document.addEventListener("mousedown",AudioSound._makeMusicOK);
-		}
-	}
-
-	AudioSound._makeMusicOK=function(){
-		Browser.document.removeEventListener("mousedown",AudioSound._makeMusicOK);
-		if (!AudioSound._musicAudio.src){
-			AudioSound._musicAudio.src="";
-			AudioSound._musicAudio.load();
-			}else{
-			AudioSound._musicAudio.play();
-		}
-	}
-
-	AudioSound._audioCache={};
-	AudioSound._musicAudio=null;
-	return AudioSound;
-})(EventDispatcher)
-
-
-/**
-*与MeshQuadTexture基本相同。不过index不是固定的
-*/
-//class laya.webgl.utils.MeshTexture extends laya.webgl.utils.Mesh2D
-var MeshTexture=(function(_super){
-	function MeshTexture(){
-		MeshTexture.__super.call(this,laya.webgl.utils.MeshTexture.const_stride,4,4);
-		this.canReuse=true;
-		this.setAttributes(laya.webgl.utils.MeshTexture._fixattriInfo);
-	}
-
-	__class(MeshTexture,'laya.webgl.utils.MeshTexture',_super);
-	var __proto=MeshTexture.prototype;
-	__proto.addData=function(vertices,uvs,idx,matrix,rgba,ctx){
-		var vertsz=vertices.length / 2;
-		var startpos=this._vb.needSize(vertsz *MeshTexture.const_stride);
-		var f32pos=startpos >> 2;
-		var vbdata=this._vb._floatArray32 || this._vb.getFloat32Array();
-		var vbu32Arr=this._vb._uint32Array;
-		var ci=0;
-		for (var i=0;i < vertsz;i++){
-			var x=vertices[ci],y=vertices[ci+1];
-			var x1=x *matrix.a+y *matrix.c+matrix.tx;
-			var y1=x *matrix.b+y *matrix.d+matrix.ty;
-			vbdata[f32pos++]=x1;vbdata[f32pos++]=y1;
-			vbdata[f32pos++]=uvs[ci];vbdata[f32pos++]=uvs[ci+1];
-			ci+=2;
-			vbu32Arr[f32pos++]=rgba;
-			vbu32Arr[f32pos++]=0xff;
-		}
-		this._vb.setNeedUpload();
-		var vertN=this.vertNum;
-		if (vertN > 0){
-			var sz=idx.length;
-			if (sz > MeshTexture.tmpIdx.length)MeshTexture.tmpIdx=new Uint16Array(sz);
-			for (var ii=0;ii < sz;ii++){
-				MeshTexture.tmpIdx[ii]=idx[ii]+vertN;
-			}
-			this._ib.appendU16Array(MeshTexture.tmpIdx,idx.length);
-			}else {
-			this._ib.append(idx);
-		}
-		this._ib.setNeedUpload();
-		this.vertNum+=vertsz;
-		this.indexNum+=idx.length;
-	}
-
-	/**
-	*把本对象放到回收池中，以便getMesh能用。
-	*/
-	__proto.releaseMesh=function(){
-		this._vb.setByteLength(0);
-		this._ib.setByteLength(0);
-		this.vertNum=0;
-		this.indexNum=0;
-		laya.webgl.utils.MeshTexture._POOL.push(this);
-	}
-
-	__proto.destroy=function(){
-		this._ib.destroy();
-		this._vb.destroy();
-		this._ib.disposeResource();
-		this._vb.deleteBuffer();
-	}
-
-	MeshTexture.getAMesh=function(){
-		if (laya.webgl.utils.MeshTexture._POOL.length){
-			return laya.webgl.utils.MeshTexture._POOL.pop();
-		}
-		return new MeshTexture();
-	}
-
-	MeshTexture.const_stride=24;
-	MeshTexture._POOL=[];
-	__static(MeshTexture,
-	['_fixattriInfo',function(){return this._fixattriInfo=[
-		0x1406,4,0,
-		0x1401,4,16,
-		0x1401,4,20];},'tmpIdx',function(){return this.tmpIdx=new Uint16Array(4);}
-	]);
-	return MeshTexture;
-})(Mesh2D)
 
 
 /**
@@ -55441,18 +55650,8 @@ var Bullet=(function(_super){
 //class propScript.PropFrame extends laya.components.Script
 var PropFrame=(function(_super){
 	function PropFrame(){
-		/**@prop {name:propM,tips:"M类道具",type:prefab}*/
-		this.propM=null;
-		/**@prop {name:propB,tips:"B类道具",type:prefab}*/
-		this.propB=null;
-		/**@prop {name:propF,tips:"F类道具",type:prefab}*/
-		this.propF=null;
-		/**@prop {name:propS,tips:"S类道具",type:prefab}*/
-		this.propS=null;
-		/**@prop {name:propL,tips:"L类道具",type:prefab}*/
-		this.propL=null;
-		/**@prop {name:propR,tips:"R类道具",type:prefab}*/
-		this.propR=null;
+		/**@prop {name:propsBox,tips:"道具",type:prefab}*/
+		this.propsBox=null;
 		this.canShootSp=null;
 		this.noShootSp=null;
 		this.canShootAni=null;
@@ -55479,6 +55678,10 @@ var PropFrame=(function(_super){
 	*时间维持一秒，期间子弹不可击打该道具
 	*/
 	__proto.playNoShoot=function(){
+		if (!this.box.activeInHierarchy){
+			console.log('No中打印未激活');
+			return;
+		}
 		this.rigid.enabled=false;
 		this.noShootSp.visible=true;
 		this.canShootSp.visible=false;
@@ -55490,6 +55693,10 @@ var PropFrame=(function(_super){
 	*时间维持一秒，期间子弹可以击打该道具
 	*/
 	__proto.playCanShoot=function(){
+		if (!this.box.activeInHierarchy){
+			console.log('Can中打印未激活');
+			return;
+		}
 		this.rigid.enabled=true;
 		this.noShootSp.visible=false;
 		this.canShootSp.visible=true;
@@ -55499,61 +55706,29 @@ var PropFrame=(function(_super){
 
 	__proto.onTriggerEnter=function(other,self,contact){
 		if (other.label==="bullet"){
-			var aniBoom=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
+			var aniBoom;
+			aniBoom=Pool.getItemByCreateFun("enemyObjBoom",CreateEffect.getInstance().createEnemyObjBoomAni,this);
 			aniBoom.play(0,false);
 			aniBoom.pos(this.box.x,this.box.y);
 			this.box.parent.addChild(aniBoom);
-			var prop=this.createProp();
+			var prop=Pool.getItemByCreateFun("propsBox",this.propsBox.create,this.propsBox);
 			prop.pos(this.box.x,this.box.y);
 			this.box.parent.addChild(prop);
 			this.box.removeSelf();
-			Pool.recover("enemyProp",this.box);
+			Laya.timer.clear(this,this.playNoShoot);
+			Laya.timer.clear(this,this.playCanShoot);
 		}
-	}
-
-	/**
-	*随机创建道具
-	*/
-	__proto.createProp=function(){
-		var type=Math.random();
-		var prop;
-		if (type >=0 && type < 0.15){
-			prop=Pool.getItemByCreateFun("prop_m",this.propM.create,this.propM);
-			}else if (type >=0.15 && type < 0.3){
-			prop=Pool.getItemByCreateFun("prop_b",this.propB.create,this.propB);
-			}else if (type >=0.3 && type < 0.45){
-			prop=Pool.getItemByCreateFun("prop_f",this.propF.create,this.propF);
-			}else if (type >=0.45 && type < 0.6){
-			prop=Pool.getItemByCreateFun("prop_s",this.propS.create,this.propS);
-			}else if (type >=0.6 && type < 0.75){
-			prop=Pool.getItemByCreateFun("prop_l",this.propL.create,this.propL);
-			}else if (type >=0.75 && type < 0.9){
-			prop=Pool.getItemByCreateFun("prop_r",this.propR.create,this.propR);
-		}
-		return prop;
-	}
-
-	// 创建爆炸动画
-	__proto.createEnemyObjBoomAni=function(){
-		var ani=new Animation();
-		ani.loadAnimation("GameScene/EnemyObjBoom.ani",null,"res/atlas/boom.atlas");
-		ani.on("complete",null,function(){
-			ani.removeSelf();
-			Pool.recover("enemyObjBoom",ani);
-		});
-		return ani;
 	}
 
 	__proto.onUpdate=function(){
 		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
 		if ((scrollRect.width !=0)&& this.box.x < scrollRect.x){
 			this.box.removeSelf();
-			Pool.recover("enemyProp",this.box);
 		}
 	}
 
 	__proto.onDisable=function(){
-		Laya.timer.clearAll(this);
+		Pool.recover("enemyProp",this.box);
 	}
 
 	return PropFrame;
@@ -55723,7 +55898,7 @@ var EnemyFive=(function(_super){
 		if (other.label==="bullet"){
 			this.PH--;
 			if (this.PH <=0){
-				var aniBoom=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
+				var aniBoom=Pool.getItemByCreateFun("enemyObjBoom",CreateEffect.getInstance().createEnemyRoleBoomAni,this);
 				aniBoom.width=50;
 				aniBoom.height=50;
 				aniBoom.pos(this.box.x-25,this.box.y-25);
@@ -55731,32 +55906,21 @@ var EnemyFive=(function(_super){
 				aniBoom.play(0,false);
 				SoundManager.playSound("sound/enemy_four_five_boom.wav");
 				this.box.removeSelf();
-				Pool.recover("enemyFive",this.box);
 			}
 		}
-	}
-
-	// 创建爆炸动画
-	__proto.createEnemyObjBoomAni=function(){
-		var ani=new Animation();
-		ani.loadAnimation("GameScene/EnemyObjBoom.ani",null,"res/atlas/boom.atlas");
-		ani.on("complete",null,function(){
-			ani.removeSelf();
-			Pool.recover("enemyObjBoom",ani);
-		});
-		return ani;
 	}
 
 	__proto.onUpdate=function(){
 		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
 		if ((scrollRect.width !=0)&& this.box.x < scrollRect.x){
 			this.box.removeSelf();
-			Pool.recover("enemyFive",this.box);
 		}
 	}
 
 	__proto.onDisable=function(){
 		Laya.timer.clearAll(this);
+		console.log('在 Five 中 onDisable');
+		Pool.recover("enemyFive",this.box);
 	}
 
 	return EnemyFive;
@@ -55766,21 +55930,7 @@ var EnemyFive=(function(_super){
 //class script.Role extends laya.components.Script
 var Role=(function(_super){
 	function Role(){
-		/**@prop {name:enemyOne,tips:"第一类敌人",type:prefab}*/
-		this.enemyOne=null;
-		/**@prop {name:enemyTow,tips:"第二类敌人",type:prefab}*/
-		this.enemyTow=null;
-		/**@prop {name:enemyThree,tips:"第三类敌人",type:prefab}*/
-		this.enemyThree=null;
-		/**@prop {name:enemyFour,tips:"第四类敌人",type:prefab}*/
-		this.enemyFour=null;
-		/**@prop {name:enemyFive,tips:"第五类敌人",type:prefab}*/
-		this.enemyFive=null;
-		/**@prop {name:enemyBossOne,tips:"第一关Boss",type:prefab}*/
-		this.enemyBossOne=null;
-		/**@prop {name:propFrame,tips:"道具框架",type:prefab}*/
-		this.propFrame=null;
-		/**@prop {name:bullet,tips:"触碰即销毁的地图块",type:prefab}*/
+		/**@prop {name:bullet,tips:"子弹",type:prefab}*/
 		this.bullet=null;
 		//人物动画
 		this.ani=null;
@@ -55882,7 +56032,8 @@ var Role=(function(_super){
 			other.label==="bossOneBullet" ||
 		other.label==="enemy_one" ||
 		other.label==="enemy_tow" ||
-		other.label==="enemy_three")&&
+		other.label==="enemy_three" ||
+		other.label==="die_line")&&
 		self.label==="body" &&
 		this.isAlive){
 			this.isAlive=false;
@@ -56187,19 +56338,9 @@ var TouchDestroy=(function(_super){
 		this.thisSp=this.owner;
 	}
 
-	__proto.createEnemyObjBoomAni=function(){
-		var ani=new Animation();
-		ani.loadAnimation("GameScene/EnemyObjBoom.ani",null,"res/atlas/boom.atlas");
-		ani.on("complete",null,function(){
-			ani.removeSelf();
-			Pool.recover("enemyObjBoom",ani);
-		});
-		return ani;
-	}
-
 	__proto.onTriggerEnter=function(other,self,contact){
 		if (other.label==="body"){
-			var aniBoom=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
+			var aniBoom=Pool.getItemByCreateFun("enemyObjBoom",CreateEffect.getInstance().createEnemyObjBoomAni,this);
 			aniBoom.pos(this.thisSp.x,this.thisSp.y);
 			this.thisSp.parent.addChild(aniBoom);
 			aniBoom.play(0,false);
@@ -56215,264 +56356,6 @@ var TouchDestroy=(function(_super){
 	}
 
 	return TouchDestroy;
-})(Script)
-
-
-//class propScript.PropS extends laya.components.Script
-var PropS=(function(_super){
-	function PropS(){
-		// 本对象精灵
-		this.thisSp=null;
-		// 本对象刚体
-		this.rigid=null;
-		PropS.__super.call(this);
-	}
-
-	__class(PropS,'propScript.PropS',_super);
-	var __proto=PropS.prototype;
-	__proto.onEnable=function(){
-		this.thisSp=this.owner;
-		this.rigid=this.thisSp.getComponent(RigidBody);
-		this.rigid.setVelocity({x:2 ,y:-6});
-	}
-
-	__proto.onTriggerEnter=function(other,self,contact){
-		if (this.rigid.linearVelocity.y > 0 && (other.label==="pass_y" || other.label==="pass_n" || other.label==="water")){
-			this.rigid.type="kinematic";
-			this.rigid.setVelocity({x:0 ,y:0});
-		}
-		if (other.label==="body"){
-			SoundManager.playSound("sound/get_prop.wav");
-			this.thisSp.removeSelf();
-			Pool.recover("prop_s",this.thisSp);
-		}
-	}
-
-	__proto.onUpdate=function(){
-		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
-		if ((scrollRect.width !=0)&& (this.thisSp.x < scrollRect.x || this.thisSp.y > (scrollRect.y+scrollRect.height))){
-			this.thisSp.removeSelf();
-			Pool.recover("prop_s",this.thisSp);
-		}
-	}
-
-	__proto.onDisable=function(){}
-	return PropS;
-})(Script)
-
-
-//class propScript.PropR extends laya.components.Script
-var PropR=(function(_super){
-	function PropR(){
-		// 本对象精灵
-		this.thisSp=null;
-		// 本对象刚体
-		this.rigid=null;
-		PropR.__super.call(this);
-	}
-
-	__class(PropR,'propScript.PropR',_super);
-	var __proto=PropR.prototype;
-	__proto.onEnable=function(){
-		this.thisSp=this.owner;
-		this.rigid=this.thisSp.getComponent(RigidBody);
-		this.rigid.setVelocity({x:2 ,y:-6});
-	}
-
-	__proto.onTriggerEnter=function(other,self,contact){
-		if (this.rigid.linearVelocity.y > 0 && (other.label==="pass_y" || other.label==="pass_n" || other.label==="water")){
-			this.rigid.type="kinematic";
-			this.rigid.setVelocity({x:0 ,y:0});
-		}
-		if (other.label==="body"){
-			SoundManager.playSound("sound/get_prop.wav");
-			this.thisSp.removeSelf();
-			Pool.recover("prop_r",this.thisSp);
-		}
-	}
-
-	__proto.onUpdate=function(){
-		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
-		if ((scrollRect.width !=0)&& (this.thisSp.x < scrollRect.x || this.thisSp.y > (scrollRect.y+scrollRect.height))){
-			this.thisSp.removeSelf();
-			Pool.recover("prop_r",this.thisSp);
-		}
-	}
-
-	__proto.onDisable=function(){}
-	return PropR;
-})(Script)
-
-
-//class propScript.PropM extends laya.components.Script
-var PropM=(function(_super){
-	function PropM(){
-		// 本对象精灵
-		this.thisSp=null;
-		// 本对象刚体
-		this.rigid=null;
-		PropM.__super.call(this);
-	}
-
-	__class(PropM,'propScript.PropM',_super);
-	var __proto=PropM.prototype;
-	__proto.onEnable=function(){
-		this.thisSp=this.owner;
-		this.rigid=this.thisSp.getComponent(RigidBody);
-		this.rigid.setVelocity({x:2 ,y:-6});
-	}
-
-	__proto.onTriggerEnter=function(other,self,contact){
-		if (this.rigid.linearVelocity.y > 0 && (other.label==="pass_y" || other.label==="pass_n" || other.label==="water")){
-			this.rigid.type="kinematic";
-			this.rigid.setVelocity({x:0 ,y:0});
-		}
-		if (other.label==="body"){
-			SoundManager.playSound("sound/get_prop.wav");
-			this.thisSp.removeSelf();
-			Pool.recover("prop_m",this.thisSp);
-		}
-	}
-
-	__proto.onUpdate=function(){
-		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
-		if ((scrollRect.width !=0)&& (this.thisSp.x < scrollRect.x || this.thisSp.y > (scrollRect.y+scrollRect.height))){
-			this.thisSp.removeSelf();
-			Pool.recover("prop_m",this.thisSp);
-		}
-	}
-
-	__proto.onDisable=function(){}
-	return PropM;
-})(Script)
-
-
-//class propScript.PropL extends laya.components.Script
-var PropL=(function(_super){
-	function PropL(){
-		// 本对象精灵
-		this.thisSp=null;
-		// 本对象刚体
-		this.rigid=null;
-		PropL.__super.call(this);
-	}
-
-	__class(PropL,'propScript.PropL',_super);
-	var __proto=PropL.prototype;
-	__proto.onEnable=function(){
-		this.thisSp=this.owner;
-		this.rigid=this.thisSp.getComponent(RigidBody);
-		this.rigid.setVelocity({x:2 ,y:-6});
-	}
-
-	__proto.onTriggerEnter=function(other,self,contact){
-		if (this.rigid.linearVelocity.y > 0 && (other.label==="pass_y" || other.label==="pass_n" || other.label==="water")){
-			this.rigid.type="kinematic";
-			this.rigid.setVelocity({x:0 ,y:0});
-		}
-		if (other.label==="body"){
-			SoundManager.playSound("sound/get_prop.wav");
-			this.thisSp.removeSelf();
-			Pool.recover("prop_l",this.thisSp);
-		}
-	}
-
-	__proto.onUpdate=function(){
-		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
-		if ((scrollRect.width !=0)&& (this.thisSp.x < scrollRect.x || this.thisSp.y > (scrollRect.y+scrollRect.height))){
-			this.thisSp.removeSelf();
-			Pool.recover("prop_l",this.thisSp);
-		}
-	}
-
-	__proto.onDisable=function(){}
-	return PropL;
-})(Script)
-
-
-//class propScript.PropF extends laya.components.Script
-var PropF=(function(_super){
-	function PropF(){
-		// 本对象精灵
-		this.thisSp=null;
-		// 本对象刚体
-		this.rigid=null;
-		PropF.__super.call(this);
-	}
-
-	__class(PropF,'propScript.PropF',_super);
-	var __proto=PropF.prototype;
-	__proto.onEnable=function(){
-		this.thisSp=this.owner;
-		this.rigid=this.thisSp.getComponent(RigidBody);
-		this.rigid.setVelocity({x:2 ,y:-6});
-	}
-
-	__proto.onTriggerEnter=function(other,self,contact){
-		if (this.rigid.linearVelocity.y > 0 && (other.label==="pass_y" || other.label==="pass_n" || other.label==="water")){
-			this.rigid.type="kinematic";
-			this.rigid.setVelocity({x:0 ,y:0});
-		}
-		if (other.label==="body"){
-			SoundManager.playSound("sound/get_prop.wav");
-			this.thisSp.removeSelf();
-			Pool.recover("prop_f",this.thisSp);
-		}
-	}
-
-	__proto.onUpdate=function(){
-		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
-		if ((scrollRect.width !=0)&& (this.thisSp.x < scrollRect.x || this.thisSp.y > (scrollRect.y+scrollRect.height))){
-			this.thisSp.removeSelf();
-			Pool.recover("prop_f",this.thisSp);
-		}
-	}
-
-	__proto.onDisable=function(){}
-	return PropF;
-})(Script)
-
-
-//class propScript.PropB extends laya.components.Script
-var PropB=(function(_super){
-	function PropB(){
-		// 本对象精灵
-		this.thisSp=null;
-		// 本对象刚体
-		this.rigid=null;
-		PropB.__super.call(this);
-	}
-
-	__class(PropB,'propScript.PropB',_super);
-	var __proto=PropB.prototype;
-	__proto.onEnable=function(){
-		this.thisSp=this.owner;
-		this.rigid=this.thisSp.getComponent(RigidBody);
-		this.rigid.setVelocity({x:2 ,y:-6});
-	}
-
-	__proto.onTriggerEnter=function(other,self,contact){
-		if (this.rigid.linearVelocity.y > 0 && (other.label==="pass_y" || other.label==="pass_n" || other.label==="water")){
-			this.rigid.type="kinematic";
-			this.rigid.setVelocity({x:0 ,y:0});
-		}
-		if (other.label==="body"){
-			SoundManager.playSound("sound/get_prop.wav");
-			this.thisSp.removeSelf();
-			Pool.recover("prop_b",this.thisSp);
-		}
-	}
-
-	__proto.onUpdate=function(){
-		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
-		if ((scrollRect.width !=0)&& (this.thisSp.x < scrollRect.x || this.thisSp.y > (scrollRect.y+scrollRect.height))){
-			this.thisSp.removeSelf();
-			Pool.recover("prop_b",this.thisSp);
-		}
-	}
-
-	__proto.onDisable=function(){}
-	return PropB;
 })(Script)
 
 
@@ -56531,7 +56414,7 @@ var EnemyThree=(function(_super){
 		if (this.thisSp.parent){
 			this.thisSp.parent.addChild(bulletSp);
 		}
-		Laya.stage.timer.once(1000,this,this.turnDown);
+		Laya.timer.once(1000,this,this.turnDown);
 	}
 
 	/**
@@ -56546,47 +56429,34 @@ var EnemyThree=(function(_super){
 	*/
 	__proto.squat=function(){
 		this.rigid.enabled=false;
-		Laya.stage.timer.once(1500,this,this.turnUp);
+		Laya.timer.once(1500,this,this.turnUp);
 	}
 
 	__proto.onTriggerEnter=function(other,self,contact){
 		if (other.label==="bullet" && self.label==="enemy_three"){
 			this.thisSp.visible=false;
-			var boomAni=Pool.getItemByCreateFun("enemyRoleBoom",this.createEnemyRoleBoomAni,this);
+			var boomAni=Pool.getItemByCreateFun("enemyRoleBoom",CreateEffect.getInstance().createEnemyRoleBoomAni,this);
 			boomAni.play(0,false,"enemyRoleBoom");
 			boomAni.pos(this.thisSp.x,this.thisSp.y);
 			this.thisSp.parent.addChild(boomAni);
-			Laya.stage.timer.clearAll(this);
 			this.thisSp.removeSelf();
-			Pool.recover("enemyThree",this.thisSp);
 		}
-	}
-
-	/**
-	*当对象池中没有爆炸动画时，
-	*则调用此函数创建动画
-	*/
-	__proto.createEnemyRoleBoomAni=function(){
-		var ani=new Animation();
-		ani.loadAnimation("GameScene/EnemyRoleBoom.ani",null,"res/atlas/boom.atlas");
-		ani.on("complete",null,function(){
-			ani.removeSelf();
-			Pool.recover("enemyRoleBoom",ani);
-		});
-		return ani;
 	}
 
 	__proto.onUpdate=function(){
 		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
 		if ((scrollRect.width !=0)&& this.thisSp.x < scrollRect.x){
-			Tween.clearTween(this.thisSp);
 			this.thisSp.removeSelf();
-			Pool.recover("enemyThree",this.thisSp);
 			this.shadeSp.removeSelf();
 		}
 	}
 
-	__proto.onDisable=function(){}
+	__proto.onDisable=function(){
+		Tween.clearTween(this.thisSp);
+		Laya.timer.clearAll(this);
+		Pool.recover("enemyThree",this.thisSp);
+	}
+
 	return EnemyThree;
 })(Script)
 
@@ -56840,7 +56710,7 @@ var EnemyFour=(function(_super){
 		if (other.label==="bullet"){
 			this.PH--;
 			if (this.PH <=0){
-				var aniBoom=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
+				var aniBoom=Pool.getItemByCreateFun("enemyObjBoom",CreateEffect.getInstance().createEnemyRoleBoomAni,this);
 				aniBoom.width=50;
 				aniBoom.height=50;
 				aniBoom.pos(this.box.x-15,this.box.y-15);
@@ -56848,20 +56718,8 @@ var EnemyFour=(function(_super){
 				aniBoom.play(0,false);
 				SoundManager.playSound("sound/enemy_four_five_boom.wav");
 				this.box.removeSelf();
-				Pool.recover("enemyFour",this.box);
 			}
 		}
-	}
-
-	// 创建爆炸动画
-	__proto.createEnemyObjBoomAni=function(){
-		var ani=new Animation();
-		ani.loadAnimation("GameScene/EnemyObjBoom.ani",null,"res/atlas/boom.atlas");
-		ani.on("complete",null,function(){
-			ani.removeSelf();
-			Pool.recover("enemyObjBoom",ani);
-		});
-		return ani;
 	}
 
 	__proto.onUpdate=function(){
@@ -56875,12 +56733,13 @@ var EnemyFour=(function(_super){
 		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
 		if ((scrollRect.width !=0)&& this.box.x < scrollRect.x){
 			this.box.removeSelf();
-			Pool.recover("enemyFour",this.box);
 		}
 	}
 
 	__proto.onDisable=function(){
 		Laya.timer.clearAll(this);
+		console.log('在 Four 中 onDisable');
+		Pool.recover("enemyFour",this.box);
 	}
 
 	return EnemyFour;
@@ -56890,18 +56749,8 @@ var EnemyFour=(function(_super){
 //class propScript.FlyProp extends laya.components.Script
 var FlyProp=(function(_super){
 	function FlyProp(){
-		/**@prop {name:propM,tips:"M类道具",type:prefab}*/
-		this.propM=null;
-		/**@prop {name:propB,tips:"B类道具",type:prefab}*/
-		this.propB=null;
-		/**@prop {name:propF,tips:"F类道具",type:prefab}*/
-		this.propF=null;
-		/**@prop {name:propS,tips:"S类道具",type:prefab}*/
-		this.propS=null;
-		/**@prop {name:propL,tips:"L类道具",type:prefab}*/
-		this.propL=null;
-		/**@prop {name:propR,tips:"R类道具",type:prefab}*/
-		this.propR=null;
+		/**@prop {name:propsBox,tips:"道具",type:prefab}*/
+		this.propsBox=null;
 		this.thisSp=null;
 		this.thisCollider=null;
 		this.thisRigid=null;
@@ -56933,61 +56782,28 @@ var FlyProp=(function(_super){
 
 	__proto.onTriggerEnter=function(other,self,contact){
 		if (other.label==="bullet" && self.label==="fly_prop"){
-			var aniBoom=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
+			var aniBoom;
+			aniBoom=Pool.getItemByCreateFun("enemyObjBoom",CreateEffect.getInstance().createEnemyObjBoomAni,this);
 			aniBoom.play(0,false);
 			aniBoom.pos(this.thisSp.x,this.thisSp.y);
 			this.thisSp.parent.addChild(aniBoom);
-			var prop=this.createProp();
+			var prop=Pool.getItemByCreateFun("propsBox",this.propsBox.create,this.propsBox);
 			prop.pos(this.thisSp.x,this.thisSp.y);
 			this.thisSp.parent.addChild(prop);
 			this.thisSp.removeSelf();
-			Pool.recover("flyProp",this.thisSp);
 		}
-	}
-
-	/**
-	*随机创建道具
-	*/
-	__proto.createProp=function(){
-		var type=Math.random();
-		var prop;
-		if (type >=0 && type < 0.15){
-			prop=Pool.getItemByCreateFun("prop_m",this.propM.create,this.propM);
-			}else if (type >=0.15 && type < 0.3){
-			prop=Pool.getItemByCreateFun("prop_b",this.propB.create,this.propB);
-			}else if (type >=0.3 && type < 0.45){
-			prop=Pool.getItemByCreateFun("prop_f",this.propF.create,this.propF);
-			}else if (type >=0.45 && type < 0.6){
-			prop=Pool.getItemByCreateFun("prop_s",this.propS.create,this.propS);
-			}else if (type >=0.6 && type < 0.75){
-			prop=Pool.getItemByCreateFun("prop_l",this.propL.create,this.propL);
-			}else if (type >=0.75 && type < 0.9){
-			prop=Pool.getItemByCreateFun("prop_r",this.propR.create,this.propR);
-		}
-		return prop;
-	}
-
-	// 创建爆炸动画
-	__proto.createEnemyObjBoomAni=function(){
-		var ani=new Animation();
-		ani.loadAnimation("GameScene/EnemyObjBoom.ani",null,"res/atlas/boom.atlas");
-		ani.on("complete",null,function(){
-			ani.removeSelf();
-			Pool.recover("enemyObjBoom",ani);
-		});
-		return ani;
 	}
 
 	__proto.onUpdate=function(){
 		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
 		if ((scrollRect.width !=0)&& this.thisSp.x > (scrollRect.x+scrollRect.width)){
 			this.thisSp.removeSelf();
-			Pool.recover("flyProp",this.thisSp);
 		}
 	}
 
 	__proto.onDisable=function(){
 		Tween.clearAll(this.thisSp);
+		Pool.recover("flyProp",this.thisSp);
 	}
 
 	return FlyProp;
@@ -57066,6 +56882,7 @@ var Controller=(function(_super){
 		this.circleColliderArr=null;
 		this.soundChannel=null;
 		Controller.__super.call(this);
+		this.createEnemy=CreateEnemy.getInstance();
 	}
 
 	__class(Controller,'script.Controller',_super);
@@ -57123,7 +56940,7 @@ var Controller=(function(_super){
 	}
 
 	/**
-	*延迟300毫秒后执行此函数
+	*延迟500毫秒后执行此函数
 	*用于计算一些需要在浏览器完全打开之后
 	*再计算的数据
 	*/
@@ -57147,7 +56964,7 @@ var Controller=(function(_super){
 		this.scrollRectXMin=0;
 		var rec=new Rectangle(0,0,Laya.stage.displayWidth,Laya.stage.displayHeight);
 		Laya.stage.scrollRect=rec;
-		Laya.stage.timer.loop(10,this,this.onLoop);
+		Laya.timer.loop(10,this,this.onLoop);
 	}
 
 	/**
@@ -57157,8 +56974,7 @@ var Controller=(function(_super){
 		var _$this=this;
 		this.moveMap();
 		if (!this.roleClass.isAlive){
-			Laya.stage.clearTimer(this,this.onLoop);
-			Laya.stage.clearTimer(this,this.produceEnemyTow);
+			Laya.timer.clear(this,this.onLoop);
 			var text=new Text();
 			text.visible=true;
 			text.pivot(30,30);
@@ -57170,7 +56986,7 @@ var Controller=(function(_super){
 			var resume=function (){
 				_$this.roleSp.pos(Laya.stage.scrollRect.x+50,0);
 				_$this.roleClass.reStart();
-				Laya.stage.timer.loop(10,_$this,_$this.onLoop);
+				Laya.timer.loop(10,_$this,_$this.onLoop);
 				Laya.stage.on("mouseup",_$this,up=function(){
 					text.visible=false;
 					Laya.stage.off("mousedown",_$this,resume);
@@ -57188,187 +57004,97 @@ var Controller=(function(_super){
 	*/
 	__proto.onTriggerEnter=function(other,self,contact){
 		if (other.label==="produce" && self.label==="produceOne"){
-			Laya.stage.timer.loop(1500,this,this.produceEnemyTow,[900,128,{x:-1,y:0}]);
+			Laya.timer.loop(1500,this,this.createEnemy.produceEnemyTow,[this.enemyTow,this.map,900,128,{x:-1,y:0}]);
 			this.circleColliderArr[0].destroy();
 		}
 		if (other.label==="produce" && self.label==="cancelProduceOne"){
-			Laya.stage.clearTimer(this,this.produceEnemyTow);
-			Laya.stage.timer.once(0,this,this.produceEnemyOne,([1000,290]));
-			Laya.stage.timer.once(0,this,this.produceFlyProp,[50]);
+			Laya.timer.clear(this,this.createEnemy.produceEnemyTow);
+			Laya.timer.once(0,this,this.createEnemy.produceEnemyOne,[this.enemyOne,this.map,1000,290]);
+			Laya.timer.once(0,this,this.createEnemy.produceFlyProp,[this.flyProp,this.map,50]);
 			this.circleColliderArr[1].destroy();
 		}
 		if (other.label==="produce" && self.label==="produceTow"){
-			Laya.stage.timer.loop(1500,this,this.produceEnemyTow,[483,290,{x:2,y:0}]);
+			Laya.timer.loop(1500,this,this.createEnemy.produceEnemyTow,[this.enemyTow,this.map,483,290,{x:2,y:0}]);
 			this.circleColliderArr[2].destroy();
 		}
 		if (other.label==="produce" && self.label==="cancelProduceTow"){
-			Laya.stage.clearTimer(this,this.produceEnemyTow);
-			Laya.stage.timer.loop(1500,this,this.produceEnemyTow,[1670,130,{x:-1,y:0}]);
+			Laya.timer.clear(this,this.createEnemy.produceEnemyTow);
+			Laya.timer.loop(1500,this,this.createEnemy.produceEnemyTow,[this.enemyTow,this.map,1670,130,{x:-1,y:0}]);
 			this.circleColliderArr[3].destroy();
 		}
 		if (other.label==="produce" && self.label==="cancelProduceThree"){
-			Laya.stage.clearTimer(this,this.produceEnemyTow);
+			Laya.timer.clear(this,this.createEnemy.produceEnemyTow);
 			this.circleColliderArr[4].destroy();
 		}
 		if (other.label==="produce" && self.label==="produceFour"){
-			Laya.stage.timer.loop(2000,this,this.produceEnemyTow,[1940,130,{x:-1,y:0}]);
-			Laya.stage.timer.once(0,this,this.produceEnemyOne,([2000,128]));
-			Laya.stage.timer.once(0,this,this.produceEnemyThree,([2200,154]));
-			Laya.stage.timer.once(0,this,this.produceEnemyFour,([2040,265]));
+			Laya.timer.loop(2000,this,this.createEnemy.produceEnemyTow,[this.enemyTow,this.map,1940,130,{x:-1,y:0}]);
+			Laya.timer.once(0,this,this.createEnemy.produceEnemyOne,[this.enemyOne,this.map,2000,128]);
+			Laya.timer.once(0,this,this.createEnemy.produceEnemyThree,[this.enemyThree,this.map,2200,154]);
+			Laya.timer.once(0,this,this.createEnemy.produceEnemyFour,[this.enemyFour,this.map,2040,265]);
 			this.circleColliderArr[5].destroy();
 		}
 		if (other.label==="produce" && self.label==="cancelProduceFour"){
-			Laya.stage.clearTimer(this,this.produceEnemyTow);
-			Laya.stage.timer.loop(2000,this,this.produceEnemyTow,[2960,182,{x:-1,y:0}]);
+			Laya.timer.clear(this,this.createEnemy.produceEnemyTow);
+			Laya.timer.loop(2000,this,this.createEnemy.produceEnemyTow,[this.enemyTow,this.map,2960,182,{x:-1,y:0}]);
 			this.circleColliderArr[6].destroy();
 		}
 		if (other.label==="produce" && self.label==="cancelProduceFive"){
-			Laya.stage.clearTimer(this,this.produceEnemyTow);
-			Laya.stage.timer.loop(2000,this,this.produceEnemyTow,[3060,76,{x:-1,y:0}]);
-			Laya.stage.timer.once(0,this,this.produceEnemyThree,([2500,100]));
-			Laya.stage.timer.once(0,this,this.producePropFrame,([2574,230]));
+			Laya.timer.clear(this,this.createEnemy.produceEnemyTow);
+			Laya.timer.loop(2000,this,this.createEnemy.produceEnemyTow,[this.enemyTow,this.map,3060,76,{x:-1,y:0}]);
+			Laya.timer.once(0,this,this.createEnemy.produceEnemyThree,[this.enemyThree,this.map,2500,100]);
+			Laya.timer.once(0,this,this.createEnemy.producePropFrame,[this.propFrame,this.map,2574,230]);
 			this.circleColliderArr[7].destroy();
 		}
 		if (other.label==="produce" && self.label==="cancelProduceSix"){
-			Laya.stage.clearTimer(this,this.produceEnemyTow);
-			Laya.stage.timer.once(0,this,this.produceEnemyFour,([2680,211]));
+			Laya.timer.clear(this,this.createEnemy.produceEnemyTow);
+			Laya.timer.once(0,this,this.createEnemy.produceEnemyFour,[this.enemyFour,this.map,2680,211]);
 			this.circleColliderArr[8].destroy();
 		}
 		if (other.label==="produce" && self.label==="produceSeven"){
-			Laya.stage.timer.once(0,this,this.produceEnemyFour,([3026,207]));
-			Laya.stage.timer.loop(2000,this,this.produceEnemyTow,[3130,290,{x:-1,y:0}]);
+			Laya.timer.once(0,this,this.createEnemy.produceEnemyFour,[this.enemyFour,this.map,3026,207]);
+			Laya.timer.loop(2000,this,this.createEnemy.produceEnemyTow,[this.enemyTow,this.map,3130,290,{x:-1,y:0}]);
 			this.circleColliderArr[9].destroy();
 		}
 		if (other.label==="produce" && self.label==="cancelProduceSeven"){
-			Laya.stage.timer.clear(this,this.produceEnemyTow);
-			Laya.stage.timer.once(0,this,this.produceEnemyTow,[3400,130,{x:-1,y:0}]);
+			Laya.timer.clear(this,this.createEnemy.produceEnemyTow);
+			Laya.timer.once(0,this,this.createEnemy.produceEnemyTow,[this.enemyTow,this.map,3400,130,{x:-1,y:0}]);
 			this.circleColliderArr[10].destroy();
 		}
 		if (other.label==="produce" && self.label==="produceEight"){
-			Laya.stage.timer.once(0,this,this.produceEnemyFive,([3380,256]));
+			Laya.timer.once(0,this,this.createEnemy.produceEnemyFive,[this.enemyFive,this.map,3380,256]);
 			this.circleColliderArr[11].destroy();
 		}
 		if (other.label==="produce" && self.label==="cancelProduceEight"){
-			Laya.stage.timer.once(0,this,this.produceEnemyFive,([3593,100]));
-			Laya.stage.timer.once(0,this,this.producePropFrame,([3755,283]));
+			Laya.timer.once(0,this,this.createEnemy.produceEnemyFive,[this.enemyFive,this.map,3593,100]);
+			Laya.timer.once(0,this,this.createEnemy.producePropFrame,[this.propFrame,this.map,3755,283]);
 			this.circleColliderArr[12].destroy();
 		}
 		if (other.label==="produce" && self.label==="produceNine"){
-			Laya.stage.timer.once(0,this,this.produceEnemyOne,([3893,182]));
-			Laya.stage.timer.once(0,this,this.produceEnemyTow,[4046,238,{x:-1,y:0}]);
+			Laya.timer.once(0,this,this.createEnemy.produceEnemyOne,[this.enemyOne,this.map,3893,182]);
+			Laya.timer.once(0,this,this.createEnemy.produceEnemyTow,[this.enemyTow,this.map,4046,238,{x:-1,y:0}]);
 			this.circleColliderArr[13].destroy();
 		}
 		if (other.label==="produce" && self.label==="cancelProduceNine"){
-			Laya.stage.timer.once(0,this,this.produceFlyProp,[50]);
-			Laya.stage.timer.once(0,this,this.produceFlyProp,[150]);
-			Laya.stage.timer.once(0,this,this.produceFlyProp,[250]);
-			Laya.stage.timer.once(0,this,this.produceEnemyTow,[4582,183,{x:-1,y:0}]);
+			Laya.timer.once(0,this,this.createEnemy.produceFlyProp,[this.flyProp,this.map,50]);
+			Laya.timer.once(0,this,this.createEnemy.produceFlyProp,[this.flyProp,this.map,150]);
+			Laya.timer.once(0,this,this.createEnemy.produceFlyProp,[this.flyProp,this.map,250]);
+			Laya.timer.once(0,this,this.createEnemy.produceEnemyTow,[this.enemyTow,this.map,4582,183,{x:-1,y:0}]);
 			this.circleColliderArr[14].destroy();
 		}
 		if (other.label==="produce" && self.label==="produceTen"){
-			Laya.stage.timer.once(0,this,this.produceEnemyFive,([4585,207]));
-			Laya.stage.timer.once(0,this,this.produceEnemyTow,[4632,290,{x:-1,y:0}]);
+			Laya.timer.once(0,this,this.createEnemy.produceEnemyFive,[this.enemyFive,this.map,4585,207]);
+			Laya.timer.once(0,this,this.createEnemy.produceEnemyTow,[this.enemyTow,this.map,4632,290,{x:-1,y:0}]);
 			this.circleColliderArr[15].destroy();
 		}
 		if (other.label==="produce" && self.label==="cancelProduceTen"){
-			Laya.stage.timer.once(0,this,this.produceEnemyFour,([4956,315]));
-			Laya.stage.timer.once(0,this,this.produceEnemyFour,([5198,313]));
+			Laya.timer.once(0,this,this.createEnemy.produceEnemyFour,[this.enemyFour,this.map,4956,315]);
+			Laya.timer.once(0,this,this.createEnemy.produceEnemyFour,[this.enemyFour,this.map,5198,313]);
 			this.circleColliderArr[16].destroy();
 		}
 		if (other.label==="produce" && self.label==="produceEleven"){
-			Laya.stage.timer.once(0,this,this.produceBoss01,([5382,67]));
+			Laya.timer.once(0,this,this.createEnemy.produceBoss01,[this.enemyBossOne,this.map,5382,67]);
 			this.circleColliderArr[17].destroy();
 		}
-	}
-
-	/**
-	*产生第一类敌人
-	*/
-	__proto.produceEnemyOne=function(__args){
-		var args=arguments;
-		var enemyOneSp;
-		enemyOneSp=Pool.getItemByCreateFun("enemyOne",this.enemyOne.create,this.enemyOne);
-		enemyOneSp.pos(args[0],args[1]);
-		this.map.addChild(enemyOneSp);
-	}
-
-	/**
-	*产生第二类敌人
-	*/
-	__proto.produceEnemyTow=function(__args){
-		var args=arguments;
-		var enemyTowSp;
-		enemyTowSp=Pool.getItemByCreateFun("enemyTow",this.enemyTow.create,this.enemyTow);
-		enemyTowSp.pos(args[0],args[1]);
-		var r=enemyTowSp.getComponent(RigidBody);
-		r.setVelocity(args[2]);
-		this.map.addChild(enemyTowSp);
-	}
-
-	/**
-	*产生第三类敌人
-	*/
-	__proto.produceEnemyThree=function(__args){
-		var args=arguments;
-		var enemyThreeSp;
-		enemyThreeSp=Pool.getItemByCreateFun("enemyThree",this.enemyThree.create,this.enemyThree);
-		enemyThreeSp.pos(args[0],args[1]);
-		this.map.addChild(enemyThreeSp);
-	}
-
-	/**
-	*产生第四类敌人
-	*/
-	__proto.produceEnemyFour=function(__args){
-		var args=arguments;
-		var enemyFourSp;
-		enemyFourSp=Pool.getItemByCreateFun("enemyFour",this.enemyFour.create,this.enemyFour);
-		enemyFourSp.pos(args[0],args[1]);
-		this.map.addChild(enemyFourSp);
-	}
-
-	/**
-	*生产第五类敌人
-	*/
-	__proto.produceEnemyFive=function(__args){
-		var args=arguments;
-		var enemyFiveSp;
-		enemyFiveSp=Pool.getItemByCreateFun("enemyFive",this.enemyFive.create,this.enemyFive);
-		enemyFiveSp.pos(args[0],args[1]);
-		this.map.addChild(enemyFiveSp);
-	}
-
-	/**
-	*生产第一关BOSS
-	*/
-	__proto.produceBoss01=function(__args){
-		var args=arguments;
-		var enemyBoss01Sp;
-		enemyBoss01Sp=Pool.getItemByCreateFun("enemyBoss01",this.enemyBossOne.create,this.enemyBossOne);
-		enemyBoss01Sp.pos(args[0],args[1]);
-		this.map.addChild(enemyBoss01Sp);
-	}
-
-	/**
-	*生产道具框架
-	*/
-	__proto.producePropFrame=function(__args){
-		var args=arguments;
-		var propFrameSp;
-		propFrameSp=Pool.getItemByCreateFun("enemyProp",this.propFrame.create,this.propFrame);
-		propFrameSp.pos(args[0],args[1]);
-		this.map.addChild(propFrameSp);
-	}
-
-	/**
-	*生产飞行物
-	*/
-	__proto.produceFlyProp=function(__args){
-		var args=arguments;
-		var flyPropSp;
-		flyPropSp=Pool.getItemByCreateFun("flyProp",this.flyProp.create,this.flyProp);
-		flyPropSp.pos(Laya.stage.scrollRect.x,args[0]);
-		this.map.addChild(flyPropSp);
 	}
 
 	/**
@@ -57553,6 +57279,44 @@ var Controller=(function(_super){
 					Laya.stage.timer.loop(10,this,this.onLoop);
 					break ;
 				}
+			case 104:{
+					this.roleClass.move(80);
+					break ;
+				}
+			case 98:{
+					this.roleClass.move(250);
+					break ;
+				}
+			case 100:{
+					this.roleClass.move(160);
+					break ;
+				}
+			case 102:{
+					this.roleClass.move(20);
+					break ;
+				}
+			case 105:{
+					this.roleClass.move(140);
+					break ;
+				}
+			case 97:{
+					this.roleClass.move(210);
+					break ;
+				}
+			case 103:{
+					this.roleClass.move(50);
+					break ;
+				}
+			case 99:{
+					this.roleClass.move(300);
+					break ;
+				}
+			case 80:{
+					var n=Math.random();
+					console.log('n = '+n);
+					var type=Math.round(n*5);
+					console.log('type'+type);
+				}
 			default :{
 					break ;
 				}
@@ -57673,27 +57437,12 @@ var EnemyOne=(function(_super){
 
 	__proto.onTriggerEnter=function(other,self,contact){
 		if (other.label==="bullet" && self.label==="enemy_one"){
-			var boomAni=Pool.getItemByCreateFun("enemyRoleBoom",this.createEnemyRoleBoomAni,this);
+			var boomAni=Pool.getItemByCreateFun("enemyRoleBoom",CreateEffect.getInstance().createEnemyRoleBoomAni,this);
 			boomAni.play(0,false,"enemyRoleBoom");
 			boomAni.pos(this.thisSp.x,this.thisSp.y);
 			this.thisSp.parent.addChild(boomAni);
 			this.thisSp.removeSelf();
-			Pool.recover("enemyThree",this.thisSp);
 		}
-	}
-
-	/**
-	*当对象池中没有爆炸动画时，
-	*则调用此函数创建动画
-	*/
-	__proto.createEnemyRoleBoomAni=function(){
-		var ani=new Animation();
-		ani.loadAnimation("GameScene/EnemyRoleBoom.ani",null,"res/atlas/boom.atlas");
-		ani.on("complete",null,function(){
-			ani.removeSelf();
-			Pool.recover("enemyRoleBoom",ani);
-		});
-		return ani;
 	}
 
 	__proto.onUpdate=function(){
@@ -57738,8 +57487,9 @@ var EnemyOne=(function(_super){
 	}
 
 	__proto.onDisable=function(){
-		Pool.recover("enemyOne",this.thisSp);
 		Laya.timer.clearAll(this);
+		console.log('enmeyOne在OnDisable中回收');
+		Pool.recover("enemyOne",this.thisSp);
 	}
 
 	return EnemyOne;
@@ -57810,7 +57560,9 @@ var EnemyTow=(function(_super){
 			this.enemyTowAni.stop();
 			this.enemyTowAni.removeSelf();
 			Pool.recover("enemyTowAni",this.enemyTowAni);
-			var boomAni=Pool.getItemByCreateFun("enemyRoleBoom",this.createEnemyRoleBoomAni,this);
+			var boomAni=Pool.getItemByCreateFun("enemyRoleBoom",CreateEffect.getInstance().createEnemyRoleBoomAni,this);
+			console.log('敌人二死亡');
+			console.log(boomAni);
 			boomAni.play(0,false,"enemyRoleBoom");
 			boomAni.pos(this.thisSp.x,this.thisSp.y);
 			this.thisSp.parent.addChild(boomAni);
@@ -57822,29 +57574,13 @@ var EnemyTow=(function(_super){
 		}
 	}
 
-	/**
-	*当对象池中没有爆炸动画时，
-	*则调用此函数创建动画
-	*/
-	__proto.createEnemyRoleBoomAni=function(){
-		var ani=new Animation();
-		ani.loadAnimation("GameScene/EnemyRoleBoom.ani",null,"res/atlas/boom.atlas");
-		ani.on("complete",null,function(){
-			ani.removeSelf();
-			Pool.recover("enemyRoleBoom",ani);
-		});
-		return ani;
-	}
-
 	__proto.onUpdate=function(){
 		this.enemyTowAni.pos(this.thisSp.x,this.thisSp.y);
 		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
 		if ((scrollRect.width !=0)&& (this.thisSp.x < scrollRect.x || this.thisSp.y > (scrollRect.y+scrollRect.height))){
 			console.log(this.thisSp.x,scrollRect.x,scrollRect.width);
 			this.enemyTowAni.removeSelf();
-			Pool.recover("enemyTowAni",this.enemyTowAni);
 			this.thisSp.removeSelf();
-			Pool.recover("enemyTow",this.thisSp);
 		}
 	}
 
@@ -57852,6 +57588,7 @@ var EnemyTow=(function(_super){
 	*回收本对象
 	*/
 	__proto.onDisable=function(){
+		console.log('tow 中 onDisable');
 		Pool.recover("enemyTow",this.thisSp);
 	}
 
@@ -57905,7 +57642,7 @@ var BossTopOne=(function(_super){
 			if (this.top01HP <=0){
 				Laya.timer.clear(this,this.shoot);
 				console.log("top01销毁");
-				var aniBoom=Pool.getItem("enemyObjBoom");
+				var aniBoom=Pool.getItemByCreateFun('enemyObjBoom',CreateEffect.getInstance().createEnemyObjBoomAni,this);
 				if (aniBoom){
 					aniBoom.pos(this.thisSp.x,this.thisSp.y);
 					aniBoom.play(0,false);
@@ -57970,7 +57707,7 @@ var BossTopTow=(function(_super){
 			this.top02HP--;
 			if (this.top02HP <=0){
 				console.log("top02销毁");
-				var aniBoom=Pool.getItem("enemyObjBoom");
+				var aniBoom=Pool.getItemByCreateFun('enemyObjBoom',CreateEffect.getInstance().createEnemyObjBoomAni,this);
 				if (aniBoom){
 					aniBoom.pos(this.thisSp.x,this.thisSp.y);
 					aniBoom.play(0,false);
@@ -57988,6 +57725,59 @@ var BossTopTow=(function(_super){
 
 	__proto.onDisable=function(){}
 	return BossTopTow;
+})(Script)
+
+
+//class propScript.PropsBox extends laya.components.Script
+var PropsBox=(function(_super){
+	function PropsBox(){
+		// 本对象盒子
+		this.thisBox=null;
+		// 本对象刚体
+		this.rigid=null;
+		// 愈显示的精灵
+		this.sp=null;
+		PropsBox.__super.call(this);
+	}
+
+	__class(PropsBox,'propScript.PropsBox',_super);
+	var __proto=PropsBox.prototype;
+	__proto.onEnable=function(){
+		this.thisBox=this.owner;
+		var propsArr=["propM","propB","propF","propS","propL","propR",];
+		var type=Math.round(Math.random()*5);
+		this.sp=this.thisBox.getChildByName(propsArr[type]);
+		this.sp.visible=true;
+		console.log("随机道具名字"+propsArr[type]);
+		this.rigid=this.thisBox.getComponent(RigidBody);
+		this.rigid.setVelocity({x:2 ,y:-6});
+		this.rigid.type="dynamic";
+	}
+
+	__proto.onTriggerEnter=function(other,self,contact){
+		if (this.rigid.linearVelocity.y > 0 && (other.label==="pass_y" || other.label==="pass_n" || other.label==="water")){
+			this.rigid.type="kinematic";
+			this.rigid.setVelocity({x:0 ,y:0});
+		}
+		if (other.label==="body"){
+			SoundManager.playSound("sound/get_prop.wav");
+			this.sp.visible=false;
+			this.thisBox.removeSelf();
+		}
+	}
+
+	__proto.onUpdate=function(){
+		var scrollRect=Laya.stage.scrollRect ? Laya.stage.scrollRect :new Rectangle();
+		if ((scrollRect.width !=0)&& (this.thisBox.x < scrollRect.x || this.thisBox.y > (scrollRect.y+scrollRect.height))){
+			this.thisBox.removeSelf();
+		}
+	}
+
+	__proto.onDisable=function(){
+		Pool.recover("propsBox",this.thisBox);
+	}
+
+	return PropsBox;
 })(Script)
 
 
@@ -58015,22 +57805,12 @@ var BossOneBullet=(function(_super){
 
 	__proto.onTriggerEnter=function(other,self,contact){
 		if (other.label==="pass_n" || other.label==="pass_y"){
-			var aniBoom=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
+			var aniBoom=Pool.getItemByCreateFun("enemyObjBoom",CreateEffect.getInstance().createEnemyObjBoomAni,this);
 			aniBoom.pos(this.thisSp.x,this.thisSp.y);
 			aniBoom.play(0,false);
 			this.thisSp.parent.addChild(aniBoom);
 			this.thisSp.removeSelf();
 		}
-	}
-
-	__proto.createEnemyObjBoomAni=function(){
-		var ani=new Animation();
-		ani.loadAnimation("GameScene/EnemyObjBoom.ani",null,"res/atlas/boom.atlas");
-		ani.on("complete",null,function(){
-			ani.removeSelf();
-			Pool.recover("enemyObjBoom",ani);
-		});
-		return ani;
 	}
 
 	__proto.onDisable=function(){
@@ -58086,12 +57866,12 @@ var BossOne=(function(_super){
 	}
 
 	__proto.boom=function(){
-		var aniBoom01=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
-		var aniBoom02=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
-		var aniBoom03=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
-		var aniBoom04=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
-		var aniBoom05=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
-		var aniBoom06=Pool.getItemByCreateFun("enemyObjBoom",this.createEnemyObjBoomAni,this);
+		var aniBoom01=Pool.getItemByCreateFun("enemyObjBoom",CreateEffect.getInstance().createEnemyObjBoomAni,this);
+		var aniBoom02=Pool.getItemByCreateFun("enemyObjBoom",CreateEffect.getInstance().createEnemyObjBoomAni,this);
+		var aniBoom03=Pool.getItemByCreateFun("enemyObjBoom",CreateEffect.getInstance().createEnemyObjBoomAni,this);
+		var aniBoom04=Pool.getItemByCreateFun("enemyObjBoom",CreateEffect.getInstance().createEnemyObjBoomAni,this);
+		var aniBoom05=Pool.getItemByCreateFun("enemyObjBoom",CreateEffect.getInstance().createEnemyObjBoomAni,this);
+		var aniBoom06=Pool.getItemByCreateFun("enemyObjBoom",CreateEffect.getInstance().createEnemyObjBoomAni,this);
 		aniBoom01.pos(this.box.x+Math.random()*190,this.box.y+160+Math.random()*90);
 		aniBoom02.pos(this.box.x+Math.random()*190,this.box.y+160+Math.random()*90);
 		aniBoom03.pos(this.box.x+Math.random()*190,this.box.y+160+Math.random()*90);
@@ -60418,6 +60198,50 @@ var TrailRenderer=(function(_super){
 
 
 /**
+*<code>TerrainHeightData</code> 类用于描述地形高度信息。
+*/
+//class laya.d3.terrain.TerrainHeightData extends laya.resource.Resource
+var TerrainHeightData=(function(_super){
+	function TerrainHeightData(width,height,bitType,value){
+		this._terrainHeightData=null;
+		this._width=0;
+		this._height=0;
+		this._bitType=0;
+		this._value=NaN;
+		TerrainHeightData.__super.call(this);
+		this._width=width;
+		this._height=height;
+		this._bitType=bitType;
+		this._value=value;
+	}
+
+	__class(TerrainHeightData,'laya.d3.terrain.TerrainHeightData',_super);
+	TerrainHeightData._pharse=function(data,propertyParams,constructParams){
+		var terrainHeightData=new TerrainHeightData(constructParams[0],constructParams[1],constructParams[2],constructParams[3]);
+		var buffer;
+		var ratio=NaN;
+		if (terrainHeightData._bitType==8){
+			buffer=new Uint8Array(data);
+			ratio=1.0 / 255.0;
+			}else if (terrainHeightData._bitType==16){
+			buffer=new Int16Array(data);
+			ratio=1.0 / 32766.0;
+		}
+		terrainHeightData._terrainHeightData=new Float32Array(terrainHeightData._height *terrainHeightData._width);
+		for (var i=0,n=terrainHeightData._height *terrainHeightData._width;i < n;i++){
+			terrainHeightData._terrainHeightData[i]=(buffer[i] *ratio *terrainHeightData._value)/ 2;
+		}
+	}
+
+	TerrainHeightData.load=function(url,complete,widht,height,bitType,value){
+		Laya.loader.create(url,complete,null,"TERRAINHEIGHTDATA",[widht,height,bitType,value],null,1,false);
+	}
+
+	return TerrainHeightData;
+})(Resource)
+
+
+/**
 *滑轮关节：它将两个物体接地(ground)并彼此连接，当一个物体上升，另一个物体就会下降
 */
 //class laya.physics.joint.PulleyJoint extends laya.physics.joint.JointBase
@@ -60467,50 +60291,6 @@ var PulleyJoint=(function(_super){
 	PulleyJoint._temp=null;
 	return PulleyJoint;
 })(JointBase)
-
-
-/**
-*<code>TerrainHeightData</code> 类用于描述地形高度信息。
-*/
-//class laya.d3.terrain.TerrainHeightData extends laya.resource.Resource
-var TerrainHeightData=(function(_super){
-	function TerrainHeightData(width,height,bitType,value){
-		this._terrainHeightData=null;
-		this._width=0;
-		this._height=0;
-		this._bitType=0;
-		this._value=NaN;
-		TerrainHeightData.__super.call(this);
-		this._width=width;
-		this._height=height;
-		this._bitType=bitType;
-		this._value=value;
-	}
-
-	__class(TerrainHeightData,'laya.d3.terrain.TerrainHeightData',_super);
-	TerrainHeightData._pharse=function(data,propertyParams,constructParams){
-		var terrainHeightData=new TerrainHeightData(constructParams[0],constructParams[1],constructParams[2],constructParams[3]);
-		var buffer;
-		var ratio=NaN;
-		if (terrainHeightData._bitType==8){
-			buffer=new Uint8Array(data);
-			ratio=1.0 / 255.0;
-			}else if (terrainHeightData._bitType==16){
-			buffer=new Int16Array(data);
-			ratio=1.0 / 32766.0;
-		}
-		terrainHeightData._terrainHeightData=new Float32Array(terrainHeightData._height *terrainHeightData._width);
-		for (var i=0,n=terrainHeightData._height *terrainHeightData._width;i < n;i++){
-			terrainHeightData._terrainHeightData[i]=(buffer[i] *ratio *terrainHeightData._value)/ 2;
-		}
-	}
-
-	TerrainHeightData.load=function(url,complete,widht,height,bitType,value){
-		Laya.loader.create(url,complete,null,"TERRAINHEIGHTDATA",[widht,height,bitType,value],null,1,false);
-	}
-
-	return TerrainHeightData;
-})(Resource)
 
 
 /**
@@ -75798,6 +75578,462 @@ var MeshSprite3D=(function(_super){
 
 
 /**
+*<p><code>Input</code> 类用于创建显示对象以显示和输入文本。</p>
+*<p>Input 类封装了原生的文本输入框，由于不同浏览器的差异，会导致此对象的默认文本的位置与用户点击输入时的文本的位置有少许的偏差。</p>
+*/
+//class laya.display.Input extends laya.display.Text
+var Input=(function(_super){
+	function Input(){
+		/**@private */
+		this._focus=false;
+		/**@private */
+		this._multiline=false;
+		/**@private */
+		this._editable=true;
+		/**@private */
+		this._restrictPattern=null;
+		this._type="text";
+		/**输入提示符。*/
+		this._prompt='';
+		/**输入提示符颜色。*/
+		this._promptColor="#A9A9A9";
+		this._originColor="#000000";
+		this._content='';
+		Input.__super.call(this);
+		this._maxChars=1E5;
+		this._width=100;
+		this._height=20;
+		this.multiline=false;
+		this.overflow="scroll";
+		this.on("mousedown",this,this._onMouseDown);
+		this.on("undisplay",this,this._onUnDisplay);
+	}
+
+	__class(Input,'laya.display.Input',_super);
+	var __proto=Input.prototype;
+	/**
+	*设置光标位置和选取字符。
+	*@param startIndex 光标起始位置。
+	*@param endIndex 光标结束位置。
+	*/
+	__proto.setSelection=function(startIndex,endIndex){
+		this.focus=true;
+		laya.display.Input.inputElement.selectionStart=startIndex;
+		laya.display.Input.inputElement.selectionEnd=endIndex;
+	}
+
+	__proto._onUnDisplay=function(e){
+		this.focus=false;
+	}
+
+	__proto._onMouseDown=function(e){
+		this.focus=true;
+	}
+
+	/**
+	*在输入期间，如果 Input 实例的位置改变，调用_syncInputTransform同步输入框的位置。
+	*/
+	__proto._syncInputTransform=function(){
+		var inputElement=this.nativeInput;
+		var transform=Utils.getTransformRelativeToWindow(this,this.padding[3],this.padding[0]);
+		var inputWid=this._width-this.padding[1]-this.padding[3];
+		var inputHei=this._height-this.padding[0]-this.padding[2];
+		if (Render.isConchApp){
+			inputElement.setScale(transform.scaleX,transform.scaleY);
+			inputElement.setSize(inputWid,inputHei);
+			inputElement.setPos(transform.x,transform.y);
+			}else {
+			Input.inputContainer.style.transform=Input.inputContainer.style.webkitTransform="scale("+transform.scaleX+","+transform.scaleY+") rotate("+(Laya.stage.canvasDegree)+"deg)";
+			inputElement.style.width=inputWid+'px';
+			inputElement.style.height=inputHei+'px';
+			Input.inputContainer.style.left=transform.x+'px';
+			Input.inputContainer.style.top=transform.y+'px';
+		}
+	}
+
+	/**选中当前实例的所有文本。*/
+	__proto.select=function(){
+		this.nativeInput.select();
+	}
+
+	__proto._setInputMethod=function(){
+		Input.input.parentElement && (Input.inputContainer.removeChild(Input.input));
+		Input.area.parentElement && (Input.inputContainer.removeChild(Input.area));
+		Input.inputElement=(this._multiline ? Input.area :Input.input);
+		Input.inputContainer.appendChild(Input.inputElement);
+		if (Text.RightToLeft){
+			Input.inputElement.style.direction="rtl";
+		}
+	}
+
+	__proto._focusIn=function(){
+		laya.display.Input.isInputting=true;
+		var input=this.nativeInput;
+		this._focus=true;
+		var cssStyle=input.style;
+		cssStyle.whiteSpace=(this.wordWrap ? "pre-wrap" :"nowrap");
+		this._setPromptColor();
+		input.readOnly=!this._editable;
+		if (Render.isConchApp){
+			input.setType(this._type);
+			input.setForbidEdit(!this._editable);
+		}
+		input.maxLength=this._maxChars;
+		var padding=this.padding;
+		input.type=this._type;
+		input.value=this._content;
+		input.placeholder=this._prompt;
+		Laya.stage.off("keydown",this,this._onKeyDown);
+		Laya.stage.on("keydown",this,this._onKeyDown);
+		Laya.stage.focus=this;
+		this.event("focus");
+		if (Browser.onPC)input.focus();
+		if(!Browser.onMiniGame && !Browser.onBDMiniGame){
+			var temp=this._text;
+			this._text=null;
+		}
+		this.typeset();
+		input.setColor(this._originColor);
+		input.setFontSize(this.fontSize);
+		input.setFontFace(Browser.onIPhone ? (Text.fontFamilyMap[this.font] || this.font):this.font);
+		if (Render.isConchApp){
+			input.setMultiAble && input.setMultiAble(this._multiline);
+		}
+		cssStyle.lineHeight=(this.leading+this.fontSize)+"px";
+		cssStyle.fontStyle=(this.italic ? "italic" :"normal");
+		cssStyle.fontWeight=(this.bold ? "bold" :"normal");
+		cssStyle.textAlign=this.align;
+		cssStyle.padding="0 0";
+		this._syncInputTransform();
+		if (!Render.isConchApp && Browser.onPC)
+			Laya.systemTimer.frameLoop(1,this,this._syncInputTransform);
+	}
+
+	// 设置DOM输入框提示符颜色。
+	__proto._setPromptColor=function(){
+		Input.promptStyleDOM=Browser.getElementById("promptStyle");
+		if (!Input.promptStyleDOM){
+			Input.promptStyleDOM=Browser.createElement("style");
+			Input.promptStyleDOM.setAttribute("id","promptStyle");
+			Browser.document.head.appendChild(Input.promptStyleDOM);
+		}
+		Input.promptStyleDOM.innerText="input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {"+"color:"+this._promptColor+"}"+"input:-moz-placeholder, textarea:-moz-placeholder {"+"color:"+this._promptColor+"}"+"input::-moz-placeholder, textarea::-moz-placeholder {"+"color:"+this._promptColor+"}"+"input:-ms-input-placeholder, textarea:-ms-input-placeholder {"+"color:"+this._promptColor+"}";
+	}
+
+	/**@private */
+	__proto._focusOut=function(){
+		laya.display.Input.isInputting=false;
+		this._focus=false;
+		this._text=null;
+		this._content=this.nativeInput.value;
+		if (!this._content){
+			Laya.superSet(Text,this,'text',this._prompt);
+			Laya.superSet(Text,this,'color',this._promptColor);
+			}else {
+			Laya.superSet(Text,this,'text',this._content);
+			Laya.superSet(Text,this,'color',this._originColor);
+		}
+		Laya.stage.off("keydown",this,this._onKeyDown);
+		Laya.stage.focus=null;
+		this.event("blur");
+		this.event("change");
+		if (Render.isConchApp)this.nativeInput.blur();
+		Browser.onPC && Laya.systemTimer.clear(this,this._syncInputTransform);
+	}
+
+	/**@private */
+	__proto._onKeyDown=function(e){
+		if (e.keyCode===13){
+			if (Browser.onMobile && !this._multiline)
+				this.focus=false;
+			this.event("enter");
+		}
+	}
+
+	__proto.changeText=function(text){
+		this._content=text;
+		if (this._focus){
+			this.nativeInput.value=text || '';
+			this.event("change");
+		}else
+		_super.prototype.changeText.call(this,text);
+	}
+
+	/**@inheritDoc */
+	__getset(0,__proto,'color',_super.prototype._$get_color,function(value){
+		if (this._focus)
+			this.nativeInput.setColor(value);
+		Laya.superSet(Text,this,'color',this._content?value:this._promptColor);
+		this._originColor=value;
+	});
+
+	/**表示是否是多行输入框。*/
+	__getset(0,__proto,'multiline',function(){
+		return this._multiline;
+		},function(value){
+		this._multiline=value;
+		this.valign=value ? "top" :"middle";
+	});
+
+	/**
+	*<p>字符数量限制，默认为10000。</p>
+	*<p>设置字符数量限制时，小于等于0的值将会限制字符数量为10000。</p>
+	*/
+	__getset(0,__proto,'maxChars',function(){
+		return this._maxChars;
+		},function(value){
+		if (value <=0)
+			value=1E5;
+		this._maxChars=value;
+	});
+
+	/**@inheritDoc */
+	__getset(0,__proto,'text',function(){
+		if (this._focus)
+			return this.nativeInput.value;
+		else
+		return this._content || "";
+		},function(value){
+		Laya.superSet(Text,this,'color',this._originColor);
+		value+='';
+		if (this._focus){
+			this.nativeInput.value=value || '';
+			this.event("change");
+			}else {
+			if (!this._multiline)
+				value=value.replace(/\r?\n/g,'');
+			this._content=value;
+			if (value)
+				Laya.superSet(Text,this,'text',value);
+			else {
+				Laya.superSet(Text,this,'text',this._prompt);
+				Laya.superSet(Text,this,'color',this.promptColor);
+			}
+		}
+	});
+
+	/**
+	*获取对输入框的引用实例。
+	*/
+	__getset(0,__proto,'nativeInput',function(){
+		return this._multiline ? Input.area :Input.input;
+	});
+
+	// 因此 调用focus接口是无法都在移动平台立刻弹出键盘的
+	/**
+	*表示焦点是否在此实例上。
+	*/
+	__getset(0,__proto,'focus',function(){
+		return this._focus;
+		},function(value){
+		var input=this.nativeInput;
+		if (this._focus!==value){
+			if (value){
+				if (input.target){
+					input.target._focusOut();
+					}else {
+					this._setInputMethod();
+				}
+				input.target=this;
+				this._focusIn();
+				}else {
+				input.target=null;
+				this._focusOut();
+				Browser.document.body.scrollTop=0;
+				input.blur();
+				if (Render.isConchApp)input.setPos(-10000,-10000);
+				else if (Input.inputContainer.contains(input))Input.inputContainer.removeChild(input);
+			}
+		}
+	});
+
+	/**
+	*是否可编辑。
+	*/
+	__getset(0,__proto,'editable',function(){
+		return this._editable;
+		},function(value){
+		this._editable=value;
+		if (Render.isConchApp){
+			Input.input.setForbidEdit(!value);
+		}
+	});
+
+	/**@inheritDoc */
+	__getset(0,__proto,'bgColor',_super.prototype._$get_bgColor,function(value){
+		Laya.superSet(Text,this,'bgColor',value);
+		if(Render.isConchApp)
+			this.nativeInput.setBgColor(value);
+	});
+
+	/**限制输入的字符。*/
+	__getset(0,__proto,'restrict',function(){
+		if (this._restrictPattern){
+			return this._restrictPattern.source;
+		}
+		return "";
+		},function(pattern){
+		if (pattern){
+			pattern="[^"+pattern+"]";
+			if (pattern.indexOf("^^")>-1)
+				pattern=pattern.replace("^^","");
+			this._restrictPattern=new RegExp(pattern,"g");
+		}else
+		this._restrictPattern=null;
+	});
+
+	/**
+	*设置输入提示符。
+	*/
+	__getset(0,__proto,'prompt',function(){
+		return this._prompt;
+		},function(value){
+		if (!this._text && value)
+			Laya.superSet(Text,this,'color',this._promptColor);
+		this.promptColor=this._promptColor;
+		if (this._text)
+			Laya.superSet(Text,this,'text',(this._text==this._prompt)?value:this._text);
+		else
+		Laya.superSet(Text,this,'text',value);
+		this._prompt=Text.langPacks && Text.langPacks[value] ? Text.langPacks[value] :value;
+	});
+
+	/**
+	*设置输入提示符颜色。
+	*/
+	__getset(0,__proto,'promptColor',function(){
+		return this._promptColor;
+		},function(value){
+		this._promptColor=value;
+		if (!this._content)Laya.superSet(Text,this,'color',value);
+	});
+
+	/**
+	*<p>输入框类型为Input静态常量之一。</p>
+	*<ul>
+	*<li>TYPE_TEXT</li>
+	*<li>TYPE_PASSWORD</li>
+	*<li>TYPE_EMAIL</li>
+	*<li>TYPE_URL</li>
+	*<li>TYPE_NUMBER</li>
+	*<li>TYPE_RANGE</li>
+	*<li>TYPE_DATE</li>
+	*<li>TYPE_MONTH</li>
+	*<li>TYPE_WEEK</li>
+	*<li>TYPE_TIME</li>
+	*<li>TYPE_DATE_TIME</li>
+	*<li>TYPE_DATE_TIME_LOCAL</li>
+	*</ul>
+	*<p>平台兼容性参见http://www.w3school.com.cn/html5/html_5_form_input_types.asp。</p>
+	*/
+	__getset(0,__proto,'type',function(){
+		return this._type;
+		},function(value){
+		if (value==="password")this._getTextStyle().asPassword=true;
+		else this._getTextStyle().asPassword=false;
+		this._type=value;
+	});
+
+	Input.__init__=function(){
+		Input._createInputElement();
+		if (Browser.onMobile){
+			var isTrue=false;
+			if(Browser.onMiniGame || Browser.onBDMiniGame){
+				isTrue=true;
+			}
+			Render.canvas.addEventListener(Input.IOS_IFRAME ?(isTrue ? "touchend" :"click"):"touchend",Input._popupInputMethod);
+		}
+	}
+
+	Input._popupInputMethod=function(e){
+		if (!laya.display.Input.isInputting)return;
+		var input=laya.display.Input.inputElement;
+		input.focus();
+	}
+
+	Input._createInputElement=function(){
+		Input._initInput(Input.area=Browser.createElement("textarea"));
+		Input._initInput(Input.input=Browser.createElement("input"));
+		Input.inputContainer=Browser.createElement("div");
+		Input.inputContainer.style.position="absolute";
+		Input.inputContainer.style.zIndex=1E5;
+		Browser.container.appendChild(Input.inputContainer);
+		Input.inputContainer.setPos=function (x,y){
+			Input.inputContainer.style.left=x+'px';
+			Input.inputContainer.style.top=y+'px';
+		};
+	}
+
+	Input._initInput=function(input){
+		var style=input.style;
+		style.cssText="position:absolute;overflow:hidden;resize:none;transform-origin:0 0;-webkit-transform-origin:0 0;-moz-transform-origin:0 0;-o-transform-origin:0 0;";
+		style.resize='none';
+		style.backgroundColor='transparent';
+		style.border='none';
+		style.outline='none';
+		style.zIndex=1;
+		input.addEventListener('input',Input._processInputting);
+		input.addEventListener('mousemove',Input._stopEvent);
+		input.addEventListener('mousedown',Input._stopEvent);
+		input.addEventListener('touchmove',Input._stopEvent);
+		input.setFontFace=function (fontFace){input.style.fontFamily=fontFace;};
+		if(!Render.isConchApp){
+			input.setColor=function (color){input.style.color=color;};
+			input.setFontSize=function (fontSize){input.style.fontSize=fontSize+'px';};
+		}
+	}
+
+	Input._processInputting=function(e){
+		var input=laya.display.Input.inputElement.target;
+		if (!input)return;
+		var value=laya.display.Input.inputElement.value;
+		if (input._restrictPattern){
+			value=value.replace(/\u2006|\x27/g,"");
+			if (input._restrictPattern.test(value)){
+				value=value.replace(input._restrictPattern,"");
+				laya.display.Input.inputElement.value=value;
+			}
+		}
+		input._text=value;
+		input.event("input");
+	}
+
+	Input._stopEvent=function(e){
+		if (e.type=='touchmove')
+			e.preventDefault();
+		e.stopPropagation && e.stopPropagation();
+	}
+
+	Input.TYPE_TEXT="text";
+	Input.TYPE_PASSWORD="password";
+	Input.TYPE_EMAIL="email";
+	Input.TYPE_URL="url";
+	Input.TYPE_NUMBER="number";
+	Input.TYPE_RANGE="range";
+	Input.TYPE_DATE="date";
+	Input.TYPE_MONTH="month";
+	Input.TYPE_WEEK="week";
+	Input.TYPE_TIME="time";
+	Input.TYPE_DATE_TIME="datetime";
+	Input.TYPE_DATE_TIME_LOCAL="datetime-local";
+	Input.TYPE_SEARCH="search";
+	Input.input=null;
+	Input.area=null;
+	Input.inputElement=null;
+	Input.inputContainer=null;
+	Input.confirmButton=null;
+	Input.promptStyleDOM=null;
+	Input.inputHeight=45;
+	Input.isInputting=false;
+	Input.stageMatrix=null;
+	__static(Input,
+	['IOS_IFRAME',function(){return this.IOS_IFRAME=(Browser.onIOS && Browser.window.top !=Browser.window.self);}
+	]);
+	return Input;
+})(Text)
+
+
+/**
 *<code>ScrollBar</code> 组件是一个滚动条组件。
 *<p>当数据太多以至于显示区域无法容纳时，最终用户可以使用 <code>ScrollBar</code> 组件控制所显示的数据部分。</p>
 *<p> 滚动条由四部分组成：两个箭头按钮、一个轨道和一个滑块。 </p> *
@@ -76398,462 +76634,6 @@ var ScrollBar=(function(_super){
 
 	return ScrollBar;
 })(UIComponent)
-
-
-/**
-*<p><code>Input</code> 类用于创建显示对象以显示和输入文本。</p>
-*<p>Input 类封装了原生的文本输入框，由于不同浏览器的差异，会导致此对象的默认文本的位置与用户点击输入时的文本的位置有少许的偏差。</p>
-*/
-//class laya.display.Input extends laya.display.Text
-var Input=(function(_super){
-	function Input(){
-		/**@private */
-		this._focus=false;
-		/**@private */
-		this._multiline=false;
-		/**@private */
-		this._editable=true;
-		/**@private */
-		this._restrictPattern=null;
-		this._type="text";
-		/**输入提示符。*/
-		this._prompt='';
-		/**输入提示符颜色。*/
-		this._promptColor="#A9A9A9";
-		this._originColor="#000000";
-		this._content='';
-		Input.__super.call(this);
-		this._maxChars=1E5;
-		this._width=100;
-		this._height=20;
-		this.multiline=false;
-		this.overflow="scroll";
-		this.on("mousedown",this,this._onMouseDown);
-		this.on("undisplay",this,this._onUnDisplay);
-	}
-
-	__class(Input,'laya.display.Input',_super);
-	var __proto=Input.prototype;
-	/**
-	*设置光标位置和选取字符。
-	*@param startIndex 光标起始位置。
-	*@param endIndex 光标结束位置。
-	*/
-	__proto.setSelection=function(startIndex,endIndex){
-		this.focus=true;
-		laya.display.Input.inputElement.selectionStart=startIndex;
-		laya.display.Input.inputElement.selectionEnd=endIndex;
-	}
-
-	__proto._onUnDisplay=function(e){
-		this.focus=false;
-	}
-
-	__proto._onMouseDown=function(e){
-		this.focus=true;
-	}
-
-	/**
-	*在输入期间，如果 Input 实例的位置改变，调用_syncInputTransform同步输入框的位置。
-	*/
-	__proto._syncInputTransform=function(){
-		var inputElement=this.nativeInput;
-		var transform=Utils.getTransformRelativeToWindow(this,this.padding[3],this.padding[0]);
-		var inputWid=this._width-this.padding[1]-this.padding[3];
-		var inputHei=this._height-this.padding[0]-this.padding[2];
-		if (Render.isConchApp){
-			inputElement.setScale(transform.scaleX,transform.scaleY);
-			inputElement.setSize(inputWid,inputHei);
-			inputElement.setPos(transform.x,transform.y);
-			}else {
-			Input.inputContainer.style.transform=Input.inputContainer.style.webkitTransform="scale("+transform.scaleX+","+transform.scaleY+") rotate("+(Laya.stage.canvasDegree)+"deg)";
-			inputElement.style.width=inputWid+'px';
-			inputElement.style.height=inputHei+'px';
-			Input.inputContainer.style.left=transform.x+'px';
-			Input.inputContainer.style.top=transform.y+'px';
-		}
-	}
-
-	/**选中当前实例的所有文本。*/
-	__proto.select=function(){
-		this.nativeInput.select();
-	}
-
-	__proto._setInputMethod=function(){
-		Input.input.parentElement && (Input.inputContainer.removeChild(Input.input));
-		Input.area.parentElement && (Input.inputContainer.removeChild(Input.area));
-		Input.inputElement=(this._multiline ? Input.area :Input.input);
-		Input.inputContainer.appendChild(Input.inputElement);
-		if (Text.RightToLeft){
-			Input.inputElement.style.direction="rtl";
-		}
-	}
-
-	__proto._focusIn=function(){
-		laya.display.Input.isInputting=true;
-		var input=this.nativeInput;
-		this._focus=true;
-		var cssStyle=input.style;
-		cssStyle.whiteSpace=(this.wordWrap ? "pre-wrap" :"nowrap");
-		this._setPromptColor();
-		input.readOnly=!this._editable;
-		if (Render.isConchApp){
-			input.setType(this._type);
-			input.setForbidEdit(!this._editable);
-		}
-		input.maxLength=this._maxChars;
-		var padding=this.padding;
-		input.type=this._type;
-		input.value=this._content;
-		input.placeholder=this._prompt;
-		Laya.stage.off("keydown",this,this._onKeyDown);
-		Laya.stage.on("keydown",this,this._onKeyDown);
-		Laya.stage.focus=this;
-		this.event("focus");
-		if (Browser.onPC)input.focus();
-		if(!Browser.onMiniGame && !Browser.onBDMiniGame){
-			var temp=this._text;
-			this._text=null;
-		}
-		this.typeset();
-		input.setColor(this._originColor);
-		input.setFontSize(this.fontSize);
-		input.setFontFace(Browser.onIPhone ? (Text.fontFamilyMap[this.font] || this.font):this.font);
-		if (Render.isConchApp){
-			input.setMultiAble && input.setMultiAble(this._multiline);
-		}
-		cssStyle.lineHeight=(this.leading+this.fontSize)+"px";
-		cssStyle.fontStyle=(this.italic ? "italic" :"normal");
-		cssStyle.fontWeight=(this.bold ? "bold" :"normal");
-		cssStyle.textAlign=this.align;
-		cssStyle.padding="0 0";
-		this._syncInputTransform();
-		if (!Render.isConchApp && Browser.onPC)
-			Laya.systemTimer.frameLoop(1,this,this._syncInputTransform);
-	}
-
-	// 设置DOM输入框提示符颜色。
-	__proto._setPromptColor=function(){
-		Input.promptStyleDOM=Browser.getElementById("promptStyle");
-		if (!Input.promptStyleDOM){
-			Input.promptStyleDOM=Browser.createElement("style");
-			Input.promptStyleDOM.setAttribute("id","promptStyle");
-			Browser.document.head.appendChild(Input.promptStyleDOM);
-		}
-		Input.promptStyleDOM.innerText="input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {"+"color:"+this._promptColor+"}"+"input:-moz-placeholder, textarea:-moz-placeholder {"+"color:"+this._promptColor+"}"+"input::-moz-placeholder, textarea::-moz-placeholder {"+"color:"+this._promptColor+"}"+"input:-ms-input-placeholder, textarea:-ms-input-placeholder {"+"color:"+this._promptColor+"}";
-	}
-
-	/**@private */
-	__proto._focusOut=function(){
-		laya.display.Input.isInputting=false;
-		this._focus=false;
-		this._text=null;
-		this._content=this.nativeInput.value;
-		if (!this._content){
-			Laya.superSet(Text,this,'text',this._prompt);
-			Laya.superSet(Text,this,'color',this._promptColor);
-			}else {
-			Laya.superSet(Text,this,'text',this._content);
-			Laya.superSet(Text,this,'color',this._originColor);
-		}
-		Laya.stage.off("keydown",this,this._onKeyDown);
-		Laya.stage.focus=null;
-		this.event("blur");
-		this.event("change");
-		if (Render.isConchApp)this.nativeInput.blur();
-		Browser.onPC && Laya.systemTimer.clear(this,this._syncInputTransform);
-	}
-
-	/**@private */
-	__proto._onKeyDown=function(e){
-		if (e.keyCode===13){
-			if (Browser.onMobile && !this._multiline)
-				this.focus=false;
-			this.event("enter");
-		}
-	}
-
-	__proto.changeText=function(text){
-		this._content=text;
-		if (this._focus){
-			this.nativeInput.value=text || '';
-			this.event("change");
-		}else
-		_super.prototype.changeText.call(this,text);
-	}
-
-	/**@inheritDoc */
-	__getset(0,__proto,'color',_super.prototype._$get_color,function(value){
-		if (this._focus)
-			this.nativeInput.setColor(value);
-		Laya.superSet(Text,this,'color',this._content?value:this._promptColor);
-		this._originColor=value;
-	});
-
-	/**表示是否是多行输入框。*/
-	__getset(0,__proto,'multiline',function(){
-		return this._multiline;
-		},function(value){
-		this._multiline=value;
-		this.valign=value ? "top" :"middle";
-	});
-
-	/**
-	*<p>字符数量限制，默认为10000。</p>
-	*<p>设置字符数量限制时，小于等于0的值将会限制字符数量为10000。</p>
-	*/
-	__getset(0,__proto,'maxChars',function(){
-		return this._maxChars;
-		},function(value){
-		if (value <=0)
-			value=1E5;
-		this._maxChars=value;
-	});
-
-	/**@inheritDoc */
-	__getset(0,__proto,'text',function(){
-		if (this._focus)
-			return this.nativeInput.value;
-		else
-		return this._content || "";
-		},function(value){
-		Laya.superSet(Text,this,'color',this._originColor);
-		value+='';
-		if (this._focus){
-			this.nativeInput.value=value || '';
-			this.event("change");
-			}else {
-			if (!this._multiline)
-				value=value.replace(/\r?\n/g,'');
-			this._content=value;
-			if (value)
-				Laya.superSet(Text,this,'text',value);
-			else {
-				Laya.superSet(Text,this,'text',this._prompt);
-				Laya.superSet(Text,this,'color',this.promptColor);
-			}
-		}
-	});
-
-	/**
-	*获取对输入框的引用实例。
-	*/
-	__getset(0,__proto,'nativeInput',function(){
-		return this._multiline ? Input.area :Input.input;
-	});
-
-	// 因此 调用focus接口是无法都在移动平台立刻弹出键盘的
-	/**
-	*表示焦点是否在此实例上。
-	*/
-	__getset(0,__proto,'focus',function(){
-		return this._focus;
-		},function(value){
-		var input=this.nativeInput;
-		if (this._focus!==value){
-			if (value){
-				if (input.target){
-					input.target._focusOut();
-					}else {
-					this._setInputMethod();
-				}
-				input.target=this;
-				this._focusIn();
-				}else {
-				input.target=null;
-				this._focusOut();
-				Browser.document.body.scrollTop=0;
-				input.blur();
-				if (Render.isConchApp)input.setPos(-10000,-10000);
-				else if (Input.inputContainer.contains(input))Input.inputContainer.removeChild(input);
-			}
-		}
-	});
-
-	/**
-	*是否可编辑。
-	*/
-	__getset(0,__proto,'editable',function(){
-		return this._editable;
-		},function(value){
-		this._editable=value;
-		if (Render.isConchApp){
-			Input.input.setForbidEdit(!value);
-		}
-	});
-
-	/**@inheritDoc */
-	__getset(0,__proto,'bgColor',_super.prototype._$get_bgColor,function(value){
-		Laya.superSet(Text,this,'bgColor',value);
-		if(Render.isConchApp)
-			this.nativeInput.setBgColor(value);
-	});
-
-	/**限制输入的字符。*/
-	__getset(0,__proto,'restrict',function(){
-		if (this._restrictPattern){
-			return this._restrictPattern.source;
-		}
-		return "";
-		},function(pattern){
-		if (pattern){
-			pattern="[^"+pattern+"]";
-			if (pattern.indexOf("^^")>-1)
-				pattern=pattern.replace("^^","");
-			this._restrictPattern=new RegExp(pattern,"g");
-		}else
-		this._restrictPattern=null;
-	});
-
-	/**
-	*设置输入提示符。
-	*/
-	__getset(0,__proto,'prompt',function(){
-		return this._prompt;
-		},function(value){
-		if (!this._text && value)
-			Laya.superSet(Text,this,'color',this._promptColor);
-		this.promptColor=this._promptColor;
-		if (this._text)
-			Laya.superSet(Text,this,'text',(this._text==this._prompt)?value:this._text);
-		else
-		Laya.superSet(Text,this,'text',value);
-		this._prompt=Text.langPacks && Text.langPacks[value] ? Text.langPacks[value] :value;
-	});
-
-	/**
-	*设置输入提示符颜色。
-	*/
-	__getset(0,__proto,'promptColor',function(){
-		return this._promptColor;
-		},function(value){
-		this._promptColor=value;
-		if (!this._content)Laya.superSet(Text,this,'color',value);
-	});
-
-	/**
-	*<p>输入框类型为Input静态常量之一。</p>
-	*<ul>
-	*<li>TYPE_TEXT</li>
-	*<li>TYPE_PASSWORD</li>
-	*<li>TYPE_EMAIL</li>
-	*<li>TYPE_URL</li>
-	*<li>TYPE_NUMBER</li>
-	*<li>TYPE_RANGE</li>
-	*<li>TYPE_DATE</li>
-	*<li>TYPE_MONTH</li>
-	*<li>TYPE_WEEK</li>
-	*<li>TYPE_TIME</li>
-	*<li>TYPE_DATE_TIME</li>
-	*<li>TYPE_DATE_TIME_LOCAL</li>
-	*</ul>
-	*<p>平台兼容性参见http://www.w3school.com.cn/html5/html_5_form_input_types.asp。</p>
-	*/
-	__getset(0,__proto,'type',function(){
-		return this._type;
-		},function(value){
-		if (value==="password")this._getTextStyle().asPassword=true;
-		else this._getTextStyle().asPassword=false;
-		this._type=value;
-	});
-
-	Input.__init__=function(){
-		Input._createInputElement();
-		if (Browser.onMobile){
-			var isTrue=false;
-			if(Browser.onMiniGame || Browser.onBDMiniGame){
-				isTrue=true;
-			}
-			Render.canvas.addEventListener(Input.IOS_IFRAME ?(isTrue ? "touchend" :"click"):"touchend",Input._popupInputMethod);
-		}
-	}
-
-	Input._popupInputMethod=function(e){
-		if (!laya.display.Input.isInputting)return;
-		var input=laya.display.Input.inputElement;
-		input.focus();
-	}
-
-	Input._createInputElement=function(){
-		Input._initInput(Input.area=Browser.createElement("textarea"));
-		Input._initInput(Input.input=Browser.createElement("input"));
-		Input.inputContainer=Browser.createElement("div");
-		Input.inputContainer.style.position="absolute";
-		Input.inputContainer.style.zIndex=1E5;
-		Browser.container.appendChild(Input.inputContainer);
-		Input.inputContainer.setPos=function (x,y){
-			Input.inputContainer.style.left=x+'px';
-			Input.inputContainer.style.top=y+'px';
-		};
-	}
-
-	Input._initInput=function(input){
-		var style=input.style;
-		style.cssText="position:absolute;overflow:hidden;resize:none;transform-origin:0 0;-webkit-transform-origin:0 0;-moz-transform-origin:0 0;-o-transform-origin:0 0;";
-		style.resize='none';
-		style.backgroundColor='transparent';
-		style.border='none';
-		style.outline='none';
-		style.zIndex=1;
-		input.addEventListener('input',Input._processInputting);
-		input.addEventListener('mousemove',Input._stopEvent);
-		input.addEventListener('mousedown',Input._stopEvent);
-		input.addEventListener('touchmove',Input._stopEvent);
-		input.setFontFace=function (fontFace){input.style.fontFamily=fontFace;};
-		if(!Render.isConchApp){
-			input.setColor=function (color){input.style.color=color;};
-			input.setFontSize=function (fontSize){input.style.fontSize=fontSize+'px';};
-		}
-	}
-
-	Input._processInputting=function(e){
-		var input=laya.display.Input.inputElement.target;
-		if (!input)return;
-		var value=laya.display.Input.inputElement.value;
-		if (input._restrictPattern){
-			value=value.replace(/\u2006|\x27/g,"");
-			if (input._restrictPattern.test(value)){
-				value=value.replace(input._restrictPattern,"");
-				laya.display.Input.inputElement.value=value;
-			}
-		}
-		input._text=value;
-		input.event("input");
-	}
-
-	Input._stopEvent=function(e){
-		if (e.type=='touchmove')
-			e.preventDefault();
-		e.stopPropagation && e.stopPropagation();
-	}
-
-	Input.TYPE_TEXT="text";
-	Input.TYPE_PASSWORD="password";
-	Input.TYPE_EMAIL="email";
-	Input.TYPE_URL="url";
-	Input.TYPE_NUMBER="number";
-	Input.TYPE_RANGE="range";
-	Input.TYPE_DATE="date";
-	Input.TYPE_MONTH="month";
-	Input.TYPE_WEEK="week";
-	Input.TYPE_TIME="time";
-	Input.TYPE_DATE_TIME="datetime";
-	Input.TYPE_DATE_TIME_LOCAL="datetime-local";
-	Input.TYPE_SEARCH="search";
-	Input.input=null;
-	Input.area=null;
-	Input.inputElement=null;
-	Input.inputContainer=null;
-	Input.confirmButton=null;
-	Input.promptStyleDOM=null;
-	Input.inputHeight=45;
-	Input.isInputting=false;
-	Input.stageMatrix=null;
-	__static(Input,
-	['IOS_IFRAME',function(){return this.IOS_IFRAME=(Browser.onIOS && Browser.window.top !=Browser.window.self);}
-	]);
-	return Input;
-})(Text)
 
 
 /**
@@ -82219,9 +81999,9 @@ var GameStart=(function(_super){
 		Laya.init(667,375,WebGL);
 		Laya.stage.screenMode="horizontal";
 		Laya.stage.scaleMode="fixedwidth";
+		Stat.show();
 	}
 
-	// Stat.show();
 	__proto.onDisable=function(){}
 	return GameStart;
 })(GameMainSceneUI)
@@ -87236,10 +87016,8 @@ var TextArea=(function(_super){
 })(TextInput)
 
 
-	Laya.__init([LoaderManager,EventDispatcher,GameConfig,View,Render,Timer,SceneUtils,WebGLContext2D,LocalStorage,CallLater,GraphicAnimation,Physics,Path]);
+	Laya.__init([LoaderManager,EventDispatcher,GameConfig,CreateEffect,CreateProps,View,Physics,CreateEnemy,Render,Timer,SceneUtils,WebGLContext2D,LocalStorage,CallLater,GraphicAnimation,Path]);
 	/**LayaGameStart**/
 	new Main();
 
 })(window,document,Laya);
-
-},{}]},{},[1]);

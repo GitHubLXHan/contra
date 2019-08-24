@@ -11,24 +11,8 @@ package script {
 	import laya.utils.Pool;
 	
 	public class Role extends Script {
-		/** @prop {name:enemyOne, tips:"第一类敌人", type:prefab}*/
-		public var enemyOne: Prefab;
-		/** @prop {name:enemyTow, tips:"第二类敌人", type:prefab}*/
-		public var enemyTow: Prefab;
-		/** @prop {name:enemyThree, tips:"第三类敌人", type:prefab}*/
-		public var enemyThree: Prefab;
-		/** @prop {name:enemyFour, tips:"第四类敌人", type:prefab}*/
-		public var enemyFour: Prefab;
-		/** @prop {name:enemyFive, tips:"第五类敌人", type:prefab}*/
-		public var enemyFive: Prefab;
-		/** @prop {name:enemyBossOne, tips:"第一关Boss", type:prefab}*/
-		public var enemyBossOne: Prefab;
-		/** @prop {name:propFrame, tips:"道具框架", type:prefab}*/
-		public var propFrame:Prefab;
 		
-		
-		
-		/** @prop {name:bullet, tips:"触碰即销毁的地图块", type:prefab}*/
+		/** @prop {name:bullet, tips:"子弹", type:prefab}*/
 		public var bullet:Prefab;
 
 		
@@ -167,12 +151,13 @@ package script {
 				canJump = true;
 			}
 			
-			
+			// 触碰到敌人或者掉下去时死亡
 			if ((other.label === "enemy_bullet" || 
 				other.label === "bossOneBullet" || 
 				other.label === "enemy_one" ||
 				other.label === "enemy_tow" ||
-				other.label === "enemy_three") && 
+				other.label === "enemy_three" ||
+				other.label === "die_line") && 
 				self.label === "body" &&
 				isAlive) {
 				isAlive = false;
@@ -181,6 +166,9 @@ package script {
 				rigid.setVelocity({x:-rigid.linearVelocity.x, y: -5});
 				Laya.stage.timer.clearAll(Controller);
 			}
+			
+			
+			
 		}
 		
 		

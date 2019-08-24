@@ -5,11 +5,12 @@
     "searchKey":"View",
     "props":{"sceneWidth":600,"sceneHeight":400,"sceneColor":"#000000"},
     "nodeParent":-1,
-    "maxID":3,
+    "maxID":4,
     "label":"View",
-    "isDirectory":false,
+    "isOpen":null,
+    "isDirectory":true,
     "isAniNode":true,
-    "hasChild":false,
+    "hasChild":true,
     "compId":2,
     "child":[
         {

@@ -7,6 +7,8 @@ package enemyScript {
 	import laya.physics.RigidBody;
 	import laya.utils.Pool;
 	
+	import utils.CreateEffect;
+	
 	public class EnemyTow extends Script {
 		
 		private var thisSp:Sprite;
@@ -84,13 +86,16 @@ package enemyScript {
 				enemyTowAni.removeSelf();
 				Pool.recover("enemyTowAni", enemyTowAni);
 				// 从对象池中加载爆炸动画后播放
-				var boomAni:Animation = Pool.getItemByCreateFun("enemyRoleBoom", createEnemyRoleBoomAni, this);
+				var boomAni:Animation = Pool.getItemByCreateFun("enemyRoleBoom", CreateEffect.getInstance().createEnemyRoleBoomAni, this);
+				console.log('敌人二死亡');
+				console.log(boomAni);
 				boomAni.play(0, false, "enemyRoleBoom");
 				boomAni.pos(thisSp.x, thisSp.y);
 				thisSp.parent.addChild(boomAni);
 				
 				// 删除本对象
 				thisSp.removeSelf();
+//				console.log('enemyTow回收');
 			}
 			
 			if (rigid.linearVelocity.y > 0 && (other.label === "pass_y" || other.label === "pass_n") && self.label === "enemy_tow_foot") {
@@ -98,25 +103,7 @@ package enemyScript {
 				rigid.setVelocity({x:rigid.linearVelocity.x, y:0});
 			}
 		}
-		
-		
-		/**
-		 * 当对象池中没有爆炸动画时，
-		 * 则调用此函数创建动画
-		 */
-		private function createEnemyRoleBoomAni():Animation
-		{
-			var ani:Animation = new Animation();
-			ani.loadAnimation("GameScene/EnemyRoleBoom.ani", null, "res/atlas/boom.atlas");
-
-			ani.on(Event.COMPLETE, null, function():void {
-				ani.removeSelf();
-				Pool.recover("enemyRoleBoom",ani);
-			});
-			return ani;
-		}
-		
-		
+			
 		
 		override public function onUpdate():void{
 			// 人物动画跟随刚体行走
@@ -127,9 +114,9 @@ package enemyScript {
 			if ((scrollRect.width != 0) && (thisSp.x < scrollRect.x || thisSp.y > (scrollRect.y + scrollRect.height))) {
 				console.log(thisSp.x,scrollRect.x, scrollRect.width);
 				enemyTowAni.removeSelf();
-				Pool.recover("enemyTowAni",enemyTowAni);
-				thisSp.removeSelf();
-				Pool.recover("enemyTow", thisSp);			
+				
+				// 删除自己待系统回收
+				thisSp.removeSelf();		
 			}
 		}
 		
@@ -137,6 +124,8 @@ package enemyScript {
 		 * 回收本对象
 		 */
 		override public function onDisable():void {
+			// 回收自己
+			console.log('tow 中 onDisable');
 			Pool.recover("enemyTow", thisSp);
 		}
 	}
